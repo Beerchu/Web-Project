@@ -1,1 +1,133 @@
-<html>  </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinema Ana Sayfası</title>
+    <link rel="stylesheet" href="mainpage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        
+        <header class="navbar">
+            <a href="#" class="logo-link">
+                <img src="images/logo.png" alt="Site Logo" class="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#">VİZYONDAKİLER</a></li>
+                    <li><a href="#">YAKINDA</a></li>
+                    <li><a href="#">FRAGMANLAR</a></li>
+                    <li><a href="#">SİNEMALAR</a></li>
+                </ul>
+            </nav>
+            <button class="menu-button"><i class="fas fa-bars"></i></button>
+        </header>
+
+        <div class="main-movie-screen">
+            <div class="trailer-content">
+                <img src="images/Gemini_Generated_Image_50urx450urx450ur.jpg" alt="Trailer Poster" class="trailer-poster">
+                
+                <div class="play-overlay">
+                    <a href="#" class="play-button" aria-label="Play Trailer">
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+                
+                <a href="#" class="buy-ticket-btn">HEMEN BİLET AL</a>
+            </div>
+        </div>
+
+        <div class="movie-listings-panel">
+
+            <section class="section-trailers">
+                <h2>FRAGMANLAR</h2>
+                <div class="movie-carousel-wrapper">
+                    <button class="scroll-btn left" onclick="scrollCarousel('trailers-carousel', -220)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="movie-carousel" id="trailers-carousel">
+                        <div class="movie-item"><img src="images/movie1.jpg" alt="Film1"><div class="play-icon"><i class="fas fa-play"></i></div><p>MIENLE</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie2.jpg" alt="Film 2"><div class="play-icon"><i class="fas fa-play"></i></div><p>GOSSILLA X KONG</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_3.jpg" alt="Film3"><div class="play-icon"><i class="fas fa-play"></i></div><p>MARVELS</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_4.jpg" alt="Film4"><div class="play-icon"><i class="fas fa-play"></i></div><p>THE MARVELS</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_5.jpg" alt="Film 5"><div class="play-icon"><i class="fas fa-play"></i></div><p>Film 5</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_6.jpg" alt="Film 6"><div class="play-icon"><i class="fas fa-play"></i></div><p>Film 6</p><div class="rating">...</div></div>
+                    </div>
+                    <button class="scroll-btn right" onclick="scrollCarousel('trailers-carousel', 220)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+            
+            <section class="section-campaigns">
+                <h2>KAMPANYALAR</h2>
+                <div class="movie-carousel-wrapper">
+                    <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -220)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="movie-carousel" id="campaigns-carousel">
+                        <div class="campaign-item">
+                            <img src="images/campaign_pic1.jpg" alt="Kampanya 1">
+                            <p>Öğrenci İndirimi %20</p>
+                        </div>
+                        <div class="campaign-item">
+                            <img src="images/campaign_pic2.jpg" alt="Kampanya 2">
+                            <p>Aile Paketi 4 Al 3 Öde</p>
+                        </div>
+                        <div class="campaign-item">
+                            <img src="images/campaign_pic3.jpg" alt="Kampanya 3">
+                            <p>Salı Sineması: 60 TL</p>
+                        </div>
+                        <div class="campaign-item">
+                            <img src="images/campaign_pic4.jpg" alt="Kampanya 4">
+                            <p>Patlamış Mısır Fırsatı</p>
+                        </div>
+                        <div class="campaign-item">
+                            <img src="images/campaign_pic5.jpg" alt="Kampanya 5">
+                            <p>Çift Kişilik Bilet</p>
+                        </div>
+                    </div>
+                    <button class="scroll-btn right" onclick="scrollCarousel('campaigns-carousel', 220)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+            <section class="section-yakinda">
+                <h2>YAKINDA</h2>
+                <div class="movie-carousel-wrapper">
+                    <button class="scroll-btn left" onclick="scrollCarousel('yakinda-carousel', -220)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="movie-carousel" id="yakinda-carousel">
+                        <div class="movie-item-yakinda"><img src="images/coming_soon_1.jpg" alt="Yakında 1"><div class="overlay">ÇOK YAKINDA</div></div>
+                        <div class="movie-item-yakinda"><img src="images/coming_soon_2.jpg" alt="Yakında 2"><div class="overlay">VİZYONDA</div></div>
+                        <div class="movie-item-yakinda"><img src="images/coming_soon_3.jpg" alt="Yakında 3"><div class="overlay">YENİ VİZYON</div></div>
+                        <div class="movie-item-yakinda"><img src="images/coming_soon_4.jpg" alt="Yakında 4"><div class="overlay">YAKINDA</div></div>
+                        <div class="movie-item-yakinda"><img src="images/coming_soon_5.jpg" alt="Yakında 5"><div class="overlay">YAKINDA</div></div>
+                    </div>
+                    <button class="scroll-btn right" onclick="scrollCarousel('yakinda-carousel', 220)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="#">İletişim</a>
+                    <a href="#">Gizlilik Politikası</a>
+                </div>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
