@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta etiketleri ve karakter seti tanımlaması -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Sayfa başlığı -->
+    <title>Contact Us - 5 Stars Cinema</title>
+    <!-- Font Awesome bağlantısı yıldız ikonları için -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS dosyası bağlantısı -->
+    <link rel="stylesheet" href="contact-style.css">
+</head>
+<body>
+    <!-- Navigasyon bölümü -->
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <i class="fas fa-star"></i>
+            <span>5 Stars Cinema</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Movies</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#" class="active">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Ana başlık bölümü -->
+    <header>
+        <div class="stars-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+        </div>
+        <h1>Contact Us</h1>
+        <p>Get in touch with our 5-star support team</p>
+    </header>
+
+    <!-- İletişim formu bölümü -->
+    <main>
+        <section class="contact-form">
+            <form id="contactForm">
+                <!-- İsim alanı -->
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <!-- E-posta alanı -->
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <!-- Konu seçim alanı -->
+                <div class="form-group">
+                    <label for="subject">Subject:</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="booking">Booking Issue</option>
+                        <option value="technical">Technical Support</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Mesaj alanı -->
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+
+                <!-- Gönder butonu -->
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+
+        <!-- İletişim bilgileri bölümü -->
+        <section class="contact-info">
+            <h2>Other Ways to Reach Us</h2>
+            <div class="info-item">
+                <h3>Address</h3>
+                <p>E5 Karayolu Üzeri Ataköy Yerleşkesi, Ataköy 7-8-9-10. Kısım, 34158 Bakırköy</p>
+            </div>
+            <div class="info-item">
+                <h3>Phone</h3>
+                <p>+90 (0212) 498 41 41</p>
+            </div>
+            <div class="info-item">
+                <h3>Email</h3>
+                <p>support@5starcinema.com</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sayfa altı bölümü -->
+    <footer>
+        <p>&copy; 2025 5 Star Cinema. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript dosyası bağlantısı -->
+    <script src="contact-script.js"></script>
+</body>
+</html>
