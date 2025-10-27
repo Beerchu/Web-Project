@@ -12,6 +12,38 @@ function scrollCarousel(carouselId, scrollAmount) {
     }
 }
 
+// Add event listeners to scroll buttons
+document.addEventListener('DOMContentLoaded', () => {
+    // Get all scroll buttons
+    const scrollButtons = document.querySelectorAll('.scroll-btn');
+    
+    scrollButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Find the closest carousel wrapper
+            const wrapper = button.closest('.movie-carousel-wrapper');
+            if (wrapper) {
+                // Find the carousel inside this wrapper
+                const carousel = wrapper.querySelector('.movie-carousel');
+                if (carousel) {
+                    // Determine scroll direction based on button class
+                    const scrollAmount = button.classList.contains('left') ? -300 : 300;
+                    carousel.scrollLeft += scrollAmount;
+                }
+            }
+        });
+    });
+
+    // Mobile menu toggle
+    const menuButton = document.querySelector('.menu-button');
+    const nav = document.querySelector('nav');
+    
+    if (menuButton && nav) {
+        menuButton.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+    }
+});
+
 // Note: In a real application, you would also likely add event listeners
 // for the main trailer play button or individual movie items.
 // E.g., document.querySelector('.play-button').addEventListener('click', () => { /* open trailer video */ });
