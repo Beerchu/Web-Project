@@ -16,12 +16,14 @@
                 <img src="images/logo.png" alt="Site Logo" class="logo">
             </a>
             <nav>
-                <ul>
-                    <li><a href="#">VİZYONDAKİLER</a></li>
-                    <li><a href="#">YAKINDA</a></li>
-                    <li><a href="#">FRAGMANLAR</a></li>
-                    <li><a href="#">SİNEMALAR</a></li>
-                    <li><a href="about.html">HAKKIMIZDA</a></li> <!-- EKLEDİM TT -->
+                  <ul>
+                    <li><a href="index.html">Home </a></li>
+                    <li><a href="#">What's On</a></li>   <!-- Vizyondakiler -->
+                    <li><a href="#">Coming Soon</a></li> 
+                    <li><a href="#">Cinemas</a></li>
+                    <li><a href="#">Offers</a></li> <!-- Neden olmasın dedim bence hoş olur -->
+                    <li><a href="about.html" class="active">About Us</a></li>
+                    <li><a href="contact-us.html">Contact Us</a></li>
                 </ul>
             </nav>
             <button class="menu-button"><i class="fas fa-bars"></i></button>
@@ -44,7 +46,7 @@
         <div class="movie-listings-panel">
 
             <section class="section-trailers">
-                <h2>FRAGMANLAR</h2>
+                <h2>TRAILER</h2>
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('trailers-carousel', -220)">
                         <i class="fas fa-chevron-left"></i>
@@ -64,7 +66,7 @@
             </section>
             
             <section class="section-campaigns">
-                <h2>KAMPANYALAR</h2>
+                <h2>Offers</h2>
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -220)">
                         <i class="fas fa-chevron-left"></i>
@@ -115,17 +117,24 @@
                 </div>
             </section>
 
+
+            <!-- FOOTER -->
+
+
             <footer class="footer">
-                <div class="footer-links">
-                    <a href="#">İletişim</a>
-                    <a href="#">Gizlilik Politikası</a>
-                </div>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                </div>
-            </footer>
+  <div class="footer-inner">
+    <nav class="footer-links">
+      <a href="#">İletişim</a>
+      <a href="#">Gizlilik Politikası</a>
+    </nav>
+
+    <div class="social-icons">
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    </div>
+  </div>
+</footer>
         </div>
     </div>
 
