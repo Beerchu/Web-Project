@@ -466,94 +466,35 @@
   }
 }
 
-/* --- Sticky layout: footer hep altta kalsın --- */
-html, body { height: 100%; }
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.main-wrapper { flex: 1; }  /* içerik alanı */
 
-/* --- Footer --- */
-:root{
-  /* projede zaten var ama garanti için */
-  --panel:#1a1a1a;
-  --muted:#9b9c9f;
-  --accent:#e50914;
-}
 
-.site-footer{
-  background:#161616;               /* 1. görseldeki koyu şerit */
-  border-top:1px solid rgba(255,255,255,.08);
-  padding:14px 22px;
-}
-
-.site-footer .footer-inner{
-  max-width:1200px;
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;    /* solda linkler, sağda ikonlar */
-  gap:16px;
-}
-
-.footer-links a{
-  color:#cfcfcf;
-  text-decoration:none;
-  margin-right:22px;
-  font-weight:500;
-}
-.footer-links a:last-child{ margin-right:0; }
-.footer-links a:hover{ color:var(--accent); }
-
-.social-icons a{
-  color:#cfcfcf;
-  font-size:22px;
-  margin-left:18px;
-  transition:color .2s ease, transform .2s ease;
-}
-.social-icons a:first-child{ margin-left:0; }
-.social-icons a:hover{
-  color:#fff;
-  transform:translateY(-1px);
-}
-
-/* Mobilde alt alta hizala */
-@media (max-width: 680px){
-  .site-footer .footer-inner{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-  .social-icons{ margin-top:6px; }
-}
 /* ===== Footer ===== */
 .footer{
   margin-top: 64px;
   border-top: 1px solid #2a2a2a;
-  background: #121212;            /* home ile uyumlu koyu zemin */
+  background: #121212;
 }
 
-.footer-inner{
+.footer .footer-inner{
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* solda linkler, sağda ikonlar */
+  justify-content: space-between;
   gap: 24px;
 }
 
-.footer-links a{
+.footer .footer-links a{
   color: #cfcfcf;
   margin-right: 24px;
   text-decoration: none;
   font-weight: 500;
 }
-.footer-links a:last-child{ margin-right: 0; }
-.footer-links a:hover{ color:#ffffff; }
+.footer .footer-links a:last-child{ margin-right: 0; }
+.footer .footer-links a:hover{ color:#ffffff; }
 
-.social-icons a{
+.footer .social-icons a{
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -564,21 +505,18 @@ body {
   margin-left: 12px;
   text-decoration: none;
 }
-.social-icons a:first-child{ margin-left: 0; }
-.social-icons a:hover{
-  background:#e50914; 
-  color:#fff;
-}
-.social-icons i{ font-size: 16px; line-height: 1; }
+.footer .social-icons a:first-child{ margin-left: 0; }
+.footer .social-icons a:hover{ background:#e50914; color:#fff; }
+.footer .social-icons i{ font-size: 16px; line-height: 1; }
 
-/* Mobilde alt alta ortala */
 @media (max-width: 720px){
-  .footer-inner{
+  .footer .footer-inner{
     flex-direction: column;
     align-items: center;
     gap: 16px;
     text-align: center;
   }
-  .footer-links a{ margin: 0 12px; }
+  .footer .footer-links a{ margin: 0 12px; }
 }
+
 
