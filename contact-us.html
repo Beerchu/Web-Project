@@ -1,32 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <!-- Meta etiketleri ve karakter seti tanımlaması -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Sayfa başlığı -->
-    <title>Contact Us - 5 Stars Cinema</title>
-    <!-- Font Awesome bağlantısı yıldız ikonları için -->
+    <title>Contact - 5 Star Cinema</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS dosyası bağlantısı -->
     <link rel="stylesheet" href="contact-style.css">
+    <script src="contact-script.js"></script>
 </head>
 <body>
-    <!-- Navigasyon bölümü -->
     <nav class="main-nav">
         <div class="nav-brand">
-            <i class="fas fa-star"></i>
-            <span>5 Stars Cinema</span>
+            <i class="fas fa-film"></i>
+            <span>5 STAR CINEMA</span>
         </div>
         <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Movies</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#" class="active">Contact</a></li>
+            <li><a href="#">NOW SHOWING</a></li>
+            <li><a href="#">COMING SOON</a></li>
+            <li><a href="#">TRAILERS</a></li>
+            <li><a href="#">CINEMAS</a></li>
+            <li><a href="#">ABOUT US</a></li>
+            <li><a href="#" class="active">CONTACT</a></li>
         </ul>
     </nav>
 
-    <!-- Ana başlık bölümü -->
     <header>
         <div class="stars-rating">
             <i class="fas fa-star"></i>
@@ -39,23 +36,19 @@
         <p>Get in touch with our 5-star support team</p>
     </header>
 
-    <!-- İletişim formu bölümü -->
     <main>
         <section class="contact-form">
             <form id="contactForm">
-                <!-- İsim alanı -->
                 <div class="form-group">
                     <label for="name">Full Name:</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" required placeholder="Your first and last name">
                 </div>
 
-                <!-- E-posta alanı -->
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required placeholder="Your email address">
                 </div>
 
-                <!-- Konu seçim alanı -->
                 <div class="form-group">
                     <label for="subject">Subject:</label>
                     <select id="subject" name="subject" required>
@@ -67,41 +60,79 @@
                     </select>
                 </div>
 
-                <!-- Mesaj alanı -->
                 <div class="form-group">
                     <label for="message">Message:</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
+                    <textarea id="message" name="message" rows="5" required placeholder="Write your message here"></textarea>
                 </div>
 
-                <!-- Gönder butonu -->
                 <button type="submit">Send Message</button>
             </form>
         </section>
 
-        <!-- İletişim bilgileri bölümü -->
         <section class="contact-info">
             <h2>Other Ways to Reach Us</h2>
             <div class="info-item">
-                <h3>Address</h3>
-                <p>E5 Karayolu Üzeri Ataköy Yerleşkesi, Ataköy 7-8-9-10. Kısım, 34158 Bakırköy</p>
+                <h3><i class="fas fa-map-marker-alt"></i> Address</h3>
+                <p>E5 Highway Alaköy Campus, Alaköy<br>7-8-9-10. Section, 34158 Bakırköy</p>
             </div>
             <div class="info-item">
-                <h3>Phone</h3>
+                <h3><i class="fas fa-phone"></i> Phone</h3>
                 <p>+90 (0212) 498 41 41</p>
             </div>
             <div class="info-item">
-                <h3>Email</h3>
+                <h3><i class="fas fa-envelope"></i> Email</h3>
                 <p>support@5starcinema.com</p>
             </div>
         </section>
     </main>
 
-    <!-- Sayfa altı bölümü -->
+    <div class="chat-widget">
+        <div class="chat-button" id="chatButton">
+            <span>💬 Live Support</span>
+        </div>
+        
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">
+                <h3>Live Support</h3>
+                <button class="close-btn" id="closeChat">×</button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <p>Hello! How can I help you?</p>
+                    <span class="time">Now</span>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button id="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
     <footer>
         <p>&copy; 2025 5 Star Cinema. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript dosyası bağlantısı -->
-    <script src="contact-script.js"></script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple form validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            // Actions to perform when the form is submitted
+            alert('Your message has been sent successfully! We will get back to you shortly.');
+            document.getElementById('contactForm').reset();
+        });
+    </script>
 </body>
 </html>
