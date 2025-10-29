@@ -72,10 +72,20 @@
   font-size: 1.1rem;
 }
 
+/* about us  yazı ve resim için */
 .about-grid {
   display: grid;
   grid-template-columns: 1fr .9fr;
   gap: 20px;
+}
+/* Paragraflar arası boşluk */
+.about-grid p {
+  margin-bottom: 1rem;
+}
+
+.about-text {
+  font-size: 1.rem;
+  line-height: 1.6;
 }
 
 .about-figure {
@@ -97,7 +107,7 @@
   font-size: .9rem;
   margin-top: 6px;
 }
-
+/*/-----------*/
 .about-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
