@@ -1,29 +1,39 @@
-// Small enhancements – defer loaded
+/* ===========================
+   About page interactions
+   - Smooth scroll
+   - Section fade-in
+   =========================== */
 
-// Animated counters when stats section enters viewport
-const counters = document.querySelectorAll('.stat-number');
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    const target = parseInt(el.dataset.countTo, 10);
-    const dur = 900; // ms
-    // const start = performance.now();
+/* ---------- Helpers ---------- */
+const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 
-    requestAnimationFrame(tick);
-    io.unobserve(el);
+/* ---------- Smooth scroll for in-page anchors ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    const target = document.querySelector(href);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-}, { threshold: 0.6 });
-counters.forEach(c => io.observe(c));
+});
 
-// Accessible accordion
-const accButtons = document.querySelectorAll('.acc-btn');
-accButtons.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    const expanded = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!expanded));
-    const panel = btn.nextElementSibling;
-    panel.classList.toggle('open', !expanded);
+/* ---------- Section fade-in on scroll (light) ---------- */
+const sections = document.querySelectorAll('.section');
+const sectionIO = new IntersectionObserver(entries => {
+  entries.forEach(ent => {
+    if (ent.isIntersecting) {
+      ent.target.style.opacity = '1';
+      ent.target.style.transform = 'translateY(0)';
+      sectionIO.unobserve(ent.target);
+    }
   });
-  // keyboard friendliness: Enter/Space default handled by button
+}, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+
+sections.forEach(sec => {
+  sec.style.opacity = '0';
+  sec.style.transform = 'translateY(30px)';
+  sec.style.transition = 'opacity .6s ease, transform .6s ease';
+  sectionIO.observe(sec);
 });
