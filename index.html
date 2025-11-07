@@ -16,14 +16,12 @@
                 <img src="images/logo.png" alt="Site Logo" class="logo">
             </a>
             <nav>
-                  <ul>
-                    <li><a href="index.html">Home </a></li>
-                    <li><a href="#">What's On</a></li>   <!-- Vizyondakiler -->
-                    <li><a href="#">Coming Soon</a></li> 
-                    <li><a href="#">Cinemas</a></li>
-                    <li><a href="#">Offers</a></li> <!-- Neden olmasın dedim bence hoş olur -->
-                    <li><a href="about.html" class="active">About Us</a></li>
-                    <li><a href="contact-us.html">Contact Us</a></li>
+                <ul>
+                    <li><a href="#">NOW SHOWING</a></li>
+                    <li><a href="#">COMING SOON</a></li>
+                    <li><a href="#">TRAILERS</a></li>
+                    <li><a href="#">CINEMAS</a></li>
+                    <li><a href="about.html">ABOUT US</a></li> <!-- EKLEDİM TT -->
                 </ul>
             </nav>
             <button class="menu-button"><i class="fas fa-bars"></i></button>
@@ -94,7 +92,7 @@
             </section>
 
             <section class="section-trailers">
-                <h2>TRAILER</h2>
+                <h2>TRAILERS</h2>
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('trailers-carousel', -220)">
                         <i class="fas fa-chevron-left"></i>
@@ -114,7 +112,7 @@
             </section>
             
             <section class="section-campaigns">
-                <h2>Offers</h2>
+                <h2>CAMPAIGNS</h2>
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -240)">
                         <i class="fas fa-chevron-left"></i>
@@ -196,27 +194,64 @@
                 </div>
             </section>
 
+            <section class="section-last-weeks">
+                <h2>LAST WEEK'S MOVIES</h2>
+                <div class="movie-carousel-wrapper">
+                    <button class="scroll-btn left" onclick="scrollCarousel('last-weeks-carousel', -220)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="movie-carousel" id="last-weeks-carousel">
+                        <div class="movie-item">
+                            <img src="images/last_week_1.jpg" alt="Dune: Part Two">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                            <p>DUNE: PART TWO</p>
+                            <div class="rating">⭐ 8.7/10</div>
+                        </div>
+                        <div class="movie-item">
+                            <img src="images/last_week_2.jpg" alt="Godzilla x Kong">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                            <p>GODZILLA X KONG</p>
+                            <div class="rating">⭐ 7.2/10</div>
+                        </div>
+                        <div class="movie-item">
+                            <img src="images/last_week_3.jpg" alt="Kung Fu Panda 4">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                            <p>KUNG FU PANDA 4</p>
+                            <div class="rating">⭐ 6.8/10</div>
+                        </div>
+                        <div class="movie-item">
+                            <img src="images/last_week_4.jpg" alt="Ghostbusters: Frozen Empire">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                            <p>GHOSTBUSTERS 4</p>
+                            <div class="rating">⭐ 6.5/10</div>
+                        </div>
+                        <div class="movie-item">
+                            <img src="images/last_week_5.jpg" alt="Bob Marley: One Love">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                            <p>BOB MARLEY: ONE LOVE</p>
+                            <div class="rating">⭐ 6.7/10</div>
+                        </div>
+                    </div>
+                    <button class="scroll-btn right" onclick="scrollCarousel('last-weeks-carousel', 220)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
 
-            <!-- FOOTER -->
-
-
-        <!-- FOOTER -->
-            <!-- FOOTER -->
-<div class="main-wrapper">
-
-  <!-- FOOTER tam burada olmalı -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <nav class="footer-links">
-        <a href="#">Contact US</a>
-        <a href="#">Privacy Policy</a>
-      </nav>
-      <div class="social-icons">
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-      </div>
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </footer>
+        </div>
     </div>
-  </footer>
 
-</div>
+    <script src="script.js"></script>
+</body>
+</html>
