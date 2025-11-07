@@ -104,16 +104,210 @@ body::before {
 }
 
 /* --- Main Movie Screen Area (Perdeye Oturtma Düzeltmesi) --- */
+/* --- Main Movie Screen Area with Video --- */
 .main-movie-screen {
     position: relative;
     width: 100%;
-    /* Ayarlar, afişi ekran görüntüsündeki beyaz perdenin içine yerleştirmek için optimize edilmiştir */
-    margin-top: 100px; 
-    padding: 0 17.5%; /* Perdenin yan boşluklarına göre ayar */
-    height: 65vh; 
-    max-height: 550px; 
-    pointer-events: none; /* Altındaki elementleri tıklanabilir tutmak için */
+    margin-top: 100px;
+    padding: 0 17.5%;
+    height: 65vh;
+    max-height: 550px;
 }
+
+.trailer-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.trailer-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.trailer-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+/* Play Overlay */
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.play-overlay:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.play-button {
+    color: #fff;
+    font-size: 60px;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.6);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.play-button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Buy Ticket Button */
+.buy-ticket-btn {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    background-color: #e50914;
+    color: #fff;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    z-index: 5;
+    pointer-events: auto;
+    font-size: 16px;
+}
+
+.buy-ticket-btn:hover {
+    background-color: #ff4757;
+}
+
+/* --- NOW SHOWING Section Styles --- */
+.section-now-showing {
+    margin-bottom: 50px;
+}
+
+.section-now-showing h2 {
+    font-size: 28px; /* Slightly larger heading */
+    margin-bottom: 25px;
+    border-bottom: 3px solid #e50914; /* Red accent color */
+    padding-bottom: 12px;
+    color: #fff;
+    text-align: center;
+}
+
+/* Now Showing Movie Items - Larger and more prominent */
+.movie-item-now-showing {
+    flex: 0 0 240px; /* Larger width: 240px (was 200px) */
+    margin-right: 25px;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie-item-now-showing:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(229, 9, 20, 0.3);
+}
+
+.movie-item-now-showing img {
+    width: 100%;
+    height: 300px; /* Taller images */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+/* Book Now Button */
+.book-now-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #e50914, #ff4757);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.book-now-btn:hover {
+    background: linear-gradient(45deg, #ff4757, #e50914);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+}
+
+/* Movie Title */
+.movie-item-now-showing p {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 8px 0;
+    color: #fff;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Showtimes */
+.showtimes {
+    font-size: 13px;
+    color: #ccc;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Special highlight for the first item */
+.movie-item-now-showing:first-child {
+    border: 2px solid #e50914;
+    background: rgba(229, 9, 20, 0.1);
+}
+
+.movie-item-now-showing:first-child::before {
+    content: "HOT";
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #e50914;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+
 
 .trailer-content {
     width: 100%;
@@ -233,57 +427,182 @@ body::before {
 .scroll-btn.right { right: 0; }
 
 /* --- FRAGMANLAR / Trailers Item Styles --- */
+/* --- TRAILERS / Fragmanlar Item Styles --- */
+.section-trailers {
+    margin-bottom: 40px;
+}
+
+.section-trailers h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    color: #fff;
+}
+
 .movie-item {
-    flex: 0 0 200px; /* Fixed width: 200px */
+    flex: 0 0 220px;
     margin-right: 20px;
     position: relative;
     cursor: pointer;
     text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.movie-item:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .movie-item img {
     width: 100%;
-    height: 250px; 
+    height: 280px;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.movie-item:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.8);
 }
 
 .movie-item .play-icon {
     position: absolute;
-    top: 35%; /* Ortalamaya yakın konum */
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
-    font-size: 30px;
-    opacity: 0.8;
-    transition: opacity 0.3s;
+    font-size: 48px;
+    background: rgba(0, 0, 0, 0.7);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
 }
 
 .movie-item:hover .play-icon {
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.movie-item p {
+    font-weight: bold;
+    font-size: 15px;
+    margin: 12px 0 8px 0;
+    color: #fff;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .rating {
     color: gold;
     font-size: 14px;
+    font-weight: bold;
     margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Duration badge */
+.movie-duration {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 2;
+    backdrop-filter: blur(5px);
+}
+
+/* Genre tags */
+.movie-genre {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 2;
+    text-transform: uppercase;
+    backdrop-filter: blur(5px);
+}
+
+/* Gradient overlay for better text readability */
+.movie-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+    border-radius: 0 0 8px 8px;
+    opacity: 0.7;
 }
 
 
 /* --- YAKINDA / Coming Soon Item Styles --- */
+/* --- COMING SOON / Yakında Item Styles --- */
+.section-yakinda {
+    margin-bottom: 40px;
+}
+
+.section-yakinda h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    color: #fff;
+}
+
 .movie-item-yakinda {
     flex: 0 0 200px; /* Fixed width: 200px */
     margin-right: 20px;
     position: relative;
     cursor: pointer;
     text-align: center;
+    transition: all 0.3s ease;
+}
+
+.movie-item-yakinda:hover {
+    transform: translateY(-5px);
 }
 
 .movie-item-yakinda img {
     width: 100%;
-    height: 120px; /* Adjusted height for 'Yakında' items */
+    height: 250px; /* Match the height of trailers section */
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.movie-item-yakinda:hover img {
+    filter: brightness(0.8);
 }
 
 .movie-item-yakinda .overlay {
@@ -292,49 +611,192 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
     color: white;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     text-align: center;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    border-radius: 5px;
+    font-size: 16px;
+    opacity: 1; /* Always visible but more prominent on hover */
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 15px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
 .movie-item-yakinda:hover .overlay {
-    opacity: 1;
+    background: linear-gradient(180deg, rgba(229,9,20,0.8) 0%, rgba(0,0,0,0.6) 100%);
+    font-size: 18px;
+}
+
+/* Add a subtle border to make it stand out */
+.movie-item-yakinda {
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.movie-item-yakinda:hover {
+    border-color: rgba(229, 9, 20, 0.5);
+}
+
+/* Optional: Add release date badge */
+.movie-item-yakinda .overlay::after {
+    content: attr(data-date);
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(229, 9, 20, 0.9);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: none;
 }
 
 /* --- KAMPANYALAR / Campaigns Item Styles --- */
+/* --- CAMPAIGNS / Campaigns Item Styles --- */
+.section-campaigns {
+    margin-bottom: 40px;
+}
+
+.section-campaigns h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    color: #fff;
+}
+
 .campaign-item {
-    flex: 0 0 200px; /* Fixed width: 200px */
+    flex: 0 0 220px; /* Slightly wider for better content display */
     margin-right: 20px;
     position: relative;
     cursor: pointer;
     text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.campaign-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(229, 9, 20, 0.3);
 }
 
 .campaign-item img {
     width: 100%;
-    height: 150px; /* Campaign visual height */
+    height: 120px; /* Keep current height but improve styling */
     object-fit: cover;
-    border-radius: 5px;
-    opacity: 0.9;
-    transition: opacity 0.3s;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
 .campaign-item:hover img {
-    opacity: 1;
+    transform: scale(1.05);
+    border-color: #e50914;
 }
 
 .campaign-item p {
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 14px;
     font-weight: bold;
+    color: #fff;
+    padding: 8px 0;
+    background: rgba(229, 9, 20, 0.1);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.campaign-item:hover p {
+    background: rgba(229, 9, 20, 0.2);
+    color: #ff6b6b;
+}
+
+/* Add discount badges or icons */
+.campaign-item::before {
+    content: "🎯";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background: #e50914;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Different icons for different campaign types */
+.campaign-item:nth-child(1)::before { content: "🎓"; } /* Student */
+.campaign-item:nth-child(2)::before { content: "👨‍👩‍👧‍👦"; } /* Family */
+.campaign-item:nth-child(3)::before { content: "📅"; } /* Tuesday */
+.campaign-item:nth-child(4)::before { content: "🍿"; } /* Popcorn */
+.campaign-item:nth-child(5)::before { content: "💑"; } /* Couple */
+
+/* Add a subtle gradient overlay on images */
+.campaign-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.campaign-item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.1) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+}
+
+.campaign-item:hover::after {
+    opacity: 1;
+}
+
+/* Campaign duration indicator */
+.campaign-duration {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+
+.section-last-weeks {
+    margin-bottom: 40px;
+}
+
+.section-last-weeks h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    color: #fff;
 }
 
 

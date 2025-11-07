@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sinema Ana Sayfası</title>
+    <title>Cinema Homepage</title>
     <link rel="stylesheet" href="mainpage.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -31,19 +31,67 @@
 
         <div class="main-movie-screen">
             <div class="trailer-content">
-                <img src="images/Gemini_Generated_Image_50urx450urx450ur.jpg" alt="Trailer Poster" class="trailer-poster">
+                <video class="trailer-video" muted loop playsinline>
+                    <source src="videos/main-trailer.mp4" type="video/mp4">
+                    <source src="videos/main-trailer.webm" type="video/webm">
+                    <img src="images/Gemini_Generated_Image_50urx450urx450ur.jpg" alt="Trailer Poster" class="trailer-poster">
+                </video>
                 
                 <div class="play-overlay">
-                    <a href="#" class="play-button" aria-label="Play Trailer">
+                    <a href="#" class="play-button" aria-label="Play/Pause Trailer" id="play-pause-button">
                         <i class="fas fa-play"></i>
                     </a>
                 </div>
                 
-                <a href="#" class="buy-ticket-btn">HEMEN BİLET AL</a>
+                <a href="#" class="buy-ticket-btn">BUY TICKETS NOW</a>
             </div>
         </div>
 
         <div class="movie-listings-panel">
+
+            <section class="section-now-showing">
+                <h2>NOW SHOWING</h2>
+                <div class="movie-carousel-wrapper">
+                    <button class="scroll-btn left" onclick="scrollCarousel('now-showing-carousel', -250)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="movie-carousel" id="now-showing-carousel">
+                        <div class="movie-item-now-showing">
+                            <img src="images/now1.jpg" alt="Movie 1">
+                            <button class="book-now-btn">BOOK NOW</button>
+                            <p>AVATAR: THE WAY OF WATER</p>
+                            <div class="showtimes">14:30 • 17:00 • 20:15</div>
+                        </div>
+                        <div class="movie-item-now-showing">
+                            <img src="images/now2.jpg" alt="Movie 2">
+                            <button class="book-now-btn">BOOK NOW</button>
+                            <p>JOHN WICK 4</p>
+                            <div class="showtimes">15:00 • 18:30 • 21:45</div>
+                        </div>
+                        <div class="movie-item-now-showing">
+                            <img src="images/now3.jpg" alt="Movie 3">
+                            <button class="book-now-btn">BOOK NOW</button>
+                            <p>OPPENHEIMER</p>
+                            <div class="showtimes">16:15 • 19:00 • 22:30</div>
+                        </div>
+                        <div class="movie-item-now-showing">
+                            <img src="images/now4.jpg" alt="Movie 4">
+                            <button class="book-now-btn">BOOK NOW</button>
+                            <p>SPIDER-MAN: ACROSS THE SPIDERVERSE</p>
+                            <div class="showtimes">13:45 • 16:30 • 19:15</div>
+                        </div>
+                        <div class="movie-item-now-showing">
+                            <img src="images/now5.jpg" alt="Movie 5">
+                            <button class="book-now-btn">BOOK NOW</button>
+                            <p>THE BATMAN</p>
+                            <div class="showtimes">14:00 • 17:30 • 20:45</div>
+                        </div>
+                    </div>
+                    <button class="scroll-btn right" onclick="scrollCarousel('now-showing-carousel', 250)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
 
             <section class="section-trailers">
                 <h2>TRAILER</h2>
@@ -52,12 +100,12 @@
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <div class="movie-carousel" id="trailers-carousel">
-                        <div class="movie-item"><img src="images/movie1.jpg" alt="Film1"><div class="play-icon"><i class="fas fa-play"></i></div><p>MIENLE</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie2.jpg" alt="Film 2"><div class="play-icon"><i class="fas fa-play"></i></div><p>GOSSILLA X KONG</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_3.jpg" alt="Film3"><div class="play-icon"><i class="fas fa-play"></i></div><p>MARVELS</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_4.jpg" alt="Film4"><div class="play-icon"><i class="fas fa-play"></i></div><p>THE MARVELS</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_5.jpg" alt="Film 5"><div class="play-icon"><i class="fas fa-play"></i></div><p>Film 5</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_6.jpg" alt="Film 6"><div class="play-icon"><i class="fas fa-play"></i></div><p>Film 6</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie1.jpg" alt="Film1"><div class="play-icon"><i class="fas fa-play"></i></div><p>Interstellar</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie2.jpg" alt="Film 2"><div class="play-icon"><i class="fas fa-play"></i></div><p>F1 Movie</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_3.jpg" alt="Film3"><div class="play-icon"><i class="fas fa-play"></i></div><p>Avengers Infinity War</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_4.jpg" alt="Film4"><div class="play-icon"><i class="fas fa-play"></i></div><p>Barbie the Movie</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_5.jpg" alt="Film 5"><div class="play-icon"><i class="fas fa-play"></i></div><p>Demon Slayer Infinity Castle</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_6.jpg" alt="Film 6"><div class="play-icon"><i class="fas fa-play"></i></div><p>How To Train Your Dragon</p><div class="rating">...</div></div>
                     </div>
                     <button class="scroll-btn right" onclick="scrollCarousel('trailers-carousel', 220)">
                         <i class="fas fa-chevron-right"></i>
@@ -68,48 +116,79 @@
             <section class="section-campaigns">
                 <h2>Offers</h2>
                 <div class="movie-carousel-wrapper">
-                    <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -220)">
+                    <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -240)">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <div class="movie-carousel" id="campaigns-carousel">
                         <div class="campaign-item">
-                            <img src="images/campaign_pic1.jpg" alt="Kampanya 1">
-                            <p>Öğrenci İndirimi %20</p>
+                            <img src="images/campaign_pic1.jpg" alt="Student Discount">
+                            <div class="campaign-duration">30 DAYS</div>
+                            <p>Student Discount 20%</p>
                         </div>
                         <div class="campaign-item">
-                            <img src="images/campaign_pic2.jpg" alt="Kampanya 2">
-                            <p>Aile Paketi 4 Al 3 Öde</p>
+                            <img src="images/campaign_pic2.jpg" alt="Family Package">
+                            <div class="campaign-duration">LIMITED</div>
+                            <p>Family Package: Buy 4 Pay for 3</p>
                         </div>
                         <div class="campaign-item">
-                            <img src="images/campaign_pic3.jpg" alt="Kampanya 3">
-                            <p>Salı Sineması: 60 TL</p>
+                            <img src="images/campaign_pic3.jpg" alt="Tuesday Cinema">
+                            <div class="campaign-duration">WEEKLY</div>
+                            <p>Tuesday Cinema: 60 TL</p>
                         </div>
                         <div class="campaign-item">
-                            <img src="images/campaign_pic4.jpg" alt="Kampanya 4">
-                            <p>Patlamış Mısır Fırsatı</p>
+                            <img src="images/campaign_pic4.jpg" alt="Popcorn Special">
+                            <div class="campaign-duration">15 DAYS</div>
+                            <p>Popcorn Special</p>
                         </div>
                         <div class="campaign-item">
-                            <img src="images/campaign_pic5.jpg" alt="Kampanya 5">
-                            <p>Çift Kişilik Bilet</p>
+                            <img src="images/campaign_pic5.jpg" alt="Couple Ticket">
+                            <div class="campaign-duration">VALENTINE</div>
+                            <p>Couple Ticket</p>
                         </div>
                     </div>
-                    <button class="scroll-btn right" onclick="scrollCarousel('campaigns-carousel', 220)">
+                    <button class="scroll-btn right" onclick="scrollCarousel('campaigns-carousel', 240)">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
             </section>
+            
             <section class="section-yakinda">
-                <h2>YAKINDA</h2>
+                <h2>COMING SOON</h2>
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('yakinda-carousel', -220)">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <div class="movie-carousel" id="yakinda-carousel">
-                        <div class="movie-item-yakinda"><img src="images/coming_soon_1.jpg" alt="Yakında 1"><div class="overlay">ÇOK YAKINDA</div></div>
-                        <div class="movie-item-yakinda"><img src="images/coming_soon_2.jpg" alt="Yakında 2"><div class="overlay">VİZYONDA</div></div>
-                        <div class="movie-item-yakinda"><img src="images/coming_soon_3.jpg" alt="Yakında 3"><div class="overlay">YENİ VİZYON</div></div>
-                        <div class="movie-item-yakinda"><img src="images/coming_soon_4.jpg" alt="Yakında 4"><div class="overlay">YAKINDA</div></div>
-                        <div class="movie-item-yakinda"><img src="images/coming_soon_5.jpg" alt="Yakında 5"><div class="overlay">YAKINDA</div></div>
+                        <div class="movie-item-yakinda">
+                            <img src="images/coming_soon_1.jpg" alt="Deadpool & Wolverine">
+                            <div class="overlay" data-date="JULY 26">
+                                DEADPOOL & WOLVERINE
+                            </div>
+                        </div>
+                        <div class="movie-item-yakinda">
+                            <img src="images/coming_soon_2.jpg" alt="Joker: Folie à Deux">
+                            <div class="overlay" data-date="OCT 4">
+                                JOKER: FOLIE À DEUX
+                            </div>
+                        </div>
+                        <div class="movie-item-yakinda">
+                            <img src="images/coming_soon_3.jpg" alt="Moana 2">
+                            <div class="overlay" data-date="NOV 27">
+                                MOANA 2
+                            </div>
+                        </div>
+                        <div class="movie-item-yakinda">
+                            <img src="images/coming_soon_4.jpg" alt="Mufasa: The Lion King">
+                            <div class="overlay" data-date="DEC 20">
+                                MUFASA
+                            </div>
+                        </div>
+                        <div class="movie-item-yakinda">
+                            <img src="images/coming_soon_5.jpg" alt="Avatar 3">
+                            <div class="overlay" data-date="DEC 2025">
+                                AVATAR 3
+                            </div>
+                        </div>
                     </div>
                     <button class="scroll-btn right" onclick="scrollCarousel('yakinda-carousel', 220)">
                         <i class="fas fa-chevron-right"></i>
