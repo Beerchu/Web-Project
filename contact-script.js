@@ -11,11 +11,11 @@ class LiveChat {
         
         // Botun vereceği rastgele cevaplar
         this.botResponses = [
-            "Anladım, size nasıl yardımcı olabilirim?",
-            "Bu konuda daha fazla bilgi verebilir misiniz?",
-            "Ekibimiz en kısa sürede sizinle iletişime geçecektir.",
-            "Teşekkür ederiz! Sorunuzu değerlendiriyoruz.",
-            "Size başka nasıl yardımcı olabilirim?"
+            "I see, how can I assist you?",
+            "Could you provide more information about this?",
+            "Our team will contact you as soon as possible.",
+            "Thank you! We are evaluating your query.",
+            "How else may I help you?"
         ];
         
         this.init();

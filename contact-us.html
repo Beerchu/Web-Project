@@ -10,22 +10,29 @@
 </head>
 <body>
     <nav class="main-nav">
+        <a href="index.html" class="nav-brand-link">
+            <img src="images/logo.png" alt="Cinema Logo" class="nav-logo">
+        </a>
         <div class="nav-brand">
-            <i class="fas fa-film"></i>
-            <span>5 STAR CINEMA</span>
-        </div>
+            <i class="fas fa-film" style="display:none;"></i>
+            <span style="display:none;">5 STAR CINEMA</span>
+            
+            </div>
         <ul class="nav-links">
-            <li><a href="#">NOW SHOWING</a></li>
-            <li><a href="#">COMING SOON</a></li>
-            <li><a href="#">TRAILERS</a></li>
-            <li><a href="#">CINEMAS</a></li>
-            <li><a href="#">ABOUT US</a></li>
-            <li><a href="#" class="active">CONTACT</a></li>
+            <li><a href="index.html">Home </a></li>
+                    <li><a href="#">NOW SHOWING</a></li>
+                    <li><a href="#">COMING SOON</a></li>
+                    <li><a href="#">TRAILERS</a></li>
+                    <li><a href="#">CINEMAS</a></li>
+                    <li><a href="#">Offers</a></li>
+                    <li><a href="about.html" class="active">About Us</a></li>
+                    <li><a href="contact-us.html">Contact Us</a></li>
         </ul>
+        <button class="menu-toggle" id="menuToggle">☰</button>
     </nav>
 
     <header>
-        <div class="stars-rating">
+        <div class="stars-rating" id="starsRating">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -133,6 +140,51 @@
             alert('Your message has been sent successfully! We will get back to you shortly.');
             document.getElementById('contactForm').reset();
         });
+        
+        // Chat widget logic (Keeping the original script structure)
+        const chatButton = document.getElementById('chatButton');
+        const chatBox = document.getElementById('chatBox');
+        const closeChat = document.getElementById('closeChat');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageButton = document.getElementById('sendMessage');
+        const chatMessages = document.getElementById('chatMessages');
+
+        chatButton.addEventListener('click', () => {
+            chatBox.classList.toggle('open');
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatBox.classList.remove('open');
+        });
+
+        sendMessageButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (messageText !== '') {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'user-message');
+                messageElement.innerHTML = `<p>${messageText}</p><span class="time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>`;
+                
+                chatMessages.appendChild(messageElement);
+                messageInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+                
+                // Simulate bot response (for a full demo)
+                setTimeout(() => {
+                    const botResponse = document.createElement('div');
+                    botResponse.classList.add('message', 'bot-message');
+                    botResponse.innerHTML = `<p>Thank you for your message. An agent will be with you shortly.</p><span class="time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>`;
+                    chatMessages.appendChild(botResponse);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
     </script>
 </body>
 </html>
