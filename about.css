@@ -72,13 +72,13 @@
   font-size: 1.1rem;
 }
 
-/* about us  yazı ve resim için */
+/* about us  This part is for the text and image */
 .about-grid {
   display: grid;
   grid-template-columns: 1fr .9fr;
   gap: 20px;
 }
-/* Paragraflar arası boşluk */
+/* space between paragraphs */
 .about-grid p {
   margin-bottom: 1rem;
 }
@@ -133,7 +133,7 @@
   color: var(--accent);
 }
 
-/* İstatistikler */
+/*  By the numbers  (  Stats  ) */
 #stats { padding: 48px 0; }
 #stats .section-title { font-size: 1.8rem; margin: 0 0 8px; }
 #stats .section-subtitle { color: var(--muted,#9b9c9f); margin-bottom: 24px; }
@@ -173,11 +173,11 @@
 @media (max-width: 560px){ .stats-grid { grid-template-columns: 1fr; } }
 
 
-/* EKİP ÜYELERİ *//* Team grid */
+/* Team grid */
 .team-grid {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(5, 1fr); /* 5 sütun */
+  grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
   align-items: stretch;
 }
 @media (max-width: 1300px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -252,7 +252,7 @@
   line-height: 1.6;
 }
 
-/* TARİHÇE/TIMELINE */
+/* TIMELINE */
 .timeline {
   position: relative;
   padding: 20px 0;
@@ -313,7 +313,7 @@
   margin: 0;
 }
 
-/* MÜŞTERİ YORUMLARI */
+/* What Our Clients Say */
 .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -383,7 +383,7 @@
   margin: 0;
 }
 
-/* SSS */
+/* FAQ (Frequently Asked Questions) */
 .about-faq details {
   background: #121212;
   border: 1px solid #2a2a2a;
