@@ -49,7 +49,89 @@ body::before {
     z-index: 10;
     position: relative;
 }
+/* --- KULLANICI MENÜSÜ DROPDOWN STİLLERİ --- */
 
+/* Dropdown konteynerini navbar'ın sağ üst köşesine konumlandırmak için */
+.user-menu-dropdown {
+    position: relative; /* İçindeki açılır menünün buraya göre konumlanmasını sağlar */
+    display: inline-block;
+    z-index: 1000; /* Diğer tüm içeriklerin üzerinde olmalı */
+    /* Navbar'daki diğer elementlerden ayırmak için */
+    margin-left: auto; 
+}
+
+/* Hamburger butonu stili */
+.menu-button {
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+    margin-right: 10px; /* Sağdan biraz boşluk */
+}
+/* Arama İkonu Konteyneri */
+.search-icon-container {
+    /* Navbar'daki elemanlarla hizalamak için */
+    display: flex;
+    align-items: center;
+    /* Dropdown menüsü ile navigasyon arasındaki boşluğu doldurur */
+    margin-left: auto; 
+    margin-right: 20px; /* Kullanıcı menüsünden ayırır */
+}
+
+/* Arama Butonu Stili */
+.search-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px; /* İkon boyutunu ayarlayın */
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.search-button:hover {
+    color: #e50914; /* Hover'da kırmızı vurgu */
+}
+/* Açılır Menü İçeriği Stilleri */
+.dropdown-content {
+    display: none; /* Başlangıçta gizli */
+    position: absolute;
+    right: 0; /* Butonun sağ kenarına hizala */
+    top: 55px; /* Navbar'ın yüksekliğine göre ayar (butonun hemen altından başlar) */
+    background-color: #1a1a1a; 
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
+    padding: 10px 0;
+    border-radius: 5px;
+    border-top: 3px solid #e50914; /* Kırmızı vurgu */
+}
+
+/* Menüdeki her bir bağlantı/düğme */
+.dropdown-action-btn {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-action-btn:hover {
+    background-color: #333;
+}
+
+/* Ayırıcı çizgi */
+.dropdown-content hr {
+    border: 0;
+    height: 1px;
+    background: #444;
+    margin: 5px 0;
+}
+
+/* JavaScript ile görünür yapıldığında kullanılacak sınıf */
+.show-dropdown {
+    display: block;
+}
 /* Logo Stilleri */
 .logo-link {
     margin-right: 50px; /* Navigasyon menüsünden ayırır */
