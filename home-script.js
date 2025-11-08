@@ -1,20 +1,12 @@
-// Function to handle horizontal scrolling of carousels
+// This function lets us scroll the selections left and right
 function scrollCarousel(carouselId, scrollAmount) {
-    // Get the element of the carousel using its ID
     const carousel = document.getElementById(carouselId);
     
-    // Check if the carousel element exists
+    //If the selection aka carousel exists, we scroll it
     if (carousel) {
-        // scrollLeft property sets or returns the number of pixels an element's content 
-        // has been scrolled to the left.
-        // We add the scrollAmount (e.g., +300 for right, -300 for left) to the current scroll position.
         carousel.scrollLeft += scrollAmount;
     }
 }
-
-// Note: In a real application, you would also likely add event listeners
-// for the main trailer play button or individual movie items.
-// E.g., document.querySelector('.play-button').addEventListener('click', () => { /* open trailer video */ });
 
 // Main trailer video play/pause controls
 document.addEventListener('DOMContentLoaded', function() {
@@ -23,12 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const playIcon = playPauseButton.querySelector('i');
     const playOverlay = document.querySelector('.play-overlay');
 
-    // Start video automatically (muted)
+    // Start video automatically
     video.play().catch(error => {
         console.log('Auto-play prevented:', error);
     });
 
-    // Play/Pause functionality
+    // Play/Pause the trailer on the main page
     playPauseButton.addEventListener('click', function(e) {
         e.preventDefault();
         
@@ -46,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         playIcon.className = 'fas fa-play';
     });
 
-    // Optional: Hide overlay when video is playing, show when paused
+    // Hide the pause/play button when video is playing, show when paused
     video.addEventListener('play', function() {
         playOverlay.style.opacity = '0';
     });
@@ -55,12 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
         playOverlay.style.opacity = '1';
     });
 
-    // Show overlay on hover
+    // Show pause/play button on hover
     playOverlay.addEventListener('mouseenter', function() {
         playOverlay.style.opacity = '1';
     });
 
-    // Hide overlay when not hovering (if video is playing)
+    // Hide play/pause button when not hovering 
     playOverlay.addEventListener('mouseleave', function() {
         if (!video.paused) {
             playOverlay.style.opacity = '0';

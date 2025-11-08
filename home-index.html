@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinema Homepage</title>
-    <link rel="stylesheet" href="home.css">
+    <!-- Our custom CSS file -->
+    <link rel="stylesheet" href="mainpage.css"> 
+    <!-- An external CSS file that we use for the button images like play and pause -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Our custom JavaScript file -->
+     <script src="script.js" defer></script>
 </head>
 <body>
 
     <div class="main-wrapper">
         
+        <!-- The top bar of every page -->
         <header class="navbar">
-            <a href="#" class="logo-link">
+            <a href="index.html" class="logo-link">
+                <!-- Our cinema logo(plan to redo it to something more modern) -->
                 <img src="images/logo.png" alt="Site Logo" class="logo">
             </a>
             <nav>
+                <!-- Navigation menu -->
                 <ul>
-                     <li><a href="home-index.html">Home </a></li>
-                    <li><a href="#">What's On</a></li>   <!-- Vizyondakiler -->
-                    <li><a href="#">Coming Soon</a></li> 
-                    <li><a href="#">Cinemas</a></li>
-                    <li><a href="#">Offers</a></li> <!-- Neden olmasın dedim bence hoş olur -->
+                    <!-- Links to all pages -->
+                    <li><a href="index.html">Home </a></li>
+                    <li><a href="#">NOW SHOWING</a></li>
+                    <li><a href="#">COMING SOON</a></li>
+                    <li><a href="#">TRAILERS</a></li>
+                    <li><a href="#">CINEMAS</a></li>
+                    <li><a href="#">OFFERS</a></li>
                     <li><a href="about.html" class="active">About Us</a></li>
                     <li><a href="contact-us.html">Contact Us</a></li>
                 </ul>
@@ -29,32 +38,38 @@
             <button class="menu-button"><i class="fas fa-bars"></i></button>
         </header>
 
+        <!-- The main screen ypu first see, where the video is, this displays the "hot" movie trailer, could write an algorithm for this later for now just visually ready -->
         <div class="main-movie-screen">
             <div class="trailer-content">
                 <video class="trailer-video" muted loop playsinline>
                     <source src="videos/main-trailer.mp4" type="video/mp4">
-                    <source src="videos/main-trailer.webm" type="video/webm">
                     <img src="images/Gemini_Generated_Image_50urx450urx450ur.jpg" alt="Trailer Poster" class="trailer-poster">
                 </video>
                 
+                <!-- showing the play button on the trailer -->
                 <div class="play-overlay">
                     <a href="#" class="play-button" aria-label="Play/Pause Trailer" id="play-pause-button">
                         <i class="fas fa-play"></i>
                     </a>
                 </div>
                 
+                <!-- the buy ticket button, will link to the ticket buying page later -->
                 <a href="#" class="buy-ticket-btn">BUY TICKETS NOW</a>
             </div>
         </div>
 
+        <!-- Where all the movies will be shown depending on the section type -->
         <div class="movie-listings-panel">
 
+            <!-- Movies that are now showing -->
             <section class="section-now-showing">
                 <h2>NOW SHOWING</h2>
+                <!-- Horizontal movie carousel -->
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('now-showing-carousel', -250)">
                         <i class="fas fa-chevron-left"></i>
                     </button>
+                    <!-- All of the movie posters -->
                     <div class="movie-carousel" id="now-showing-carousel">
                         <div class="movie-item-now-showing">
                             <img src="images/now1.jpg" alt="Movie 1">
@@ -93,6 +108,7 @@
                 </div>
             </section>
 
+            <!-- All of the trailers -->
             <section class="section-trailers">
                 <h2>TRAILERS</h2>
                 <div class="movie-carousel-wrapper">
@@ -113,6 +129,7 @@
                 </div>
             </section>
             
+            <!-- All the campaigns we have created for our cinema, will go to the campaign page later -->
             <section class="section-campaigns">
                 <h2>CAMPAIGNS</h2>
                 <div class="movie-carousel-wrapper">
@@ -124,6 +141,7 @@
                             <img src="images/campaign_pic1.jpg" alt="Student Discount">
                             <div class="campaign-duration">30 DAYS</div>
                             <p>Student Discount 20%</p>
+                            <!-- The best one :D -->
                         </div>
                         <div class="campaign-item">
                             <img src="images/campaign_pic2.jpg" alt="Family Package">
@@ -152,6 +170,7 @@
                 </div>
             </section>
             
+            <!-- Upcoming movies that is planned to be shown in the cinema after release  -->
             <section class="section-yakinda">
                 <h2>COMING SOON</h2>
                 <div class="movie-carousel-wrapper">
@@ -196,6 +215,7 @@
                 </div>
             </section>
 
+            <!-- Something unique to our cinema site, it shows the movies that ended last week with their ratings, perhaps so that they can choose what to watch at home online -->
             <section class="section-last-weeks">
                 <h2>LAST WEEK'S MOVIES</h2>
                 <div class="movie-carousel-wrapper">
@@ -240,20 +260,19 @@
                 </div>
             </section>
 
+            <!-- The classic footer with the social media and the Privacy Polacy with Copyright -->
             <footer class="footer">
-                <div class="footer-links">
-                    <a href="contact-us.html">Contact</a>
-                    <a href="#">Privacy Policy</a>
-                </div>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <div class="footer-inner">
+                    <nav class="footer-links">
+                        <a href="#">Copyright &copy; 2025</a>
+                        <a href="#">Privacy Policy</a>
+                    </nav>
+                    <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    </div>
                 </div>
             </footer>
-        </div>
-    </div>
-
-    <script src="home-script.js"></script>
 </body>
 </html>

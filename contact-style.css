@@ -12,7 +12,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Navigasyon */
+/* Navigation bar */
 .main-nav {
     background-color: #000;
     padding: 1.2rem 2rem;
@@ -75,7 +75,7 @@ body {
     background-color: #ff0000;
 }
 
-/* Başlık Bölümü */
+
 header {
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), 
                 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23111"/><path d="M0,0 L100,0 L100,100 Z" fill="%23222"/></svg>');
@@ -191,7 +191,7 @@ button[type="submit"]:hover {
     box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
 }
 
-/* İletişim Bilgileri */
+
 .contact-info {
     background-color: #111;
     padding: 2.5rem;
@@ -253,7 +253,7 @@ footer p {
     opacity: 0.8;
 }
 
-/* Responsive Tasarım */
+
 @media (max-width: 900px) {
     main {
         grid-template-columns: 1fr;
@@ -299,9 +299,9 @@ footer p {
         padding: 1.5rem;
     }
 }
-/* --- CANLI DESTEK WIDGET STİLLERİ (5 Star Cinema Teması) --- */
 
-/* Widget Konumlandırma */
+
+/* Widget location*/
 .chat-widget {
     position: fixed;
     bottom: 20px;
@@ -309,17 +309,16 @@ footer p {
     z-index: 1000;
 }
 
-/* Canlı Destek Butonu Stili */
+/*Live chat button style */
 .chat-button {
-    /* Kırmızı gradient tema */
     background: linear-gradient(to right, #ff0000, #cc0000); 
     color: white;
     padding: 15px 20px;
     border-radius: 25px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4); /* Kırmızı gölge */
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4); 
     transition: all 0.3s ease;
-    font-weight: bold; /* Mevcut sitenizin fontuna uyum */
+    font-weight: bold; 
 }
 
 .chat-button:hover {
@@ -327,20 +326,20 @@ footer p {
     box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
 }
 
-/* Chat Box Stilleri */
+/* Chat Box styles */
 .chat-box {
     position: absolute;
     bottom: 70px;
     right: 0;
     width: 350px;
     height: 450px;
-    background: #111; /* Karanlık arka plan */
-    border-radius: 10px; /* Daha az yuvarlak */
-    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.2); /* Kırmızı gölge */
+    background: #111; 
+    border-radius: 10px; 
+    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.2); 
     display: none;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid #333; /* Kenarlık */
+    border: 1px solid #333; 
 }
 
 .chat-box.active {
@@ -348,7 +347,7 @@ footer p {
     animation: slideUp 0.3s ease;
 }
 
-/* Animasyonu koruyoruz */
+
 @keyframes slideUp {
     from {
         opacity: 0;
@@ -361,7 +360,7 @@ footer p {
 }
 
 .chat-header {
-    /* Kırmızı gradient tema */
+    /*Red gradient tema */
     background: linear-gradient(to right, #ff0000, #cc0000);
     color: white;
     padding: 15px;
@@ -391,34 +390,34 @@ footer p {
 }
 
 .close-btn:hover {
-    background: rgba(0, 0, 0, 0.2); /* Kırmızı üzerine koyu hover */
+    background: rgba(0, 0, 0, 0.2); 
 }
 
 .chat-messages {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
-    background: #000; /* Mesaj alanı daha koyu */
+    background: #000; 
 }
 
 .message {
     margin-bottom: 15px;
     max-width: 80%;
     padding: 10px 15px;
-    border-radius: 10px; /* Temaya uyumlu, daha keskin kenarlar */
+    border-radius: 10px; 
     position: relative;
     color: #fff;
 }
 
 .user-message {
-    background: #ff0000; /* Kullanıcı mesajı (Kırmızı) */
+    background: #ff0000; 
     color: white;
     margin-left: auto;
     border-bottom-right-radius: 5px;
 }
 
 .bot-message {
-    background: #222; /* Bot mesajı (Koyu gri/Siyah) */
+    background: #222; 
     color: #fff;
     border: 1px solid #333;
     margin-right: auto;
@@ -430,7 +429,7 @@ footer p {
     opacity: 0.6;
     display: block;
     margin-top: 5px;
-    color: #ccc; /* Zamanı okunur yapmak için */
+    color: #ccc; 
 }
 
 .chat-input {
@@ -472,13 +471,12 @@ footer p {
     background: #cc0000;
 }
 
-/* Responsive Tasarım */
 @media (max-width: 480px) {
     .chat-box {
         width: 300px;
         height: 400px;
         right: 10px;
-        bottom: 60px; /* Butonun üstünde kalması için biraz yukarı çektik */
+        bottom: 60px; 
     }
     
     .chat-widget {
