@@ -1,4 +1,4 @@
-/* General Resets and Base Styles */
+/* The base, it is used for reset as we used in the theory */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,10 +14,10 @@ body {
     background-position: center top; /* Center the image */
     background-attachment: fixed; /* Keep the background fixed while scrolling content */
     min-height: 100vh;
-    overflow-x: hidden; /* Prevent horizontal scroll from layout issues */
+    overflow-x: hidden; /* Prevent horizontal scroll so that it doesn't look odd */
 }
 
-/* Add a dark overlay to the background for better text readability */
+/* Make the background a bit darker to make the page more readable */
 body::before {
     content: '';
     position: fixed;
@@ -25,34 +25,33 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Dark transparency */
-    z-index: -1; /* Behind the content, above the background image */
+    background-color: rgba(0, 0, 0, 0.4); /* Dark transparency(the forth value is opacity I think) */
+    z-index: -1; /* Send the darkener to the back but above the background */
 }
 
 /* Main Wrapper for Content */
 .main-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 50px; /* Space at the bottom */
+    padding-bottom: 50px;
 }
 
-/* --- Top Navigation Bar --- */
+/*  Top Navigation Bar */
 .navbar {
     width: 90%;
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px 0;
     display: flex;
-    justify-content: space-between; /* Logo solda, Nav ortada/sağda, Menü butonu en sağda */
+    justify-content: space-between; /* Logo left, Nav center, Menu right (kendime not) */
     align-items: center;
     background-color: rgba(0, 0, 0, 0.7); 
     z-index: 10;
     position: relative;
 }
 
-/* YENİ: Logo Stilleri */
+/* Logo Stilleri */
 .logo-link {
-    /* Navigasyon menüsünü sağa itmek için flex-grow: 1 kullanabiliriz, ancak menünün ortada kalması için marj daha iyidir. */
     margin-right: 50px; /* Navigasyon menüsünden ayırır */
     padding-left: 10px; 
     display: flex; /* Flex konteyner olmasını sağlar */
@@ -61,21 +60,8 @@ body::before {
 
 .logo {
     width: 90px; 
-    height: 90px;
-    /* DİKKAT: Logonun daire şeklinde ve arka plansız görünmesinin anahtarı budur: */
-    /* 1. Logonun kendisi şeffaf arka planlı bir PNG olmalı. */
-    /* 2. border-radius: 50% ile daire şekli verilir. */
-    border-radius: 50%; 
-    
-    /* Eğer PNG dosyanız zaten dairesel ve şeffafsa, object-fit: cover kullanın. 
-       Bu, daireye sığdırırken dış kenarları keser. */
-    object-fit: contain; 
-    
-    /* Eğer PNG'niz kare veya dikdörtgen ise ve onu zorla daireye sığdırmak istiyorsanız,
-       object-fit: contain'ı tekrar kullanabilirsiniz, ancak beyaz/siyah arka plan görünebilir. 
-       Logonun daire görünümü için en iyi yol, PNG'nin kendisinin daire olmasıdır. */
-       
-    border: none; 
+    height: 90px; 
+    object-fit: contain;   
 }
 .navbar nav {
     /* Navigasyon menüsünü ortalamak için */
@@ -103,8 +89,7 @@ body::before {
     cursor: pointer;
 }
 
-/* --- Main Movie Screen Area (Perdeye Oturtma Düzeltmesi) --- */
-/* --- Main Movie Screen Area with Video --- */
+/* Main Movie Screen Area with Video */
 .main-movie-screen {
     position: relative;
     width: 100%;
@@ -137,7 +122,7 @@ body::before {
     display: none;
 }
 
-/* Play Overlay */
+/* Play Button */
 .play-overlay {
     position: absolute;
     top: 0;
@@ -200,23 +185,23 @@ body::before {
     background-color: #ff4757;
 }
 
-/* --- NOW SHOWING Section Styles --- */
+/* NOW SHOWING */
 .section-now-showing {
     margin-bottom: 50px;
 }
 
 .section-now-showing h2 {
-    font-size: 28px; /* Slightly larger heading */
+    font-size: 28px; /* Slightly larger heading compared to others to make it pop more(eye-catching) */
     margin-bottom: 25px;
-    border-bottom: 3px solid #e50914; /* Red accent color */
+    border-bottom: 3px solid #e50914;
     padding-bottom: 12px;
     color: #fff;
     text-align: center;
 }
 
-/* Now Showing Movie Items - Larger and more prominent */
+/* Now Showing Movie Items */
 .movie-item-now-showing {
-    flex: 0 0 240px; /* Larger width: 240px (was 200px) */
+    flex: 0 0 240px; /* Larger in size compared to other sections since this is one of our main eye catchers in the main page we are doing :) */
     margin-right: 25px;
     position: relative;
     cursor: pointer;
@@ -237,7 +222,7 @@ body::before {
 
 .movie-item-now-showing img {
     width: 100%;
-    height: 300px; /* Taller images */
+    height: 300px;
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 12px;
@@ -287,7 +272,7 @@ body::before {
     font-weight: 500;
 }
 
-/* Special highlight for the first item */
+/* This part makes it so that the first movie (Avatar for now) has like a red border and more pop up then others making it look as its trending etc. */
 .movie-item-now-showing:first-child {
     border: 2px solid #e50914;
     background: rgba(229, 9, 20, 0.1);
@@ -323,7 +308,7 @@ body::before {
     display: block;
 }
 
-/* Play Button Overlay */
+/* Play Button for others */
 .play-overlay {
     position: absolute;
     top: 0;
@@ -350,7 +335,7 @@ body::before {
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
 }
 
-/* Buy Ticket Button */
+/* Buy Ticket Button for others */
 .buy-ticket-btn {
     position: absolute;
     bottom: 40px; 
@@ -363,18 +348,18 @@ body::before {
     border-radius: 5px;
     transition: background-color 0.3s;
     z-index: 5; 
-    pointer-events: auto; /* Butonun tıklanabilir olmasını sağlar */
+    pointer-events: auto;
 }
 
-/* --- Movie Listings Panel (The Dark Card) --- */
+/* Movie Listings Panel */
 .movie-listings-panel {
     width: 90%;
     max-width: 1400px;
-    background-color: #1a1a1a; /* Dark background for the card section */
+    background-color: #1a1a1a; 
     padding: 30px;
     border-radius: 8px;
-    margin: 50px auto 0 auto; /* Center the panel horizontally */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    margin: 50px auto 0 auto; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .movie-listings-panel h2 {
@@ -394,13 +379,11 @@ body::before {
     display: flex;
     overflow-x: scroll; /* Enables horizontal scrolling */
     scroll-behavior: smooth; /* Smooth scrolling for button clicks */
-    -webkit-overflow-scrolling: touch; /* Better scrolling on iOS */
     padding: 10px 0;
-    scrollbar-width: none; /* Firefox: Hide scrollbar */
 }
 
 .movie-carousel::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera: Hide scrollbar */
+    display: none; /*Hide scrollbar */
 }
 
 /* Scroll Buttons */
@@ -426,8 +409,7 @@ body::before {
 .scroll-btn.left { left: 0; }
 .scroll-btn.right { right: 0; }
 
-/* --- FRAGMANLAR / Trailers Item Styles --- */
-/* --- TRAILERS / Fragmanlar Item Styles --- */
+/* TRAILERS */
 .section-trailers {
     margin-bottom: 40px;
 }
@@ -552,7 +534,6 @@ body::before {
     backdrop-filter: blur(5px);
 }
 
-/* Gradient overlay for better text readability */
 .movie-item::after {
     content: "";
     position: absolute;
@@ -565,9 +546,7 @@ body::before {
     opacity: 0.7;
 }
 
-
-/* --- YAKINDA / Coming Soon Item Styles --- */
-/* --- COMING SOON / Yakında Item Styles --- */
+/* COMING SOON */
 .section-yakinda {
     margin-bottom: 40px;
 }
@@ -581,7 +560,7 @@ body::before {
 }
 
 .movie-item-yakinda {
-    flex: 0 0 200px; /* Fixed width: 200px */
+    flex: 0 0 200px;
     margin-right: 20px;
     position: relative;
     cursor: pointer;
@@ -595,7 +574,7 @@ body::before {
 
 .movie-item-yakinda img {
     width: 100%;
-    height: 250px; /* Match the height of trailers section */
+    height: 250px;
     object-fit: cover;
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -620,7 +599,7 @@ body::before {
     font-weight: bold;
     text-align: center;
     font-size: 16px;
-    opacity: 1; /* Always visible but more prominent on hover */
+    opacity: 1;
     transition: all 0.3s ease;
     border-radius: 8px;
     padding: 15px;
@@ -632,7 +611,7 @@ body::before {
     font-size: 18px;
 }
 
-/* Add a subtle border to make it stand out */
+/* Add a small border to make it stand out */
 .movie-item-yakinda {
     border: 2px solid transparent;
     border-radius: 10px;
@@ -643,7 +622,7 @@ body::before {
     border-color: rgba(229, 9, 20, 0.5);
 }
 
-/* Optional: Add release date badge */
+/* Add release date badge */
 .movie-item-yakinda .overlay::after {
     content: attr(data-date);
     position: absolute;
@@ -659,8 +638,7 @@ body::before {
     text-shadow: none;
 }
 
-/* --- KAMPANYALAR / Campaigns Item Styles --- */
-/* --- CAMPAIGNS / Campaigns Item Styles --- */
+/* CAMPAIGNS */
 .section-campaigns {
     margin-bottom: 40px;
 }
@@ -674,7 +652,7 @@ body::before {
 }
 
 .campaign-item {
-    flex: 0 0 220px; /* Slightly wider for better content display */
+    flex: 0 0 220px;
     margin-right: 20px;
     position: relative;
     cursor: pointer;
@@ -695,7 +673,7 @@ body::before {
 
 .campaign-item img {
     width: 100%;
-    height: 120px; /* Keep current height but improve styling */
+    height: 120px;
     object-fit: cover;
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -749,7 +727,7 @@ body::before {
 .campaign-item:nth-child(4)::before { content: "🍿"; } /* Popcorn */
 .campaign-item:nth-child(5)::before { content: "💑"; } /* Couple */
 
-/* Add a subtle gradient overlay on images */
+/* Add a little gradient overlay on images */
 .campaign-item {
     position: relative;
     overflow: hidden;
@@ -800,7 +778,7 @@ body::before {
 }
 
 
-/* ===== Footer ===== */
+/* Footer */
 .footer{
   margin-top: 64px;
   border-top: 1px solid #2a2a2a;
