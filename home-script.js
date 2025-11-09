@@ -1,16 +1,12 @@
 // home-script.js
-// SİNEMA HOMEPAGE NİHAİ JAVASCRIPT KODU
-
-// =========================================================
-// 1. CAROUSEL KAYDIRMA FONKSİYONU
-// Yatay film/kampanya listelerini kaydırmak için kullanılır.
-// =========================================================
 
 /**
- * Scrolls the designated carousel element horizontally.
- * @param {string} carouselId - The ID of the carousel container to scroll.
- * @param {number} scrollAmount - The distance in pixels to scroll (positive for right, negative for left).
- */
+//The @param tag is used within JSDoc comments to formally describe a function's parameters, and it follows this format:
+//@param {DataType} variableName - Description of the parameter.
+
+@param {string} carouselId - The ID of the carousel container to scroll.
+@param {number} scrollAmount - The distance in pixels to scroll (positive for right, negative for left).
+*/
 function scrollCarousel(carouselId, scrollAmount) {
     const carousel = document.getElementById(carouselId);
     
@@ -21,19 +17,14 @@ function scrollCarousel(carouselId, scrollAmount) {
 }
 
 
-// =========================================================
-// 2. KULLANICI MENÜSÜ DROPDOWN FONKSİYONLARI
-// Hamburger menüye tıklandığında açılır menüyü gösterir/gizler.
-// =========================================================
+//User Dropdown Menu Functionality
+//Toggles the visibility of the user dropdown menu (Sign In, Sign Up, Cart).
 
-/**
- * Toggles the visibility of the user dropdown menu (Sign In, Sign Up, Cart).
- */
 function toggleDropdown() {
-    // Dropdown içeriğini seçer
+    // Choose the dropdown menu element
     const dropdown = document.getElementById("userDropdown");
     
-    // show-dropdown sınıfını ekleyerek/kaldırarak menüyü gösterir/gizler
+    //Toggle the "show-dropdown" class to show/hide the menu
     dropdown.classList.toggle("show-dropdown");
 }
 
@@ -42,11 +33,11 @@ function toggleDropdown() {
  * @param {Event} event - The click event.
  */
 window.onclick = function(event) {
-    // Tıklanan elementin hamburger butonu veya içindeki ikon olup olmadığını kontrol et
+    // Check if the click is not on the menu button or its icon
     if (!event.target.matches('.menu-button') && !event.target.matches('.menu-button i')) {
         const dropdown = document.getElementById("userDropdown");
         
-        // Eğer menü görünür durumdaysa, kapat
+        // If the dropdown is open, remove the "show-dropdown" class to close it
         if (dropdown && dropdown.classList.contains('show-dropdown')) {
             dropdown.classList.remove('show-dropdown');
         }
@@ -54,24 +45,19 @@ window.onclick = function(event) {
 }
 
 
-// =========================================================
-// 3. VİDEO OYNATMA VE KONTROL FONKSİYONLARI
-// Sayfa yüklendiğinde video oynatmayı ve play/pause kontrollerini yönetir.
-// =========================================================
-
+// Pause/play buttons and overlay effects for the trailer video on the main page
 document.addEventListener('DOMContentLoaded', function() {
     const video = document.querySelector('.trailer-video');
     const playPauseButton = document.getElementById('play-pause-button');
     const playIcon = playPauseButton ? playPauseButton.querySelector('i') : null;
     const playOverlay = document.querySelector('.play-overlay');
 
-    // Video ve kontrol elementlerinin varlığını kontrol et
+    // Check if video and controls exist
     if (!video || !playPauseButton || !playIcon || !playOverlay) {
-        // Video traileri olmayan diğer sayfalarda (About, Contact) bu kısmı atla
+        // Video or controls not found, exit the function
         return; 
     }
 
-    // Start video automatically (tarayıcının otomatik oynatma kısıtlamalarını yönetir)
     video.play().catch(error => {
         console.warn('Auto-play prevented (muted required):', error);
     });
