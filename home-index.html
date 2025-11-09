@@ -16,27 +16,43 @@
     <div class="main-wrapper">
         
         <!-- The top bar of every page -->
-        <header class="navbar">
-            <a href="home-index.html" class="logo-link">
-                <!-- Our cinema logo(plan to redo it to something more modern) -->
-                <img src="images/logo.png" alt="Site Logo" class="logo">
+    <header class="navbar">
+    <a href="home-index.html" class="logo-link">
+        <img src="images/logo.png" alt="Site Logo" class="logo">
+    </a>
+    
+    <nav>
+        <ul>
+            <li><a href="home-index.html">Home </a></li>
+            <li><a href="#">MOVIES</a></li>
+            <li><a href="#">COMING SOON</a></li>
+            <li><a href="#">CINEMAS</a></li>
+            <li><a href="#">OFFERS</a></li>
+            <li><a href="about.html" class="active">About Us</a></li>
+            <li><a href="contact-us.html">Contact Us</a></li>
+        </ul>
+    </nav>
+    <div class="search-icon-container">
+        <a href="#" class="search-button" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </a>
+    </div>
+    <div class="user-menu-dropdown">
+        <button class="menu-button" onclick="toggleDropdown()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="dropdown-content" id="userDropdown">
+            <a href="#" class="dropdown-action-btn sign-in">Sign In</a>
+            <a href="#" class="dropdown-action-btn sign-up">Sign Up</a>
+            
+            <hr>
+            <a href="#" class="dropdown-action-btn cart">
+                <i class="fas fa-shopping-cart"></i> Go To Cart
             </a>
-            <nav>
-                <!-- Navigation menu -->
-                <ul>
-                    <!-- Links to all pages -->
-                    <li><a href="home-index.html">Home </a></li>
-                    <li><a href="#">NOW SHOWING</a></li>
-                    <li><a href="#">COMING SOON</a></li>
-                    <li><a href="#">TRAILERS</a></li>
-                    <li><a href="#">CINEMAS</a></li>
-                    <li><a href="#">OFFERS</a></li>
-                    <li><a href="about.html" class="active">About Us</a></li>
-                    <li><a href="contact-us.html">Contact Us</a></li>
-                </ul>
-            </nav>
-            <button class="menu-button"><i class="fas fa-bars"></i></button>
-        </header>
+        </div>
+    </div>
+    </header>
 
         <!-- The main screen ypu first see, where the video is, this displays the "hot" movie trailer, could write an algorithm for this later for now just visually ready -->
         <div class="main-movie-screen">
@@ -110,7 +126,7 @@
 
             <!-- All of the trailers -->
             <section class="section-trailers">
-                <h2>TRAILERS</h2>
+                <h2>TOP 10</h2>
                 <div class="movie-carousel-wrapper">
                     <button class="scroll-btn left" onclick="scrollCarousel('trailers-carousel', -220)">
                         <i class="fas fa-chevron-left"></i>

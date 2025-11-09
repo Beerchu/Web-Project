@@ -1,252 +1,236 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 body {
-    background-color: #000;
     color: #fff;
+    background-image: url('images/main_cinema.png');
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* --- NAVİGASYON (GÖRSEL 1'E UYARLANDI) --- */
-.main-nav { 
-    /* Home sayfasındaki .navbar stili */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+.main-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 50px;
+}
+
+
+/* ===== HEADER/NAVBAR STYLES ===== */
+.navbar {
     width: 90%;
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px 0;
     display: flex;
-    justify-content: space-between; /* Logo solda, Nav ortada/sağda, Menü butonu en sağda */
+    justify-content: space-between;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7); 
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 10;
     position: relative;
-    box-shadow: none; /* Eskiden kalma shadow'u kaldırdık */
-    border-bottom: none; /* Eskiden kalma border'ı kaldırdık */
-    height: auto;
 }
 
-/* YENİ: Logo Stilleri (.nav-brand yerine .logo-link kullanıldığını varsaydık) */
-.nav-brand {
-    /* Logo görselini temsil eden div (eski .nav-brand), şimdi .logo-link stiline benzer davranacak */
-    margin-right: 50px; /* Navigasyon menüsünden ayırır */
-    padding-left: 10px; 
-    display: flex; 
+.logo-link {
+    margin-right: 50px;
+    padding-left: 10px;
+    display: flex;
     align-items: center;
-    /* Contact Us sayfasındaki eski logo stili korunuyor: */
-    width: 50px; 
-    height: 50px;
-    background-image: url('image_a16722.png'); 
-    background-size: cover;
-    background-position: center;
-    border-radius: 50%;
-    color: transparent; /* İkon ve metni gizlemek için */
-    overflow: hidden;
-}
-.nav-brand i, .nav-brand span {
-    display: none; /* HTML'deki i ve span elementlerini gizle */
 }
 
+.logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
 
-/* Navigasyon menüsü (navbar nav) */
-.main-nav .nav-links-wrapper {
-    /* Navigasyon menüsünü ortalamak için */
-    margin: 0 auto;
-}
-.nav-logo {
-    width: 100px; /* İlk görseldeki logonun tahmini boyutu */
-    height: 100px; /* Kare bir görsel için width ile aynı değer */
-    border-radius: 50%; /* Dairesel şekil vermek için */
-    object-fit: cover; /* Görselin daire içine sığmasını sağlar, kenarları kesebilir */
-}
-.main-nav .nav-links-wrapper {
+.navbar nav {
     margin: 0 auto;
 }
 
-.nav-links {
+.navbar ul {
     list-style: none;
     display: flex;
-    gap: 30px; /* Home CSS'teki gap değerini kullandık */
-    margin: 0;
-    padding: 0;
+    gap: 30px;
 }
 
-.nav-links li {
-    margin: 0; /* Home CSS'e göre sıfırlandı */
-}
-
-.nav-links a {
+.navbar a {
     color: #fff;
     text-decoration: none;
-    font-weight: bold; /* Kalın font Home CSS'ten alındı */
-    padding: 5px 10px; /* Padding Home CSS'ten alındı */
-    font-size: 1rem;
-    text-transform: uppercase;
-    position: relative;
-    letter-spacing: normal;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+.navbar a:hover {
+    color: #e50914;
 }
 
-.nav-links a:hover {
-    color: #ff0000;
-}
-
-.nav-links a.active {
-    /* Home sayfasında aktif link stili belirgin değildi, biz kırmızı alt çizgisiz beyaz bırakalım */
+.navbar a.active {
     color: #fff;
 }
 
-.nav-links a.active::after {
-    /* Kırmızı alt çizgiyi kaldırdık */
-    content: none;
+
+.search-icon-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px;
 }
 
-/* Hamburger Menü Simgesi */
-.menu-toggle {
+.search-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.search-button:hover {
+    color: #e50914;
+}
+
+.user-menu-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 1000;
+    margin-left: auto;
+}
+
+.menu-button {
+    padding: 8px;
     background: none;
     border: none;
-    color: #fff; /* Home CSS'teki renk */
-    font-size: 24px; /* Home CSS'teki font boyutu */
     cursor: pointer;
-    padding: 5px;
+    color: #fff;
+    font-size: 20px;
+    margin-right: 10px; /* Sağdan biraz boşluk */
 }
 
-/* Diğer Başlık Bölümü ve Ana İçerik Stilleri (Dokunulmadı) */
-/* ... */
-
-/* Responsive Tasarım (Navigasyon İlgili Kısımlar) */
-@media (max-width: 900px) {
-    main {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 55px;
+    background-color: #1a1a1a;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
+    padding: 10px 0;
+    border-radius: 5px;
+    border-top: 3px solid #e50914;
 }
 
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2.2rem;
-    }
-    
-    .main-nav {
-        /* Mobil görünümde sadece logo ve menü butonu yan yana kalsın */
-        flex-direction: row; 
-        justify-content: space-between;
-        padding: 1rem;
-    }
-    
-    .nav-links {
-        /* Mobil menü kapalı (JS ile açılacak) */
-        display: none; 
-        flex-direction: column;
-        width: 100%;
-        position: absolute;
-        top: 80px; /* Nav bar yüksekliği kadar aşağıya */
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.9);
-        padding: 10px 0;
-        gap: 10px;
-    }
-    
-    /* Mobil menü açıldığında */
-    .nav-links.open {
-        display: flex;
-    }
-    
-    .nav-links li {
-        margin: 0;
-        text-align: center;
-    }
-    
-    .nav-links a {
-        display: block;
-        padding: 10px 0;
-    }
-    
-    .menu-toggle {
-        display: block;
-    }
-
-    .contact-form, .contact-info {
-        padding: 1.8rem;
-    }
+.dropdown-action-btn {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }
 
-@media (min-width: 769px) {
-    .menu-toggle {
-        display: none; /* Masaüstünde butonu gizleyelim */
-    }
-    .nav-links {
-        display: flex !important; /* Masaüstünde her zaman göster */
-    }
+.dropdown-action-btn:hover {
+    background-color: #333;
+    color: #fff;
 }
 
-@media (max-width: 480px) {
-    header {
-        padding: 3rem 1rem;
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .contact-form, .contact-info {
-        padding: 1.5rem;
-    }
+.dropdown-content hr {
+    border: 0;
+    height: 1px;
+    background: #444;
+    margin: 5px 0;
 }
 
+.show-dropdown {
+    display: block;
+}
 
-header {
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23111"/><path d="M0,0 L100,0 L100,100 Z" fill="%23222"/></svg>');
+/* ===== CONTENT PANEL ===== */
+.movie-listings-panel {
+    width: 90%;
+    max-width: 1400px;
+    background-color: #1a1a1a;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 30px auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HERO SECTION ===== */
+.about-hero {
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 24px;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    margin-bottom: 40px;
+}
+
+.about-hero__text h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
     color: white;
-    text-align: center;
-    padding: 4rem 0;
-    position: relative;
-    overflow: hidden;
 }
 
-/* Diğer tüm stiller buraya kopyalanmaya devam edecek... */
-.stars-rating {
-    margin-bottom: 1.5rem;
+.about-hero__text p {
+    color: #b9c3cf;
+    max-width: 52ch;
+    margin: 0 0 14px;
 }
 
-.stars-rating i {
-    color: #ff0000;
-    margin: 0 3px;
-    font-size: 1.5rem;
-    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+.about-btn {
+    display: inline-block;
+    background: #e50914;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 6px;
+    padding: 10px 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
-    text-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+.about-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
 }
 
-header p {
-    margin: 0.5rem 0 0;
-    font-size: 1.2rem;
-    opacity: 0.9;
-    color: #ddd;
+.about-hero__badge img {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
 }
 
-/* Ana İçerik */
+/* ===== CONTACT FORM STYLES ===== */
 main {
-    max-width: 1200px;
-    margin: 3rem auto;
-    padding: 0 1.5rem;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2.5rem;
+    margin-bottom: 40px;
 }
 
-/* Form Bölümü */
 .contact-form {
     background-color: #111;
     padding: 2.5rem;
@@ -314,7 +298,6 @@ button[type="submit"]:hover {
     box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
 }
 
-
 .contact-info {
     background-color: #111;
     padding: 2.5rem;
@@ -362,79 +345,67 @@ button[type="submit"]:hover {
     font-size: 1.1rem;
 }
 
-/* Footer */
-footer {
-    background-color: #000;
+/* ===== FOOTER STYLES ===== */
+.footer {
+    margin-top: auto;
+    border-top: 1px solid #2a2a2a;
+    background: #121212;
+    padding: 20px 0;
+}
+
+.footer .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.footer .footer-links a {
+    color: #cfcfcf;
+    margin-right: 24px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer .footer-links a:last-child {
+    margin-right: 0;
+}
+
+.footer .footer-links a:hover {
+    color: #ffffff;
+}
+
+.footer .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    color: #cfcfcf;
+    margin-left: 12px;
+    text-decoration: none;
+}
+
+.footer .social-icons a:first-child {
+    margin-left: 0;
+}
+
+.footer .social-icons a:hover {
+    background: #e50914;
     color: #fff;
-    text-align: center;
-    padding: 2rem 0;
-    margin-top: 4rem;
-    border-top: 1px solid #333;
 }
 
-footer p {
-    opacity: 0.8;
+.footer .social-icons i {
+    font-size: 16px;
+    line-height: 1;
 }
 
-
-@media (max-width: 900px) {
-    main {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2.2rem;
-    }
-    
-    .main-nav {
-        /* Tekrar column yaptık ama menü linklerini gizleyip sadece 
-           logo ve hamburger menü kalsın, mobil menü açılır kapanır olsun */
-        flex-direction: row; 
-        justify-content: space-between;
-        padding: 1rem;
-    }
-    
-    .nav-links {
-        /* Mobil menü için gizlenmeli */
-        display: none; 
-    }
-    
-    .menu-toggle {
-        display: block; /* Hamburger menü mobil görünümde görünür olsun */
-    }
-
-    .contact-form, .contact-info {
-        padding: 1.8rem;
-    }
-}
-
-@media (min-width: 769px) {
-    .menu-toggle {
-        display: block; /* Masaüstünde de sağda hamburger butonu görünecek */
-    }
-}
-
-@media (max-width: 480px) {
-    header {
-        padding: 3rem 1rem;
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .contact-form, .contact-info {
-        padding: 1.5rem;
-    }
-}
-/* --- CANLI DESTEK WIDGET STİLLERİ (5 Star Cinema Teması) --- */
-/* (Bu kısım orijinal haliyle bırakılmıştır) */
-
-
-/* Widget location*/
+/* ===== CHAT WIDGET STYLES ===== */
 .chat-widget {
     position: fixed;
     bottom: 20px;
@@ -442,16 +413,15 @@ footer p {
     z-index: 1000;
 }
 
-/*Live chat button style */
 .chat-button {
-    background: linear-gradient(to right, #ff0000, #cc0000); 
+    background: linear-gradient(to right, #ff0000, #cc0000);
     color: white;
     padding: 15px 20px;
     border-radius: 25px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4); 
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
     transition: all 0.3s ease;
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 .chat-button:hover {
@@ -459,27 +429,25 @@ footer p {
     box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
 }
 
-/* Chat Box styles */
 .chat-box {
     position: absolute;
     bottom: 70px;
     right: 0;
     width: 350px;
     height: 450px;
-    background: #111; 
-    border-radius: 10px; 
-    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.2); 
+    background: #111;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.2);
     display: none;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid #333; 
+    border: 1px solid #333;
 }
 
-.chat-box.open { /* .active yerine .open kullanıldığı için düzeltildi */
+.chat-box.open {
     display: flex;
     animation: slideUp 0.3s ease;
 }
-
 
 @keyframes slideUp {
     from {
@@ -493,7 +461,6 @@ footer p {
 }
 
 .chat-header {
-    /*Red gradient tema */
     background: linear-gradient(to right, #ff0000, #cc0000);
     color: white;
     padding: 15px;
@@ -523,34 +490,34 @@ footer p {
 }
 
 .close-btn:hover {
-    background: rgba(0, 0, 0, 0.2); 
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .chat-messages {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
-    background: #000; 
+    background: #000;
 }
 
 .message {
     margin-bottom: 15px;
     max-width: 80%;
     padding: 10px 15px;
-    border-radius: 10px; 
+    border-radius: 10px;
     position: relative;
     color: #fff;
 }
 
 .user-message {
-    background: #ff0000; 
+    background: #ff0000;
     color: white;
     margin-left: auto;
     border-bottom-right-radius: 5px;
 }
 
 .bot-message {
-    background: #222; 
+    background: #222;
     color: #fff;
     border: 1px solid #333;
     margin-right: auto;
@@ -562,7 +529,7 @@ footer p {
     opacity: 0.6;
     display: block;
     margin-top: 5px;
-    color: #ccc; 
+    color: #ccc;
 }
 
 .chat-input {
@@ -604,20 +571,109 @@ footer p {
     background: #cc0000;
 }
 
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem;
+    }
+    
+    .navbar nav {
+        display: none;
+    }
+    
+    .navbar ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.9);
+        padding: 10px 0;
+        gap: 10px;
+    }
+    
+    .navbar ul.open {
+        display: flex;
+    }
+    
+    .search-icon-container {
+        margin-right: 10px;
+    }
+    
+    .menu-button {
+        margin-right: 0;
+    }
+    
+    .dropdown-content {
+        top: 50px;
+        right: 10px;
+    }
+    
+    .about-hero {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-hero__badge img {
+        margin: 10px auto 0;
+    }
+    
+    main {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .contact-form, .contact-info {
+        padding: 1.8rem;
+    }
+    
+    .footer .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .footer .footer-links a {
+        margin: 0 12px;
+    }
+}
+
 @media (max-width: 480px) {
+    .about-hero {
+        padding: 20px;
+    }
+    
+    .about-hero__text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .contact-form, .contact-info {
+        padding: 1.5rem;
+    }
+    
     .chat-box {
         width: 300px;
         height: 400px;
         right: 10px;
-        bottom: 60px; 
+        bottom: 60px;
     }
     
     .chat-widget {
         right: 10px;
         bottom: 10px;
     }
+    
     .chat-button {
         padding: 12px 18px;
         font-size: 1rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .navbar ul {
+        display: flex !important;
     }
 }
