@@ -160,13 +160,12 @@ logo-link {
     font-weight: bold;
     padding: 5px 10px;
 }
+.navbar a:hover {
+    color: #e50914;
+}
 
-.menu-button {
-    background: none;
-    border: none;
+.navbar a.active {
     color: #fff;
-    font-size: 24px;
-    cursor: pointer;
 }
 
 /* Main Movie Screen Area with Video */
