@@ -49,12 +49,92 @@ body::before {
     z-index: 10;
     position: relative;
 }
+/* --- User menu dropdown styles --- */
+.user-menu-dropdown {
+    position: relative; /* Position the internal dropdown menu relative to this container. */
+    display: inline-block;
+    z-index: 1000;
+    /* To separate it from other elements in the Navbar. */
+    margin-left: auto; 
+}
 
-/* Logo Stilleri */
-.logo-link {
-    margin-right: 50px; /* Navigasyon menüsünden ayırır */
+/* Menü Button Style */
+.menu-button {
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+    margin-right: 10px; 
+}
+
+.search-icon-container {
+    /* To align with other elements in the Navbar. */
+    display: flex;
+    align-items: center;
+    /* Fill the space between Dropdown menu and navigation*/
+    margin-left: auto; 
+    margin-right: 20px; 
+}
+
+
+.search-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px; 
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.search-button:hover {
+    color: #e50914; /* Red accent on hover */
+}
+/* Dropdown Menu Content */
+.dropdown-content {
+    display: none; /* Hide by default */
+    position: absolute;
+    right: 0; 
+    top: 55px; /* Below the menu button */
+    background-color: #1a1a1a; 
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
+    padding: 10px 0;
+    border-radius: 5px;
+    border-top: 3px solid #e50914; /* Red accent on top */
+}
+
+/* Dropdown Menu Items */
+.dropdown-action-btn {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-action-btn:hover {
+    background-color: #333;
+}
+
+/* Divider Line */
+.dropdown-content hr {
+    border: 0;
+    height: 1px;
+    background: #444;
+    margin: 5px 0;
+}
+
+/* Show Dropdown when active */
+.show-dropdown {
+    display: block;
+}
+/* Logo Style */
+logo-link {
+    margin-right: 50px; 
     padding-left: 10px; 
-    display: flex; /* Flex konteyner olmasını sağlar */
+    display: flex;
     align-items: center;
 }
 
@@ -64,7 +144,7 @@ body::before {
     object-fit: contain;   
 }
 .navbar nav {
-    /* Navigasyon menüsünü ortalamak için */
+    /* Center the navigation in the navbar */
     margin: 0 auto;
 }
 
