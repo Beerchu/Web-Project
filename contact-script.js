@@ -1,32 +1,28 @@
-/**
- * Toggles the visibility of the user dropdown menu (Sign In, Sign Up, Cart).
- */
+/* Toggles the visibility of the user dropdown menu (Sign In, Sign Up, Cart).*/
 function toggleDropdown() {
-    // Dropdown içeriğini seçer
+    // Chooses the dropdown content
     const dropdown = document.getElementById("userDropdown");
     
-    // show-dropdown sınıfını ekleyerek/kaldırarak menüyü gösterir/gizler
+    // shows/hides the menu by adding/removing the show-dropdown class
     dropdown.classList.toggle("show-dropdown");
 }
 
-/**
- * Closes the dropdown menu when a click occurs outside of the menu button.
- * @param {Event} event - The click event.
- */
+/* Closes the dropdown menu when a click occurs outside of the menu button.*/
 window.onclick = function(event) {
-    // Tıklanan elementin hamburger butonu veya içindeki ikon olup olmadığını kontrol et
+     // Check if the clicked element is the menu icon
     if (!event.target.matches('.menu-button') && !event.target.matches('.menu-button i')) {
         const dropdown = document.getElementById("userDropdown");
         
-        // Eğer menü görünür durumdaysa, kapat
+        // If the menu is visible, close it
         if (dropdown && dropdown.classList.contains('show-dropdown')) {
             dropdown.classList.remove('show-dropdown');
         }
     }
-}// ⭐ Canlı Destek Sistemi Sınıfı
+}
+
+// Live chat system
 class LiveChat {
     constructor() {
-        // Gerekli DOM elementlerini seç
         this.chatButton = document.getElementById('chatButton');
         this.chatBox = document.getElementById('chatBox');
         this.closeChat = document.getElementById('closeChat');
@@ -34,7 +30,7 @@ class LiveChat {
         this.sendMessage = document.getElementById('sendMessage');
         this.chatMessages = document.getElementById('chatMessages');
         
-        // Botun vereceği rastgele cevaplar
+        // The bot's predefined responses
         this.botResponses = [
             "I see, how can I assist you?",
             "Could you provide more information about this?",
@@ -47,7 +43,6 @@ class LiveChat {
     }
     
     init() {
-        // Event listener'ları ekle
         if (this.chatButton) this.chatButton.addEventListener('click', () => this.toggleChat());
         if (this.closeChat) this.closeChat.addEventListener('click', () => this.closeChatBox());
         if (this.sendMessage) this.sendMessage.addEventListener('click', () => this.sendUserMessage());
@@ -80,11 +75,11 @@ class LiveChat {
         
         if (message === '') return;
         
-        // Kullanıcı mesajını ekle
+        //Add user message to chat
         this.addMessage(message, 'user');
         this.messageInput.value = '';
         
-        // Bot yanıtını simüle et (1-2 saniye gecikmeli)
+        //simulate bot response after a delay
         setTimeout(() => {
             this.addBotResponse();
         }, 1000 + Math.random() * 1000);
@@ -121,7 +116,7 @@ class LiveChat {
         if (this.chatMessages) this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
     }
     
-    // Güvenlik için HTML karakterlerini kaçış dizisine dönüştürür
+    // FOR SECURITY: Escape HTML to prevent XSS
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -130,25 +125,24 @@ class LiveChat {
 }
 
 
-// 🚀 Tüm Sayfa Yükleme İşlemleri (DOMContentLoaded)
+//DOMContentLoaded event to ensure the DOM is fully loaded before running scripts
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. İletişim Formu İşleyicisi
+    // 1. Contact Form Submission Handling
     const contactForm = document.getElementById('contactForm');
     
     if (contactForm) {
-        // İki kere yazılan form işleyiciyi birleştirdik.
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Basit doğrulama (HTML'de 'required' olsa da iyi bir kontrol)
+            //Check if necessary fields are filled
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const subject = document.getElementById('subject').value;
             const message = document.getElementById('message').value;
 
             if (!name || !email || subject === "" || !message) {
-                 alert('Lütfen tüm alanları doldurun.');
+                 alert('Fill neccesary fields.');
                  return;
             }
 
@@ -159,33 +153,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 message: message
             };
             
-            console.log('Form verileri:', formData);
-            alert('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.');
+            console.log('Form data:', formData);
+            alert('Your message has been sent, we will contact you later.');
             contactForm.reset();
         });
     }
 
-    // 2. Canlı Destek Sistemi Başlatma
+    // 2. Initialize Live Chat
     new LiveChat();
 
-    // 3. Ekstra Özellik: Sayfa dışına tıklayınca chat'i kapat
+    // 3. Close chat box when clicking outside
     const chatBox = document.getElementById('chatBox');
     const chatButton = document.getElementById('chatButton');
     
     document.addEventListener('click', (e) => {
-        // Chat kutusu açıksa ve tıklanan yer kutunun veya butonun içi değilse kapat
+        // Close chat box if click is outside chat box and chat button
         if (chatBox && chatBox.classList.contains('active') && 
             chatButton && !chatBox.contains(e.target) && 
             !chatButton.contains(e.target)) {
             chatBox.classList.remove('active');
         }
     });
-
-    // 4. Yıldız Yağmuru Efekti (Eski kodunuzdan korundu)
-    const navBrand = document.querySelector('.nav-brand');
-    if (navBrand) {
-        navBrand.style.cursor = 'pointer';
-        // showStarRain fonksiyonu bu kodda tanımlı değil, ancak olay dinleyiciyi koruyoruz.
-        // navBrand.addEventListener('click', showStarRain); 
-    }
 });

@@ -33,7 +33,9 @@ body::before {
 .main-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 50px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /*  Top Navigation Bar */
@@ -43,13 +45,54 @@ body::before {
     margin: 0 auto;
     padding: 20px 0;
     display: flex;
-    justify-content: space-between; /* Logo left, Nav center, Menu right (kendime not) */
+    justify-content: space-between; /* Logo left, Nav center, Menu right (note to self) */
     align-items: center;
     background-color: rgba(0, 0, 0, 0.7); 
     z-index: 10;
     position: relative;
 }
-/* --- User menu dropdown styles --- */
+
+.navbar nav {
+    /* Center the navigation in the navbar */
+    margin: 0 auto;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+.navbar a:hover {
+    color: #e50914;
+}
+
+.navbar a.active {
+    color: #fff;
+}
+
+/* Logo Style */
+.logo-link {
+    margin-right: 50px; 
+    padding-left: 10px; 
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 90px; 
+    height: 90px; 
+    object-fit: contain;   
+}
+
+/* User menu dropdown styles */
 .user-menu-dropdown {
     position: relative; /* Position the internal dropdown menu relative to this container. */
     display: inline-block;
@@ -58,7 +101,7 @@ body::before {
     margin-left: auto; 
 }
 
-/* Menü Button Style */
+/* Menu Button Style */
 .menu-button {
     padding: 8px;
     background: none;
@@ -88,8 +131,9 @@ body::before {
 }
 
 .search-button:hover {
-    color: #e50914; /* Red accent on hover */
+    color: #e50914;
 }
+
 /* Dropdown Menu Content */
 .dropdown-content {
     display: none; /* Hide by default */
@@ -101,7 +145,7 @@ body::before {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
     padding: 10px 0;
     border-radius: 5px;
-    border-top: 3px solid #e50914; /* Red accent on top */
+    border-top: 3px solid #e50914; 
 }
 
 /* Dropdown Menu Items */
@@ -130,43 +174,8 @@ body::before {
 .show-dropdown {
     display: block;
 }
-/* Logo Style */
-logo-link {
-    margin-right: 50px; 
-    padding-left: 10px; 
-    display: flex;
-    align-items: center;
-}
 
-.logo {
-    width: 90px; 
-    height: 90px; 
-    object-fit: contain;   
-}
-.navbar nav {
-    /* Center the navigation in the navbar */
-    margin: 0 auto;
-}
 
-.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
-
-.navbar a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 5px 10px;
-}
-.navbar a:hover {
-    color: #e50914;
-}
-
-.navbar a.active {
-    color: #fff;
-}
 
 /* Main Movie Screen Area with Video */
 .main-movie-screen {
@@ -383,7 +392,7 @@ logo-link {
 .trailer-poster {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Görselin tüm alanı kaplamasını sağlar */
+    object-fit: cover;
     display: block;
 }
 
@@ -400,7 +409,7 @@ logo-link {
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.2); 
     transition: background-color 0.3s;
-    pointer-events: auto; /* Butonun tıklanabilir olmasını sağlar */
+    pointer-events: auto;
 }
 
 .play-overlay:hover {
@@ -448,7 +457,7 @@ logo-link {
     padding-bottom: 10px;
 }
 
-/* --- Carousel Styling (Ortak) --- */
+/* Carousel Styling */
 .movie-carousel-wrapper {
     position: relative;
     margin-bottom: 40px;
@@ -488,7 +497,7 @@ logo-link {
 .scroll-btn.left { left: 0; }
 .scroll-btn.right { right: 0; }
 
-/* TRAILERS */
+/* Top 10 */
 .section-trailers {
     margin-bottom: 40px;
 }

@@ -1,12 +1,10 @@
 // home-script.js
 
-/**
-//The @param tag is used within JSDoc comments to formally describe a function's parameters, and it follows this format:
-//@param {DataType} variableName - Description of the parameter.
-
-@param {string} carouselId - The ID of the carousel container to scroll.
-@param {number} scrollAmount - The distance in pixels to scroll (positive for right, negative for left).
+/* Function's parameters meanings:
+carouselId - The ID of the carousel container to scroll.
+scrollAmount - The distance in pixels to scroll (positive for right, negative for left).
 */
+
 function scrollCarousel(carouselId, scrollAmount) {
     const carousel = document.getElementById(carouselId);
     
@@ -28,10 +26,7 @@ function toggleDropdown() {
     dropdown.classList.toggle("show-dropdown");
 }
 
-/**
- * Closes the dropdown menu when a click occurs outside of the menu button.
- * @param {Event} event - The click event.
- */
+/* Closes the dropdown menu when a click occurs outside of the menu button.*/
 window.onclick = function(event) {
     // Check if the click is not on the menu button or its icon
     if (!event.target.matches('.menu-button') && !event.target.matches('.menu-button i')) {

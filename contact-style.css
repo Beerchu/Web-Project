@@ -33,7 +33,7 @@ body::before {
 }
 
 
-/* ===== HEADER/NAVBAR STYLES ===== */
+/* NAVBAR STYLES */
 .navbar {
     width: 90%;
     max-width: 1400px;
@@ -47,6 +47,7 @@ body::before {
     position: relative;
 }
 
+/* Logo Style */
 .logo-link {
     margin-right: 50px;
     padding-left: 10px;
@@ -84,7 +85,7 @@ body::before {
     color: #fff;
 }
 
-
+/* Search Icon and User Menu */
 .search-icon-container {
     display: flex;
     align-items: center;
@@ -118,9 +119,10 @@ body::before {
     cursor: pointer;
     color: #fff;
     font-size: 20px;
-    margin-right: 10px; /* Sağdan biraz boşluk */
+    margin-right: 10px;
 }
 
+/* When dropped down shows sign-in, sign-out and my cart */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -159,21 +161,7 @@ body::before {
     display: block;
 }
 
-/* ===== CONTENT PANEL ===== */
-.movie-listings-panel {
-    width: 90%;
-    max-width: 1400px;
-    background-color: #1a1a1a;
-    padding: 30px;
-    border-radius: 8px;
-    margin: 30px auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ===== HERO SECTION ===== */
+/* HERO SECTION (First part the user sees) */
 .about-hero {
     background: rgba(0, 0, 0, 0.65);
     border: 1px solid #2a2a2a;
@@ -223,7 +211,7 @@ body::before {
     filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
 }
 
-/* ===== CONTACT FORM STYLES ===== */
+/* CONTACT FORM STYLES */
 main {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -298,6 +286,7 @@ button[type="submit"]:hover {
     box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
 }
 
+/* CONTACT INFO STYLES */
 .contact-info {
     background-color: #111;
     padding: 2.5rem;
@@ -345,7 +334,7 @@ button[type="submit"]:hover {
     font-size: 1.1rem;
 }
 
-/* ===== FOOTER STYLES ===== */
+/* FOOTER STYLES */
 .footer {
     margin-top: auto;
     border-top: 1px solid #2a2a2a;
@@ -405,7 +394,7 @@ button[type="submit"]:hover {
     line-height: 1;
 }
 
-/* ===== CHAT WIDGET STYLES ===== */
+/* CHAT WIDGET STYLES ( Live chat )  */
 .chat-widget {
     position: fixed;
     bottom: 20px;
@@ -571,7 +560,7 @@ button[type="submit"]:hover {
     background: #cc0000;
 }
 
-/* ===== RESPONSIVE STYLES ===== */
+/* RESPONSIVE STYLES */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: row;

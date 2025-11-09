@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - 5 Star Cinema</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Contact Us - Five Stars Cinema</title>
+    <!-- Contact us stylesheet -->
     <link rel="stylesheet" href="contact-style.css">
+    <!-- An external CSS file that we use for the menu and search icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- The JavaScript file of Contact us -->
     <script src="contact-script.js"></script>
 </head>
 <body>
     <div class="main-wrapper">
-        <!-- ==========================
-             NAVIGATION BAR SECTION
-        =========================== -->
+        <!-- Top part for all pages,logo,menu etc. -->
         <header class="navbar">
             <a href="home-index.html" class="logo-link">
                 <img src="images/logo.png" alt="Cinema Logo" class="logo">
             </a>
             <nav>
                 <ul>
-                    <li><a href="home-index.html">Home</a></li>
+                    <li><a href="home-index.html">HOME</a></li>
                     <li><a href="#">MOVIES</a></li>
                     <li><a href="#">COMING SOON</a></li>
                     <li><a href="#">CINEMAS</a></li>
                     <li><a href="#">OFFERS</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact-us.html" class="active">Contact Us</a></li>
+                    <li><a href="about.html">ABOUT US</a></li>
+                    <li><a href="contact-us.html" class="active">CONTACT US</a></li>
                 </ul>
             </nav>
 
@@ -53,9 +54,8 @@
             </div>
         </header>
 
-        <!-- Content panel -->
         <div class="movie-listings-panel">
-            <!-- HERO section -->
+            <!-- Quick Introduction, first part you see on the page, you can click the button to go to the contact form part of the page-->
             <section class="about-hero">
                 <div class="about-hero__text">
                     <h1>Contact Us</h1>
@@ -68,6 +68,7 @@
             </section>
 
             <main>
+                <!-- The contact form -->
                 <section class="contact-form" id="contact-form">
                     <form id="contactForm">
                         <div class="form-group">
@@ -100,6 +101,7 @@
                     </form>
                 </section>
 
+                <!-- Contact Information -->
                 <section class="contact-info">
                     <h2>Other Ways to Reach Us</h2>
                     <div class="info-item">
@@ -108,7 +110,8 @@
                     </div>
                     <div class="info-item">
                         <h3><i class="fas fa-phone"></i> Phone</h3>
-                        <p>+90 (0212) 498 41 41</p>
+                        <!-- Teacher this number is real you can contact the secretary(Irmak Tarhan) of the company ;) -->
+                        <p>+90 (553) 777 06 03</p>
                     </div>
                     <div class="info-item">
                         <h3><i class="fas fa-envelope"></i> Email</h3>
@@ -125,14 +128,15 @@
                         <a href="#">Privacy Policy</a>
                     </nav>
                     <div class="social-icons">
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
             </footer>
         </div>
 
+        <!-- A live chat section, however right now it only uses ready answers and doesn't check what was sent, we plan to connect it if possible -->
         <div class="chat-widget">
             <div class="chat-button" id="chatButton">
                 <span>💬 Live Support</span>
@@ -159,6 +163,7 @@
         </div>
     </div>
         
+    <!-- Hello teacher, the reason why we wrote this here instead of the javascript file is because for some reason whenever we did that it broke, but at least we get to show two ways to write a script :) -->
     <script>
         function toggleDropdown() {
             const dropdown = document.getElementById("userDropdown");

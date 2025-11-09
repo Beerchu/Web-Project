@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cinema Homepage</title>
+    <title>Home - Five Stars Cinema</title>
     <!-- Our custom CSS file -->
     <link rel="stylesheet" href="home.css"> 
     <!-- An external CSS file that we use for the button images like play and pause -->
@@ -18,18 +18,19 @@
         <!-- The top bar of every page -->
     <header class="navbar">
     <a href="home-index.html" class="logo-link">
+        <!-- We will change the logo later -->
         <img src="images/logo.png" alt="Site Logo" class="logo">
     </a>
     
     <nav>
         <ul>
-            <li><a href="home-index.html">Home </a></li>
+            <li><a href="home-index.html">HOME</a></li>
             <li><a href="#">MOVIES</a></li>
             <li><a href="#">COMING SOON</a></li>
             <li><a href="#">CINEMAS</a></li>
             <li><a href="#">OFFERS</a></li>
-            <li><a href="about.html" class="active">About Us</a></li>
-            <li><a href="contact-us.html">Contact Us</a></li>
+            <li><a href="about.html" class="active">ABOUT US</a></li>
+            <li><a href="contact-us.html">CONTACT US</a></li>
         </ul>
     </nav>
     <div class="search-icon-container">
@@ -54,7 +55,7 @@
     </div>
     </header>
 
-        <!-- The main screen ypu first see, where the video is, this displays the "hot" movie trailer, could write an algorithm for this later for now just visually ready -->
+        <!-- The main screen you first see, where the video is, this displays the "hot" movie trailer, could write an algorithm for this later for now just visually ready -->
         <div class="main-movie-screen">
             <div class="trailer-content">
                 <video class="trailer-video" muted loop playsinline>
@@ -124,7 +125,10 @@
                 </div>
             </section>
 
-            <!-- All of the trailers -->
+            <!-- Top 10 movies of our Cinemas -->
+             <!-- Hello teacher, the class names, or ids are called trailers because we had other plans before and we changed it afterwards to be more fitting -->
+              <!-- We plan to chnage the names afterwards for now we didn't change it to not break the website... please understand ;v; -->
+               <!-- The names will be changed with topTen, example: section-topTen -->
             <section class="section-trailers">
                 <h2>TOP 10</h2>
                 <div class="movie-carousel-wrapper">
@@ -132,12 +136,16 @@
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <div class="movie-carousel" id="trailers-carousel">
-                        <div class="movie-item"><img src="images/movie1.jpg" alt="Film1"><div class="play-icon"><i class="fas fa-play"></i></div><p>Interstellar</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie2.jpg" alt="Film 2"><div class="play-icon"><i class="fas fa-play"></i></div><p>F1 Movie</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_3.jpg" alt="Film3"><div class="play-icon"><i class="fas fa-play"></i></div><p>Avengers Infinity War</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_4.jpg" alt="Film4"><div class="play-icon"><i class="fas fa-play"></i></div><p>Barbie the Movie</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_5.jpg" alt="Film 5"><div class="play-icon"><i class="fas fa-play"></i></div><p>Demon Slayer Infinity Castle</p><div class="rating">...</div></div>
-                        <div class="movie-item"><img src="images/movie_thumbnail_6.jpg" alt="Film 6"><div class="play-icon"><i class="fas fa-play"></i></div><p>How To Train Your Dragon</p><div class="rating">...</div></div>
+                        <div class="movie-item"><img src="images/movie1.jpg" alt="Interstellar"><div class="play-icon"><i class="fas fa-play"></i></div><p>Interstellar</p><div class="rating">⭐ 9.5/10</div></div>
+                        <div class="movie-item"><img src="images/movie_7.jpg" alt="The Matrix"><div class="play-icon"><i class="fas fa-play"></i></div><p>The Matrix</p><div class="rating">⭐ 9.3/10</div></div>
+                        <div class="movie-item"><img src="images/movie_8.jpg" alt="Charlie And The Chocolate Factory"><div class="play-icon"><i class="fas fa-play"></i></div><p>Charlie And The Chocolate Factory</p><div class="rating">⭐ 9.1/10</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_6.jpg" alt="How To Train Your Dragon"><div class="play-icon"><i class="fas fa-play"></i></div><p>How To Train Your Dragon</p><div class="rating">⭐ 9.0/10</div></div>
+                        <div class="movie-item"><img src="images/movie2.jpg" alt="F1 Movie"><div class="play-icon"><i class="fas fa-play"></i></div><p>F1 Movie</p><div class="rating">⭐ 8.7/10</div></div>
+                        <div class="movie-item"><img src="images/movie_10.jpg" alt="Mission Impossible"><div class="play-icon"><i class="fas fa-play"></i></div><p>Mission Impossible</p><div class="rating">⭐ 8.5/10</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_3.jpg" alt="Avengers Infinity War"><div class="play-icon"><i class="fas fa-play"></i></div><p>Avengers Infinity War</p><div class="rating">⭐ 8.2/10</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_4.jpg" alt="Barbie the Movie"><div class="play-icon"><i class="fas fa-play"></i></div><p>Barbie the Movie</p><div class="rating">⭐ 7.7/10</div></div>
+                        <div class="movie-item"><img src="images/movie_thumbnail_5.jpg" alt="Demon Slayer Infinity Castle"><div class="play-icon"><i class="fas fa-play"></i></div><p>Demon Slayer Infinity Castle</p><div class="rating">⭐ 7.5/10</div></div>
+                        <div class="movie-item"><img src="images/movie_9.jpg" alt="The Greatest Showman"><div class="play-icon"><i class="fas fa-play"></i></div><p>The Greatest Showman</p><div class="rating">⭐ 7.1/10</div></div>
                     </div>
                     <button class="scroll-btn right" onclick="scrollCarousel('trailers-carousel', 220)">
                         <i class="fas fa-chevron-right"></i>
@@ -284,9 +292,9 @@
                         <a href="#">Privacy Policy</a>
                     </nav>
                     <div class="social-icons">
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
             </footer>

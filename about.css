@@ -1,4 +1,3 @@
-/* --- HEADER (NAVBAR) BÖLÜMÜ --- */
 :root {
   --panel: #1a1a1a;
   --muted: #b9c3cf;
@@ -7,7 +6,7 @@
 
 body {
     color: #fff;
-    background-image: url('images/main_cinema.png');
+    background-image: url('images/main_cinema.png'); /* Background image same as all pages */
     background-size: cover;
     background-position: center top;
     background-attachment: fixed;
@@ -48,106 +47,8 @@ body::before {
     position: relative;
 }
 
-/* Logo Stili */
-.logo-link {
-    margin-right: 50px;
-    padding-left: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.logo {
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-}
-
-/* Dropdown konteynerini navbar'ın sağ üst köşesine konumlandırmak için */
-.user-menu-dropdown {
-    position: relative; /* İçindeki açılır menünün buraya göre konumlanmasını sağlar */
-    display: inline-block;
-    z-index: 1000; /* Diğer tüm içeriklerin üzerinde olmalı */
-    /* Navbar'daki diğer elementlerden ayırmak için */
-    margin-left: auto; 
-}
-
-/* Hamburger butonu stili */
-.menu-button {
-    padding: 8px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-    font-size: 20px;
-    margin-right: 10px; /* Sağdan biraz boşluk */
-    transition: color 0.3s;
-}
-/* Arama İkonu Konteyneri */
-.search-icon-container {
-    /* Navbar'daki elemanlarla hizalamak için */
-    display: flex;
-    align-items: center;
-    /* Dropdown menüsü ile navigasyon arasındaki boşluğu doldurur */
-    margin-left: auto; 
-    margin-right: 20px; /* Kullanıcı menüsünden ayırır */
-}
-
-/* Arama Butonu Stili */
-.search-button {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px; /* İkon boyutunu ayarlayın */
-    padding: 10px;
-    transition: color 0.3s;
-}
-
-.search-button:hover {
-    color: #e50914; /* Hover'da kırmızı vurgu */
-}
-/* Açılır Menü İçeriği Stilleri */
-.dropdown-content {
-    display: none; /* Başlangıçta gizli */
-    position: absolute;
-    right: 0; /* Butonun sağ kenarına hizala */
-    top: 55px; /* Navbar'ın yüksekliğine göre ayar (butonun hemen altından başlar) */
-    background-color: #1a1a1a; 
-    min-width: 180px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
-    padding: 10px 0;
-    border-radius: 5px;
-    border-top: 3px solid #e50914; /* Kırmızı vurgu */
-}
-
-/* Menüdeki her bir bağlantı/düğme */
-.dropdown-action-btn {
-    color: #fff;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-
-.dropdown-action-btn:hover {
-    background-color: #333;
-    color: #fff;
-}
-
-/* Ayırıcı çizgi */
-.dropdown-content hr {
-    border: 0;
-    height: 1px;
-    background: #444;
-    margin: 5px 0;
-}
-
-/* JavaScript ile görünür yapıldığında kullanılacak sınıf */
-.show-dropdown {
-    display: block;
-}
-
 .navbar nav {
-    /* Navigasyon menüsünü ortalamak için */
+    /* To put the navigation part in the middle */
     margin: 0 auto;
 }
 
@@ -172,6 +73,101 @@ body::before {
     color: #fff;
 }
 
+/* Logo Style */
+.logo-link {
+    margin-right: 50px;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+/* User Menu Dropdown Container */
+.user-menu-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 1000; /* To be on top of any possible element */
+    margin-left: auto; 
+}
+
+/* Menu button styles */
+.menu-button {
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+    margin-right: 10px;
+    transition: color 0.3s;
+}
+
+/* Search Icon Style */
+.search-icon-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+    margin-right: 20px; /* Add distance between menu and search icons */
+}
+
+.search-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.search-button:hover {
+    color: #e50914;
+}
+
+/* Dropdown menu style on the inside */
+.dropdown-content {
+    display: none; /* Doesn't show up unless clicked */
+    position: absolute;
+    right: 0;
+    top: 55px; 
+    background-color: #1a1a1a; 
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
+    padding: 10px 0;
+    border-radius: 5px;
+    border-top: 3px solid #e50914;
+}
+
+.dropdown-action-btn {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-action-btn:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.dropdown-content hr {
+    border: 0;
+    height: 1px;
+    background: #444;
+    margin: 5px 0;
+}
+
+/* This is the style that shows the dropdown menu for the javascript function */
+.show-dropdown {
+    display: block;
+}
+
+/* HERO SECTION (First part the user sees) */
 .about-hero {
   width: 90%;
   max-width: 1400px;
@@ -275,7 +271,7 @@ body::before {
   font-size: .9rem;
   margin-top: 6px;
 }
-/*/-----------*/
+
 .about-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -301,7 +297,7 @@ body::before {
   color: var(--accent);
 }
 
-/*  By the numbers  (  Stats  ) */
+/* Statistics */
 #stats { padding: 48px 0; }
 #stats .section-title { font-size: 1.8rem; margin: 0 0 8px; }
 #stats .section-subtitle { color: var(--muted,#9b9c9f); margin-bottom: 24px; }
@@ -643,8 +639,6 @@ body::before {
     grid-template-columns: 1fr;
   }
 }
-
-
 
 /* Footer */
 .footer{
