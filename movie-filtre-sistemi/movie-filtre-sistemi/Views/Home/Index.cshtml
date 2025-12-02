@@ -1,224 +1,311 @@
-﻿@model movie_filtre_sistemi.Models.MovieFilterViewModel
-
-@{
-    ViewBag.Title = "Movies";
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .movies-page {
-        padding-top: 30px;
-        padding-bottom: 40px;
-    }
+<div class="main-movie-screen">
+    <div class="trailer-content">
+        <video class="trailer-video" muted loop playsinline>
+            <source src="@Url.Content("~/videos/main-trailer.mp4")" type="video/mp4" />
+            <img src="@Url.Content("~/images/Gemini_Generated_Image_50urx450urx450ur.jpg")"
+                 alt="Trailer Poster" class="trailer-poster" />
+        </video>
 
-    .movies-header {
-        color: #fff;
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 15px;
-    }
-
-    .movies-filter-bar {
-        background: rgba(0, 0, 0, 0.85);
-        color: #fff;
-        padding: 10px 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    .movies-filter-label {
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-right: 5px;
-    }
-
-    .movies-filter-select {
-        display: inline-block;
-        min-width: 120px;
-    }
-
-    .movies-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
-    }
-
-    .movie-box {
-        background: #111;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-        .movie-box:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.8);
-        }
-
-    .movie-poster {
-        width: 100%;
-        height: 260px;
-        object-fit: cover;
-        display: block;
-    }
-
-    .movie-box-body {
-        padding: 10px 12px 12px;
-        color: #eee;
-        font-size: 13px;
-    }
-
-    .movie-box-title {
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: 4px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .movie-box-meta {
-        color: #bbb;
-        font-size: 12px;
-        margin-bottom: 3px;
-    }
-
-    .movie-box-rating {
-        font-size: 13px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .movie-status-badge {
-        font-size: 10px;
-        padding: 3px 7px;
-        border-radius: 999px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .badge-now {
-        background: #28a745;
-        color: #fff;
-    }
-
-    .badge-coming {
-        background: #ffc107;
-        color: #111;
-    }
-
-    .badge-archived {
-        background: #dc3545;
-        color: #fff;
-    }
-
-    .no-results {
-        color: #ccc;
-        margin-top: 20px;
-        font-style: italic;
-    }
-</style>
-
-<div class="container movies-page">
-
-    <div class="movies-header">Movies</div>
-
-    @using (Html.BeginForm("Index", "Movies", FormMethod.Get))
-    {
-        <div class="movies-filter-bar">
-            <div>
-                <span class="movies-filter-label">Genre</span>
-                <span class="movies-filter-select">
-                    <select name="genreId" class="form-control input-sm"
-                            onchange="this.form.submit()">
-                        <option value="">All</option>
-                        @foreach (var g in Model.Genres)
-                        {
-                            <option value="@g.GenreID"
-                                    @(Model.SelectedGenreId == g.GenreID ? "selected" : "")>
-                                @g.Name
-                            </option>
-                        }
-                    </select>
-                </span>
-            </div>
-
-            <div>
-                <span class="movies-filter-label">Cinema</span>
-                <span class="movies-filter-select">
-                    <select name="cinemaId" class="form-control input-sm"
-                            onchange="this.form.submit()">
-                        <option value="">All</option>
-                        @foreach (var c in Model.Cinemas)
-                        {
-                            <option value="@c.CinemaID"
-                                    @(Model.SelectedCinemaId == c.CinemaID ? "selected" : "")>
-                                @c.CinemaName
-                            </option>
-                        }
-                    </select>
-                </span>
-            </div>
+        <div class="play-overlay">
+            <a href="#" class="play-button" aria-label="Play/Pause Trailer" id="play-pause-button">
+                <i class="fas fa-play"></i>
+            </a>
         </div>
-    }
 
-    <div class="movies-grid">
-        @foreach (var movie in Model.Movies)
-        {
-            var posterPath = Url.Content("~/" + movie.PosterUrl);
+        <a href="#" class="buy-ticket-btn">BUY TICKETS NOW</a>
+    </div>
+</div>
 
-            string badgeClass = "badge-archived";
-            if (movie.Status == "Now Showing")
-            {
-                badgeClass = "badge-now";
-            }
-            else if (movie.Status == "Coming Soon")
-            {
-                badgeClass = "badge-coming";
-            }
+<div class="movie-listings-panel">
 
-            <div class="movie-box">
-                <img src="@posterPath" alt="@movie.Title" class="movie-poster" />
+    <!-- NOW SHOWING -->
+    <section class="section-now-showing">
+        <h2>NOW SHOWING</h2>
+        <div class="movie-carousel-wrapper">
+            <button class="scroll-btn left" onclick="scrollCarousel('now-showing-carousel', -250)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
 
-                <div class="movie-box-body">
-                    <div class="movie-box-title">@movie.Title</div>
+            <div class="movie-carousel" id="now-showing-carousel">
+                <div class="movie-item-now-showing">
+                    <img src="@Url.Content("~/images/now1.jpg")" alt="AVATAR: THE WAY OF WATER" />
+                    <button class="book-now-btn">BOOK NOW</button>
+                    <p>AVATAR: THE WAY OF WATER</p>
+                    <div class="showtimes">14:30 • 17:00 • 20:15</div>
+                </div>
 
-                    <div class="movie-box-meta">
-                        @if (movie.ReleaseDate.HasValue)
-                        {
-                            @movie.ReleaseDate.Value.ToString("dd MMM yyyy")
-                        }
-                        else
-                        {
-                            @:Release date TBA
-                        }
+                <div class="movie-item-now-showing">
+                    <img src="@Url.Content("~/images/now2.jpg")" alt="JOHN WICK 4" />
+                    <button class="book-now-btn">BOOK NOW</button>
+                    <p>JOHN WICK 4</p>
+                    <div class="showtimes">15:00 • 18:30 • 21:45</div>
+                </div>
+
+                <div class="movie-item-now-showing">
+                    <img src="@Url.Content("~/images/now3.jpg")" alt="OPPENHEIMER" />
+                    <button class="book-now-btn">BOOK NOW</button>
+                    <p>OPPENHEIMER</p>
+                    <div class="showtimes">16:15 • 19:00 • 22:30</div>
+                </div>
+
+                <div class="movie-item-now-showing">
+                    <img src="@Url.Content("~/images/now4.jpg")" alt="SPIDER-MAN: ACROSS THE SPIDERVERSE" />
+                    <button class="book-now-btn">BOOK NOW</button>
+                    <p>SPIDER-MAN: ACROSS THE SPIDERVERSE</p>
+                    <div class="showtimes">13:45 • 16:30 • 19:15</div>
+                </div>
+
+                <div class="movie-item-now-showing">
+                    <img src="@Url.Content("~/images/now5.jpg")" alt="THE BATMAN" />
+                    <button class="book-now-btn">BOOK NOW</button>
+                    <p>THE BATMAN</p>
+                    <div class="showtimes">14:00 • 17:30 • 20:45</div>
+                </div>
+            </div>
+
+            <button class="scroll-btn right" onclick="scrollCarousel('now-showing-carousel', 250)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- TOP 10 -->
+    <section class="section-trailers">
+        <h2>TOP 10</h2>
+        <div class="movie-carousel-wrapper">
+            <button class="scroll-btn left" onclick="scrollCarousel('trailers-carousel', -220)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="movie-carousel" id="trailers-carousel">
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie1.jpg")" alt="Interstellar" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>Interstellar</p>
+                    <div class="rating">⭐ 9.5/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_7.jpg")" alt="The Matrix" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>The Matrix</p>
+                    <div class="rating">⭐ 9.3/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_8.jpg")" alt="Charlie And The Chocolate Factory" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>Charlie And The Chocolate Factory</p>
+                    <div class="rating">⭐ 9.1/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_thumbnail_6.jpg")" alt="How To Train Your Dragon" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>How To Train Your Dragon</p>
+                    <div class="rating">⭐ 9.0/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie2.jpg")" alt="F1 Movie" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>F1 Movie</p>
+                    <div class="rating">⭐ 8.7/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_10.jpg")" alt="Mission Impossible" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>Mission Impossible</p>
+                    <div class="rating">⭐ 8.5/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_thumbnail_3.jpg")" alt="Avengers Infinity War" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>Avengers Infinity War</p>
+                    <div class="rating">⭐ 8.2/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_thumbnail_4.jpg")" alt="Barbie the Movie" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>Barbie the Movie</p>
+                    <div class="rating">⭐ 7.7/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_thumbnail_5.jpg")" alt="Demon Slayer Infinity Castle" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>Demon Slayer Infinity Castle</p>
+                    <div class="rating">⭐ 7.5/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/movie_9.jpg")" alt="The Greatest Showman" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>The Greatest Showman</p>
+                    <div class="rating">⭐ 7.1/10</div>
+                </div>
+            </div>
+
+            <button class="scroll-btn right" onclick="scrollCarousel('trailers-carousel', 220)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- CAMPAIGNS -->
+    <section class="section-campaigns">
+        <h2>CAMPAIGNS</h2>
+        <div class="movie-carousel-wrapper">
+            <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -240)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="movie-carousel" id="campaigns-carousel">
+                <div class="campaign-item">
+                    <img src="@Url.Content("~/images/campaign_pic1.jpg")" alt="Student Discount" />
+                    <div class="campaign-duration">30 DAYS</div>
+                    <p>Student Discount 20%</p>
+                </div>
+
+                <div class="campaign-item">
+                    <img src="@Url.Content("~/images/campaign_pic2.jpg")" alt="Family Package" />
+                    <div class="campaign-duration">LIMITED</div>
+                    <p>Family Package: Buy 4 Pay for 3</p>
+                </div>
+
+                <div class="campaign-item">
+                    <img src="@Url.Content("~/images/campaign_pic3.jpg")" alt="Tuesday Cinema" />
+                    <div class="campaign-duration">WEEKLY</div>
+                    <p>Tuesday Cinema: 60 TL</p>
+                </div>
+
+                <div class="campaign-item">
+                    <img src="@Url.Content("~/images/campaign_pic4.jpg")" alt="Popcorn Special" />
+                    <div class="campaign-duration">15 DAYS</div>
+                    <p>Popcorn Special</p>
+                </div>
+
+                <div class="campaign-item">
+                    <img src="@Url.Content("~/images/campaign_pic5.jpg")" alt="Couple Ticket" />
+                    <div class="campaign-duration">VALENTINE</div>
+                    <p>Couple Ticket</p>
+                </div>
+            </div>
+
+            <button class="scroll-btn right" onclick="scrollCarousel('campaigns-carousel', 240)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- COMING SOON -->
+    <section class="section-yakinda">
+        <h2>COMING SOON</h2>
+        <div class="movie-carousel-wrapper">
+            <button class="scroll-btn left" onclick="scrollCarousel('yakinda-carousel', -220)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="movie-carousel" id="yakinda-carousel">
+                <div class="movie-item-yakinda">
+                    <img src="@Url.Content("~/images/coming_soon_1.jpg")" alt="Deadpool & Wolverine" />
+                    <div class="overlay" data-date="JULY 26">
+                        DEADPOOL &amp; WOLVERINE
                     </div>
+                </div>
 
-                    <div class="movie-box-meta">
-                        Duration: @(movie.Duration_min ?? 0) min
+                <div class="movie-item-yakinda">
+                    <img src="@Url.Content("~/images/coming_soon_2.jpg")" alt="Joker: Folie à Deux" />
+                    <div class="overlay" data-date="OCT 4">
+                        JOKER: FOLIE À DEUX
                     </div>
+                </div>
 
-                    <div class="movie-box-rating">
-                        <span>⭐ @movie.Ratings / 10</span>
-                        <span class="movie-status-badge @badgeClass">
-                            @movie.Status
-                        </span>
+                <div class="movie-item-yakinda">
+                    <img src="@Url.Content("~/images/coming_soon_3.jpg")" alt="Moana 2" />
+                    <div class="overlay" data-date="NOV 27">
+                        MOANA 2
+                    </div>
+                </div>
+
+                <div class="movie-item-yakinda">
+                    <img src="@Url.Content("~/images/coming_soon_4.jpg")" alt="Mufasa: The Lion King" />
+                    <div class="overlay" data-date="DEC 20">
+                        MUFASA
+                    </div>
+                </div>
+
+                <div class="movie-item-yakinda">
+                    <img src="@Url.Content("~/images/coming_soon_5.jpg")" alt="Avatar 3" />
+                    <div class="overlay" data-date="DEC 2025">
+                        AVATAR 3
                     </div>
                 </div>
             </div>
-        }
-    </div>
 
-    @if (!Model.Movies.Any())
-    {
-        <p class="no-results">No movies found for this filter.</p>
-    }
+            <button class="scroll-btn right" onclick="scrollCarousel('yakinda-carousel', 220)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- LAST WEEK'S MOVIES -->
+    <section class="section-last-weeks">
+        <h2>LAST WEEK'S MOVIES</h2>
+        <div class="movie-carousel-wrapper">
+            <button class="scroll-btn left" onclick="scrollCarousel('last-weeks-carousel', -220)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="movie-carousel" id="last-weeks-carousel">
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/last_week_1.jpg")" alt="Dune: Part Two" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>DUNE: PART TWO</p>
+                    <div class="rating">⭐ 8.7/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/last_week_2.jpg")" alt="Godzilla x Kong" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>GODZILLA X KONG</p>
+                    <div class="rating">⭐ 7.2/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/last_week_3.jpg")" alt="Kung Fu Panda 4" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>KUNG FU PANDA 4</p>
+                    <div class="rating">⭐ 6.8/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/last_week_4.jpg")" alt="Ghostbusters: Frozen Empire" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>GHOSTBUSTERS 4</p>
+                    <div class="rating">⭐ 6.5/10</div>
+                </div>
+
+                <div class="movie-item">
+                    <img src="@Url.Content("~/images/last_week_5.jpg")" alt="Bob Marley: One Love" />
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    <p>BOB MARLEY: ONE LOVE</p>
+                    <div class="rating">⭐ 6.7/10</div>
+                </div>
+            </div>
+
+            <button class="scroll-btn right" onclick="scrollCarousel('last-weeks-carousel', 220)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
 
 </div>

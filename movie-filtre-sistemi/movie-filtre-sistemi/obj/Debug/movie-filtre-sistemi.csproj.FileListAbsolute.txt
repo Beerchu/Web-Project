@@ -87,3 +87,4 @@ C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-si
 C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\obj\Debug\movie-filtre-sistemi.csproj.CopyComplete
 C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\obj\Debug\movie-filtre-sistemi.dll
 C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\obj\Debug\movie-filtre-sistemi.pdb
+C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\obj\Debug\movie-filtre-sistemi.csproj.AssemblyReference.cache
