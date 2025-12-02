@@ -1,0 +1,102 @@
+﻿@model movie_filtre_sistemi.Models.MovieFilterViewModel
+
+@{
+    ViewBag.Title = "Movies";
+}
+
+<div class="movies-page container">
+
+    <div class="movies-header-row">
+        <h1 class="movies-title">Movies</h1>
+
+        <form id="movies-filter-form"
+              method="get"
+              action="@Url.Action("Index", "Movies")"
+              class="movies-filter-form">
+
+            <div class="movies-filter-group">
+                <label for="genreSelect" class="movies-filter-label">Genre</label>
+                <select id="genreSelect" name="genreId" class="movies-filter-select">
+                    <option value="">All</option>
+                    @foreach (var g in Model.Genres)
+                    {
+                        <option value="@g.GenreID"
+                                @(Model.SelectedGenreId == g.GenreID ? "selected" : "")>
+                            @g.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="movies-filter-group">
+                <label for="cinemaSelect" class="movies-filter-label">Cinema</label>
+                <select id="cinemaSelect" name="cinemaId" class="movies-filter-select">
+                    <option value="">All</option>
+                    @foreach (var c in Model.Cinemas)
+                    {
+                        <option value="@c.CinemaID"
+                                @(Model.SelectedCinemaId == c.CinemaID ? "selected" : "")>
+                            @c.CinemaName
+                        </option>
+                    }
+                </select>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="movies-grid">
+        @foreach (var movie in Model.Movies)
+        {
+            var posterPath = Url.Content("~/" + movie.PosterUrl);
+
+            string badgeClass = "badge-archived";
+            if (movie.Status == "Now Showing")
+            {
+                badgeClass = "badge-now";
+            }
+            else if (movie.Status == "Coming Soon")
+            {
+                badgeClass = "badge-coming";
+            }
+
+            <article class="movie-card">
+                <div class="movie-card-poster">
+                    <img src="@posterPath" alt="@movie.Title" />
+                </div>
+
+                <div class="movie-card-body">
+                    <h2 class="movie-card-title">@movie.Title</h2>
+
+                    <div class="movie-card-meta">
+                        @if (movie.ReleaseDate.HasValue)
+                        {
+                            @movie.ReleaseDate.Value.ToString("dd MMM yyyy")
+                        }
+                        else
+                        {
+                            @:Release date TBA
+                        }
+                    </div>
+
+                    <div class="movie-card-meta">
+                        Duration: @(movie.Duration_min ?? 0) min
+                    </div>
+
+                    <div class="movie-card-rating">
+                        <span>⭐ @movie.Ratings / 10</span>
+                        <span class="movie-status-badge @badgeClass">
+                            @movie.Status
+                        </span>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+
+    @if (!Model.Movies.Any())
+    {
+        <p class="movies-no-results">No movies found for this filter.</p>
+    }
+
+</div>

@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CinemaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cinemas">
+          <Key>
+            <PropertyRef Name="CinemaID" />
+          </Key>
+          <Property Name="CinemaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CinemaName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Genres">
+          <Key>
+            <PropertyRef Name="GenreID" />
+          </Key>
+          <Property Name="GenreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Genres_Movies">
+          <Key>
+            <PropertyRef Name="GenreMovieID" />
+          </Key>
+          <Property Name="GenreMovieID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GenreID" Type="int" />
+          <Property Name="MovieID" Type="int" />
+        </EntityType>
+        <EntityType Name="Halls">
+          <Key>
+            <PropertyRef Name="HallID" />
+          </Key>
+          <Property Name="HallID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HallType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Capacity" Type="int" />
+          <Property Name="CinemaID" Type="int" />
+        </EntityType>
+        <EntityType Name="Movies">
+          <Key>
+            <PropertyRef Name="MovieID" />
+          </Key>
+          <Property Name="MovieID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Duration_min" Type="int" />
+          <Property Name="PosterUrl" Type="nvarchar" MaxLength="255" />
+          <Property Name="Ratings" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReleaseDate" Type="date" />
+        </EntityType>
+        <EntityType Name="Showings">
+          <Key>
+            <PropertyRef Name="ShowingID" />
+          </Key>
+          <Property Name="ShowingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShowTime" Type="datetime2" Precision="2" Nullable="false" />
+          <Property Name="TicketPrice" Type="money" Nullable="false" />
+          <Property Name="MovieID" Type="int" />
+          <Property Name="HallID" Type="int" />
+        </EntityType>
+        <Association Name="FK__Genres_Mo__Genre__48CFD27E">
+          <End Role="Genres" Type="Self.Genres" Multiplicity="0..1" />
+          <End Role="Genres_Movies" Type="Self.Genres_Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genres">
+              <PropertyRef Name="GenreID" />
+            </Principal>
+            <Dependent Role="Genres_Movies">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Halls__CinemaID__44FF419A">
+          <End Role="Cinemas" Type="Self.Cinemas" Multiplicity="0..1" />
+          <End Role="Halls" Type="Self.Halls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cinemas">
+              <PropertyRef Name="CinemaID" />
+            </Principal>
+            <Dependent Role="Halls">
+              <PropertyRef Name="CinemaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Showings__HallID__4D94879B">
+          <End Role="Halls" Type="Self.Halls" Multiplicity="0..1" />
+          <End Role="Showings" Type="Self.Showings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Halls">
+              <PropertyRef Name="HallID" />
+            </Principal>
+            <Dependent Role="Showings">
+              <PropertyRef Name="HallID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Showings__MovieI__4CA06362">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="0..1" />
+          <End Role="Showings" Type="Self.Showings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Showings">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CinemaDBModelStoreContainer">
+          <EntitySet Name="Cinemas" EntityType="Self.Cinemas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genres" EntityType="Self.Genres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genres_Movies" EntityType="Self.Genres_Movies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Halls" EntityType="Self.Halls" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Movies" EntityType="Self.Movies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Showings" EntityType="Self.Showings" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Genres_Mo__Genre__48CFD27E" Association="Self.FK__Genres_Mo__Genre__48CFD27E">
+            <End Role="Genres" EntitySet="Genres" />
+            <End Role="Genres_Movies" EntitySet="Genres_Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Halls__CinemaID__44FF419A" Association="Self.FK__Halls__CinemaID__44FF419A">
+            <End Role="Cinemas" EntitySet="Cinemas" />
+            <End Role="Halls" EntitySet="Halls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Showings__HallID__4D94879B" Association="Self.FK__Showings__HallID__4D94879B">
+            <End Role="Halls" EntitySet="Halls" />
+            <End Role="Showings" EntitySet="Showings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Showings__MovieI__4CA06362" Association="Self.FK__Showings__MovieI__4CA06362">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Showings" EntitySet="Showings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CinemaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cinemas">
+          <Key>
+            <PropertyRef Name="CinemaID" />
+          </Key>
+          <Property Name="CinemaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CinemaName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Halls" Relationship="Self.FK__Halls__CinemaID__44FF419A" FromRole="Cinemas" ToRole="Halls" />
+        </EntityType>
+        <EntityType Name="Genres">
+          <Key>
+            <PropertyRef Name="GenreID" />
+          </Key>
+          <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Genres_Movies" Relationship="Self.FK__Genres_Mo__Genre__48CFD27E" FromRole="Genres" ToRole="Genres_Movies" />
+        </EntityType>
+        <EntityType Name="Genres_Movies">
+          <Key>
+            <PropertyRef Name="GenreMovieID" />
+          </Key>
+          <Property Name="GenreMovieID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GenreID" Type="Int32" />
+          <Property Name="MovieID" Type="Int32" />
+          <NavigationProperty Name="Genres" Relationship="Self.FK__Genres_Mo__Genre__48CFD27E" FromRole="Genres_Movies" ToRole="Genres" />
+        </EntityType>
+        <EntityType Name="Halls">
+          <Key>
+            <PropertyRef Name="HallID" />
+          </Key>
+          <Property Name="HallID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HallType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Capacity" Type="Int32" />
+          <Property Name="CinemaID" Type="Int32" />
+          <NavigationProperty Name="Cinemas" Relationship="Self.FK__Halls__CinemaID__44FF419A" FromRole="Halls" ToRole="Cinemas" />
+          <NavigationProperty Name="Showings" Relationship="Self.FK__Showings__HallID__4D94879B" FromRole="Halls" ToRole="Showings" />
+        </EntityType>
+        <EntityType Name="Movies">
+          <Key>
+            <PropertyRef Name="MovieID" />
+          </Key>
+          <Property Name="MovieID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Duration_min" Type="Int32" />
+          <Property Name="PosterUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Ratings" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReleaseDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Showings" Relationship="Self.FK__Showings__MovieI__4CA06362" FromRole="Movies" ToRole="Showings" />
+        </EntityType>
+        <EntityType Name="Showings">
+          <Key>
+            <PropertyRef Name="ShowingID" />
+          </Key>
+          <Property Name="ShowingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShowTime" Type="DateTime" Nullable="false" Precision="2" />
+          <Property Name="TicketPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="MovieID" Type="Int32" />
+          <Property Name="HallID" Type="Int32" />
+          <NavigationProperty Name="Halls" Relationship="Self.FK__Showings__HallID__4D94879B" FromRole="Showings" ToRole="Halls" />
+          <NavigationProperty Name="Movies" Relationship="Self.FK__Showings__MovieI__4CA06362" FromRole="Showings" ToRole="Movies" />
+        </EntityType>
+        <Association Name="FK__Halls__CinemaID__44FF419A">
+          <End Role="Cinemas" Type="Self.Cinemas" Multiplicity="0..1" />
+          <End Role="Halls" Type="Self.Halls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cinemas">
+              <PropertyRef Name="CinemaID" />
+            </Principal>
+            <Dependent Role="Halls">
+              <PropertyRef Name="CinemaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Genres_Mo__Genre__48CFD27E">
+          <End Role="Genres" Type="Self.Genres" Multiplicity="0..1" />
+          <End Role="Genres_Movies" Type="Self.Genres_Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genres">
+              <PropertyRef Name="GenreID" />
+            </Principal>
+            <Dependent Role="Genres_Movies">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Showings__HallID__4D94879B">
+          <End Role="Halls" Type="Self.Halls" Multiplicity="0..1" />
+          <End Role="Showings" Type="Self.Showings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Halls">
+              <PropertyRef Name="HallID" />
+            </Principal>
+            <Dependent Role="Showings">
+              <PropertyRef Name="HallID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Showings__MovieI__4CA06362">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="0..1" />
+          <End Role="Showings" Type="Self.Showings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Showings">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CinemaDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cinemas" EntityType="Self.Cinemas" />
+          <EntitySet Name="Genres" EntityType="Self.Genres" />
+          <EntitySet Name="Genres_Movies" EntityType="Self.Genres_Movies" />
+          <EntitySet Name="Halls" EntityType="Self.Halls" />
+          <EntitySet Name="Movies" EntityType="Self.Movies" />
+          <EntitySet Name="Showings" EntityType="Self.Showings" />
+          <AssociationSet Name="FK__Halls__CinemaID__44FF419A" Association="Self.FK__Halls__CinemaID__44FF419A">
+            <End Role="Cinemas" EntitySet="Cinemas" />
+            <End Role="Halls" EntitySet="Halls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Genres_Mo__Genre__48CFD27E" Association="Self.FK__Genres_Mo__Genre__48CFD27E">
+            <End Role="Genres" EntitySet="Genres" />
+            <End Role="Genres_Movies" EntitySet="Genres_Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Showings__HallID__4D94879B" Association="Self.FK__Showings__HallID__4D94879B">
+            <End Role="Halls" EntitySet="Halls" />
+            <End Role="Showings" EntitySet="Showings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Showings__MovieI__4CA06362" Association="Self.FK__Showings__MovieI__4CA06362">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Showings" EntitySet="Showings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CinemaDBModelStoreContainer" CdmEntityContainer="CinemaDBEntities">
+          <EntitySetMapping Name="Cinemas">
+            <EntityTypeMapping TypeName="CinemaDBModel.Cinemas">
+              <MappingFragment StoreEntitySet="Cinemas">
+                <ScalarProperty Name="CinemaID" ColumnName="CinemaID" />
+                <ScalarProperty Name="CinemaName" ColumnName="CinemaName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genres">
+            <EntityTypeMapping TypeName="CinemaDBModel.Genres">
+              <MappingFragment StoreEntitySet="Genres">
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genres_Movies">
+            <EntityTypeMapping TypeName="CinemaDBModel.Genres_Movies">
+              <MappingFragment StoreEntitySet="Genres_Movies">
+                <ScalarProperty Name="GenreMovieID" ColumnName="GenreMovieID" />
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Halls">
+            <EntityTypeMapping TypeName="CinemaDBModel.Halls">
+              <MappingFragment StoreEntitySet="Halls">
+                <ScalarProperty Name="HallID" ColumnName="HallID" />
+                <ScalarProperty Name="HallType" ColumnName="HallType" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="CinemaID" ColumnName="CinemaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Movies">
+            <EntityTypeMapping TypeName="CinemaDBModel.Movies">
+              <MappingFragment StoreEntitySet="Movies">
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Duration_min" ColumnName="Duration_min" />
+                <ScalarProperty Name="PosterUrl" ColumnName="PosterUrl" />
+                <ScalarProperty Name="Ratings" ColumnName="Ratings" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Showings">
+            <EntityTypeMapping TypeName="CinemaDBModel.Showings">
+              <MappingFragment StoreEntitySet="Showings">
+                <ScalarProperty Name="ShowingID" ColumnName="ShowingID" />
+                <ScalarProperty Name="ShowTime" ColumnName="ShowTime" />
+                <ScalarProperty Name="TicketPrice" ColumnName="TicketPrice" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+                <ScalarProperty Name="HallID" ColumnName="HallID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
