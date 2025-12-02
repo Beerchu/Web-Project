@@ -14,6 +14,17 @@
               action="@Url.Action("Index", "Movies")"
               class="movies-filter-form">
 
+            <!-- SEARCH BAR -->
+            <div class="movies-search-wrapper">
+                <i class="fas fa-search movies-search-icon"></i>
+                <input type="text"
+                       name="searchTerm"
+                       class="movies-search-input"
+                       placeholder="Search movie..."
+                       value="@Model.SearchTerm" />
+            </div>
+
+
             <div class="movies-filter-group">
                 <label for="genreSelect" class="movies-filter-label">Genre</label>
                 <select id="genreSelect" name="genreId" class="movies-filter-select">

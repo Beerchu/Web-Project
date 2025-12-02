@@ -1,4 +1,3 @@
-C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\obj\Debug\movie-filtre-sistemi.csproj.AssemblyReference.cache
 C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\obj\Debug\movie-filtre-sistemi.csproj.CoreCompileInputs.cache
 C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\bin\movie-filtre-sistemi.dll.config
 C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\bin\movie-filtre-sistemi.dll

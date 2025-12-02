@@ -94,6 +94,69 @@
 }
 
 
+
+/* Header içinde sağ tarafı hizala: search + filtre kapsülü */
+.movies-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+/* ------------- SEARCH BAR ----------*/
+
+.movies-search-wrapper {
+    position: relative;
+}
+
+.movies-search-input {
+    min-width: 220px;
+    padding: 7px 10px 7px 32px;
+    border-radius: 999px;
+    border: 1px solid #666;
+    background: #111;
+    color: #fff;
+    outline: none;
+    font-size: 13px;
+}
+
+    .movies-search-input::placeholder {
+        color: #888;
+    }
+
+    .movies-search-input:focus {
+        border-color: #ff4040;
+        box-shadow: 0 0 0 2px rgba(255, 64, 64, 0.3);
+    }
+
+.movies-search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* Filtre kapsülünde margin-right fazla kaçmasın */
+.movies-filter-form {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+    margin-right: 10px; /* biraz boşluk, duvara yapışmasın */
+}
+
+
+
+
+
+
 /* Grid – desktop: 5 kolon */
 
 .movies-grid {
