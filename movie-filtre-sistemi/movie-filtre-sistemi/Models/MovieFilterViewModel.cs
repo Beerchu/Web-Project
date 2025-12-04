@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace movie_filtre_sistemi.Models
+namespace FiveStars.Models
 {
     public class MovieFilterViewModel
     {

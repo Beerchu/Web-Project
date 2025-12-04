@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using movie_filtre_sistemi.Models;
+using FiveStars.Models;
 
-namespace movie_filtre_sistemi.Controllers
+namespace FiveStars.Controllers
 {
     public class MoviesController : Controller
     {

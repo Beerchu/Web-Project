@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\movie-filtre-sistemi",
+    "\\movie-filtre-sistemi\\movie-filtre-sistemi",
+    "\\movie-filtre-sistemi\\movie-filtre-sistemi\\Views",
+    "\\movie-filtre-sistemi\\movie-filtre-sistemi\\Views\\Home"
   ],
+  "SelectedNode": "\\movie-filtre-sistemi\\movie-filtre-sistemi",
   "PreviewInSolutionExplorer": false
 }

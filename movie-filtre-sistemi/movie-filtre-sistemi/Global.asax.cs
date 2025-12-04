@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace movie_filtre_sistemi
+namespace FiveStars
 {
     public class MvcApplication : System.Web.HttpApplication
     {

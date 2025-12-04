@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace movie_filtre_sistemi.Models
+namespace FiveStars.Models
 {
     using System;
     using System.Data.Entity;

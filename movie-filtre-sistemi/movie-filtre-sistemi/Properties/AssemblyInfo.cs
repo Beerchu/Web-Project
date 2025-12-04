@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Bir derlemeyle ilgili Genel Bilgiler şu yollarla denetlenir:
 // denetlenir. Bir derlemeyle ilişkilendirilmiş bilgileri değiştirmek için bu
 // öznitelik değerlerini değiştirin.
-[assembly: AssemblyTitle("movie_filtre_sistemi")]
+[assembly: AssemblyTitle("FiveStars")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("movie_filtre_sistemi")]
+[assembly: AssemblyProduct("FiveStars")]
 [assembly: AssemblyCopyright("Telif hakkı ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

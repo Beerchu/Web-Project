@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace movie_filtre_sistemi
+namespace FiveStars
 {
     public class RouteConfig
     {
@@ -16,8 +16,11 @@ namespace movie_filtre_sistemi
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+
+                namespaces: new[] { "FiveStars.Controllers" }).DataTokens["UseNamespaceFallback"] = false;
+            
+                ;
         }
     }
 }

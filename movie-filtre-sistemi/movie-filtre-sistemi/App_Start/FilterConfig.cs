@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace movie_filtre_sistemi
+namespace FiveStars
 {
     public class FilterConfig
     {
