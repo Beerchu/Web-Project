@@ -176,4 +176,3 @@ C:\Users\EXCALIBUR\source\repos\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStar
 C:\Users\EXCALIBUR\source\repos\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CopyComplete
 C:\Users\EXCALIBUR\source\repos\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.dll
 C:\Users\EXCALIBUR\source\repos\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.pdb
-C:\Users\EXCALIBUR\source\repos\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.AssemblyReference.cache
