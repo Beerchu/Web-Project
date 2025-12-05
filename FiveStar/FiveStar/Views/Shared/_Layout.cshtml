@@ -1,0 +1,88 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewBag.Title - Five Stars Cinema</title>
+
+    @Styles.Render("~/Content/css")
+
+    <!-- Genel site stilleri -->
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/about.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/contact-style.css")" />
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/movies.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/home.css")" />
+
+    <!-- İkonlar -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="main-wrapper">
+
+        <header class="navbar">
+            <a href="@Url.Action("Index", "Home")" class="logo-link">
+                <img src="@Url.Content("~/images/logo.png")" alt="Site Logo" class="logo" />
+            </a>
+
+            <nav>
+                <ul>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Movies", "Index", "Movies")</li>
+
+                    <!-- Şimdilik hepsi Home/Index'e gidiyor -->
+                    <li>@Html.ActionLink("Coming Soon", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Cinemas", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Offers", "Index", "Home")</li>
+
+                    <li>@Html.ActionLink("About Us", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+                </ul>
+            </nav>
+
+            <div class="search-icon-container">
+                <a href="#" class="search-button" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </a>
+            </div>
+
+            <div class="user-menu-dropdown">
+                <button class="menu-button" onclick="toggleDropdown()">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="dropdown-content" id="userDropdown">
+                    <a href="#" class="dropdown-action-btn sign-in">Sign In</a>
+                    <a href="#" class="dropdown-action-btn sign-up">Sign Up</a>
+                    <hr />
+                    <a href="#" class="dropdown-action-btn cart">
+                        <i class="fas fa-shopping-cart"></i> Go To Cart
+                    </a>
+                </div>
+            </div>
+        </header>
+
+
+      
+        <div class="container body-content">
+            @RenderBody()
+        </div>
+
+        
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="@Url.Content("~/Scripts/home-script.js")"></script>
+    <script src="@Url.Content("~/Scripts/movies.js")"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
