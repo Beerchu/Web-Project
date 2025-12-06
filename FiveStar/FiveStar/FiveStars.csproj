@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\about.css" />
+    <Content Include="Content\campaigns.css" />
     <Content Include="Content\contact-style.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\movies.css" />
@@ -178,6 +179,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\beyza.jpg" />
+    <Content Include="images\campaigns-hero.jpg" />
     <Content Include="images\campaign_pic1.jpg" />
     <Content Include="images\campaign_pic2.jpg" />
     <Content Include="images\campaign_pic3.jpg" />
@@ -232,6 +234,7 @@
       <DependentUpon>CinemaModel.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\about.js" />
+    <Content Include="Scripts\campaigns.js" />
     <Content Include="Scripts\contact-script.js" />
     <Content Include="Scripts\home-script.js" />
     <Content Include="Scripts\movies.js" />
@@ -261,6 +264,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Campaigns.cshtml" />
+    <Content Include="Views\Movies\ComingSoon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -1,0 +1,289 @@
+﻿﻿@{
+    ViewBag.Title = "Campaigns & Special Offers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Content/campaigns.css")" />
+
+<div class="campaigns-hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1><span class="gradient-text">🎬 Exclusive Campaigns</span></h1>
+            <p class="hero-subtitle">Unlock amazing offers and elevate your cinema experience</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Active Offers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1K+</div>
+                    <div class="stat-label">Redeemed Weekly</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="@Url.Content("~/images/campaigns-hero.jpg")" alt="Cinema Campaigns" />
+            <div class="floating-badge">
+                <span>🔥 HOT DEALS</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="campaigns-container">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Offers</button>
+            <button class="filter-tab" data-filter="student">Student</button>
+            <button class="filter-tab" data-filter="family">Family</button>
+            <button class="filter-tab" data-filter="weekly">Weekly</button>
+            <button class="filter-tab" data-filter="food">Food & Drinks</button>
+            <button class="filter-tab" data-filter="special">Special</button>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search campaigns..." id="campaignSearch">
+        </div>
+    </div>
+
+    <!-- Campaigns Grid -->
+    <div class="campaigns-grid">
+        <!-- Student Discount -->
+        <div class="campaign-card" data-category="student">
+            <div class="card-header">
+                <div class="badge student-badge">🎓 Student Exclusive</div>
+                <div class="time-badge">
+                    <i class="fas fa-clock"></i>
+                    <span>30 days left</span>
+                </div>
+            </div>
+            <div class="card-image">
+                <img src="@Url.Content("~/images/campaign_pic1.jpg")" alt="Student Discount" />
+                <div class="discount-overlay">
+                    <span class="discount">-20%</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Student Discount 20% Off</h3>
+                <p class="card-description">All students with valid ID get 20% off on weekday shows before 18:00. Perfect for after-class relaxation!</p>
+
+                <div class="card-details">
+                    <div class="detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>Mon-Fri</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-clock"></i>
+                        <span>Before 18:00</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-film"></i>
+                        <span>All Movies</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn-apply" data-campaign="student">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Apply Offer</span>
+                    </button>
+                    <button class="btn-details" onclick="showDetails(1)">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Details</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Package -->
+        <div class="campaign-card" data-category="family">
+            <div class="card-header">
+                <div class="badge family-badge">👨‍👩‍👧‍👦 Family Special</div>
+                <div class="time-badge limited">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>Limited Time</span>
+                </div>
+            </div>
+            <div class="card-image">
+                <img src="@Url.Content("~/images/campaign_pic2.jpg")" alt="Family Package" />
+                <div class="discount-overlay">
+                    <span class="discount">4 for 3</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Family Package: Buy 3 Get 1 Free</h3>
+                <p class="card-description">Perfect for family weekends! Buy 3 tickets and get the 4th one absolutely free. Create unforgettable memories.</p>
+
+                <div class="card-details">
+                    <div class="detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>Weekends</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-users"></i>
+                        <span>4+ People</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-child"></i>
+                        <span>Kids Welcome</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn-apply" data-campaign="family">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Apply Offer</span>
+                    </button>
+                    <button class="btn-details" onclick="showDetails(2)">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Details</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuesday Special -->
+        <div class="campaign-card" data-category="weekly">
+            <div class="card-header">
+                <div class="badge weekly-badge">📅 Tuesday Special</div>
+                <div class="time-badge weekly">
+                    <i class="fas fa-calendar-week"></i>
+                    <span>Every Tuesday</span>
+                </div>
+            </div>
+            <div class="card-image">
+                <img src="@Url.Content("~/images/campaign_pic3.jpg")" alt="Tuesday Cinema" />
+                <div class="discount-overlay">
+                    <span class="discount">60 TL</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Public Tuesday: All Movies 60 TL</h3>
+                <p class="card-description">Every Tuesday, all movies, all sessions are fixed at just 60 TL. The perfect mid-week escape from reality!</p>
+
+                <div class="card-details">
+                    <div class="detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>Tuesdays</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-film"></i>
+                        <span>All Movies</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-clock"></i>
+                        <span>All Times</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn-apply" data-campaign="tuesday">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Apply Offer</span>
+                    </button>
+                    <button class="btn-details" onclick="showDetails(3)">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Details</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popcorn Special -->
+        <div class="campaign-card" data-category="food">
+            <div class="card-header">
+                <div class="badge food-badge">🍿 Snack Deal</div>
+                <div class="time-badge">
+                    <i class="fas fa-clock"></i>
+                    <span>15 days left</span>
+                </div>
+            </div>
+            <div class="card-image">
+                <img src="@Url.Content("~/images/campaign_pic4.jpg")" alt="Popcorn Special" />
+                <div class="discount-overlay">
+                    <span class="discount">Free Upgrade</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Free Popcorn Upgrade + Surprise</h3>
+                <p class="card-description">Buy any medium popcorn and get a free upgrade to large size plus a mystery treat. Movie snacks perfected!</p>
+
+                <div class="card-details">
+                    <div class="detail">
+                        <i class="fas fa-utensils"></i>
+                        <span>Food Court</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-gift"></i>
+                        <span>Free Gift</span>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-popcorn"></i>
+                        <span>Large Popcorn</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn-apply" data-campaign="popcorn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Add to Order</span>
+                    </button>
+                    <button class="btn-details" onclick="showDetails(4)">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Details</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <div class="how-to-section">
+        <h2 class="section-title">
+            <i class="fas fa-question-circle"></i>
+            How to Redeem Offers
+        </h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Choose Your Campaign</h3>
+                    <p>Browse through our exclusive offers and select one that suits your needs</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Apply During Checkout</h3>
+                    <p>Use the "Apply Offer" button or enter the promo code when booking tickets</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Enjoy Your Movie</h3>
+                    <p>Show your e-ticket at the cinema and enjoy your discounted experience!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal" id="detailsModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div class="modal-body" id="modalBody">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/campaigns.js")"></script>
+}

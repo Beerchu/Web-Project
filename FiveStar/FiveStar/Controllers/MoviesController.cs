@@ -61,5 +61,10 @@ namespace FiveStars.Controllers
 
             return View(vm);
         }
+
+        public ActionResult ComingSoon()
+        {
+            return View();
+        }
     }
 }

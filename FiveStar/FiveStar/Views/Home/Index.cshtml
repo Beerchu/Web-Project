@@ -160,43 +160,47 @@
         </div>
     </section>
 
-    <!-- CAMPAIGNS -->
+    <!-- Campaigns Section -->
     <section class="section-campaigns">
-        <h2>CAMPAIGNS</h2>
+        <div class="section-header">
+            <h2>CAMPAIGNS</h2>
+            <a href="@Url.Action("Campaigns", "Home")" class="see-all-btn">
+                SEE ALL <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
         <div class="movie-carousel-wrapper">
             <button class="scroll-btn left" onclick="scrollCarousel('campaigns-carousel', -240)">
                 <i class="fas fa-chevron-left"></i>
             </button>
 
             <div class="movie-carousel" id="campaigns-carousel">
+                <!-- Student Discount -->
                 <div class="campaign-item">
                     <img src="@Url.Content("~/images/campaign_pic1.jpg")" alt="Student Discount" />
                     <div class="campaign-duration">30 DAYS</div>
                     <p>Student Discount 20%</p>
                 </div>
 
+                <!-- Family Package -->
                 <div class="campaign-item">
                     <img src="@Url.Content("~/images/campaign_pic2.jpg")" alt="Family Package" />
                     <div class="campaign-duration">LIMITED</div>
                     <p>Family Package: Buy 4 Pay for 3</p>
                 </div>
 
+                <!-- Tuesday Cinema -->
                 <div class="campaign-item">
                     <img src="@Url.Content("~/images/campaign_pic3.jpg")" alt="Tuesday Cinema" />
                     <div class="campaign-duration">WEEKLY</div>
                     <p>Tuesday Cinema: 60 TL</p>
                 </div>
 
+                <!-- Popcorn Special -->
                 <div class="campaign-item">
                     <img src="@Url.Content("~/images/campaign_pic4.jpg")" alt="Popcorn Special" />
                     <div class="campaign-duration">15 DAYS</div>
                     <p>Popcorn Special</p>
-                </div>
-
-                <div class="campaign-item">
-                    <img src="@Url.Content("~/images/campaign_pic5.jpg")" alt="Couple Ticket" />
-                    <div class="campaign-duration">VALENTINE</div>
-                    <p>Couple Ticket</p>
                 </div>
             </div>
 
@@ -208,54 +212,54 @@
 
     <!-- COMING SOON -->
     <section class="section-yakinda">
-        <h2>COMING SOON</h2>
-        <div class="movie-carousel-wrapper">
-            <button class="scroll-btn left" onclick="scrollCarousel('yakinda-carousel', -220)">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+        <div class="section-header">
+            <h2>COMING SOON</h2>
+            <a href="@Url.Action("ComingSoon", "Movies")" class="see-all-btn">
+                SEE ALL <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
 
-            <div class="movie-carousel" id="yakinda-carousel">
-                <div class="movie-item-yakinda">
-                    <img src="@Url.Content("~/images/coming_soon_1.jpg")" alt="Deadpool & Wolverine" />
-                    <div class="overlay" data-date="JULY 26">
-                        DEADPOOL &amp; WOLVERINE
-                    </div>
-                </div>
-
-                <div class="movie-item-yakinda">
-                    <img src="@Url.Content("~/images/coming_soon_2.jpg")" alt="Joker: Folie à Deux" />
-                    <div class="overlay" data-date="OCT 4">
-                        JOKER: FOLIE À DEUX
-                    </div>
-                </div>
-
-                <div class="movie-item-yakinda">
-                    <img src="@Url.Content("~/images/coming_soon_3.jpg")" alt="Moana 2" />
-                    <div class="overlay" data-date="NOV 27">
-                        MOANA 2
-                    </div>
-                </div>
-
-                <div class="movie-item-yakinda">
-                    <img src="@Url.Content("~/images/coming_soon_4.jpg")" alt="Mufasa: The Lion King" />
-                    <div class="overlay" data-date="DEC 20">
-                        MUFASA
-                    </div>
-                </div>
-
-                <div class="movie-item-yakinda">
-                    <img src="@Url.Content("~/images/coming_soon_5.jpg")" alt="Avatar 3" />
-                    <div class="overlay" data-date="DEC 2025">
-                        AVATAR 3
-                    </div>
+        <div class="movie-carousel" id="yakinda-carousel">
+            <div class="movie-item-yakinda">
+                <img src="@Url.Content("~/images/coming_soon_1.jpg")" alt="Deadpool & Wolverine" />
+                <div class="overlay" data-date="JULY 26">
+                    DEADPOOL &amp; WOLVERINE
                 </div>
             </div>
 
-            <button class="scroll-btn right" onclick="scrollCarousel('yakinda-carousel', 220)">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+            <div class="movie-item-yakinda">
+                <img src="@Url.Content("~/images/coming_soon_2.jpg")" alt="Joker: Folie à Deux" />
+                <div class="overlay" data-date="OCT 4">
+                    JOKER: FOLIE À DEUX
+                </div>
+            </div>
+
+            <div class="movie-item-yakinda">
+                <img src="@Url.Content("~/images/coming_soon_3.jpg")" alt="Moana 2" />
+                <div class="overlay" data-date="NOV 27">
+                    MOANA 2
+                </div>
+            </div>
+
+            <div class="movie-item-yakinda">
+                <img src="@Url.Content("~/images/coming_soon_4.jpg")" alt="Mufasa: The Lion King" />
+                <div class="overlay" data-date="DEC 20">
+                    MUFASA
+                </div>
+            </div>
+
+            <div class="movie-item-yakinda">
+                <img src="@Url.Content("~/images/coming_soon_5.jpg")" alt="Avatar 3" />
+                <div class="overlay" data-date="DEC 2025">
+                    AVATAR 3
+                </div>
+            </div>
         </div>
-    </section>
+
+        <button class="scroll-btn right" onclick="scrollCarousel('yakinda-carousel', 220)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+</section>
 
     <!-- LAST WEEK'S MOVIES -->
     <section class="section-last-weeks">

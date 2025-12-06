@@ -13,6 +13,11 @@ namespace FiveStars.Controllers
             return View();
         }
 
+        public ActionResult Campaigns()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
            
