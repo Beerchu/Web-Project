@@ -38,29 +38,45 @@ body::before {
     flex-direction: column;
 }
 
-/*  Top Navigation Bar */
+/* Top Navigation Bar */
 .navbar {
     width: 90%;
-    max-width: 1400px;
+    max-width: 1700px;
     margin: 0 auto;
     padding: 20px 0;
     display: flex;
-    justify-content: space-between; /* Logo left, Nav center, Menu right (note to self) */
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7); 
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 10;
     position: relative;
+    gap: 30px; 
+}
+
+.logo-link {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
 }
 
 .navbar nav {
-    /* Center the navigation in the navbar */
-    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
 .navbar ul {
     list-style: none;
     display: flex;
     gap: 30px;
+    margin: 0;
+    padding: 0;
 }
 
 .navbar a {
@@ -70,35 +86,41 @@ body::before {
     padding: 5px 10px;
     transition: color 0.3s;
 }
-.navbar a:hover {
-    color: #e50914;
-}
 
-.navbar a.active {
-    color: #fff;
-}
+    .navbar a:hover {
+        color: #e50914;
+    }
 
-/* Logo Style */
-.logo-link {
-    margin-right: 50px; 
-    padding-left: 10px; 
+    .navbar a.active {
+        color: #fff;
+    }
+
+/* RIGHT SECTION - Search + User Menu */
+.navbar-right-section {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
-.logo {
-    width: 90px; 
-    height: 90px; 
-    object-fit: contain;   
+/* Search icon */
+.search-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    transition: color 0.3s;
 }
+
+    .search-button:hover {
+        color: #e50914;
+    }
 
 /* User menu dropdown styles */
 .user-menu-dropdown {
-    position: relative; /* Position the internal dropdown menu relative to this container. */
+    position: relative;
     display: inline-block;
     z-index: 1000;
-    /* To separate it from other elements in the Navbar. */
-    margin-left: auto; 
 }
 
 /* Menu Button Style */
@@ -109,43 +131,24 @@ body::before {
     cursor: pointer;
     color: #fff;
     font-size: 20px;
-    margin-right: 10px; 
 }
 
-.search-icon-container {
-    /* To align with other elements in the Navbar. */
-    display: flex;
-    align-items: center;
-    /* Fill the space between Dropdown menu and navigation*/
-    margin-left: auto; 
-    margin-right: 20px; 
-}
-
-
-.search-button {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px; 
-    padding: 10px;
-    transition: color 0.3s;
-}
-
-.search-button:hover {
-    color: #e50914;
-}
+    .menu-button:hover {
+        color: #e50914;
+    }
 
 /* Dropdown Menu Content */
 .dropdown-content {
-    display: none; /* Hide by default */
+    display: none;
     position: absolute;
-    right: 0; 
-    top: 55px; /* Below the menu button */
-    background-color: #1a1a1a; 
+    right: 0;
+    top: 55px;
+    background-color: #1a1a1a;
     min-width: 180px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
     padding: 10px 0;
     border-radius: 5px;
-    border-top: 3px solid #e50914; 
+    border-top: 3px solid #e50914;
 }
 
 /* Dropdown Menu Items */
@@ -158,9 +161,9 @@ body::before {
     transition: background-color 0.3s;
 }
 
-.dropdown-action-btn:hover {
-    background-color: #333;
-}
+    .dropdown-action-btn:hover {
+        background-color: #333;
+    }
 
 /* Divider Line */
 .dropdown-content hr {
@@ -181,10 +184,10 @@ body::before {
 .main-movie-screen {
     position: relative;
     width: 100%;
-    margin-top: 100px;
-    padding: 0 17.5%;
-    height: 65vh;
-    max-height: 550px;
+    margin-top: 20px;
+    padding: 0 10%; 
+    height: 70vh; 
+    max-height: none; 
 }
 
 .trailer-content {
@@ -192,10 +195,11 @@ body::before {
     height: 100%;
     position: relative;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 8px; 
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
+/* Ensure video covers the new large area */
 .trailer-video {
     width: 100%;
     height: 100%;
@@ -726,18 +730,172 @@ body::before {
     text-shadow: none;
 }
 
+
+/*See all Button*/
+.see-all-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 4px 0;
+}
+
+    .see-all-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #e50914;
+        transition: transform 0.3s ease;
+        transform: scaleX(0);
+        transform-origin: bottom right;
+    }
+
+    .see-all-link:hover {
+        color: #ff6b6b;
+    }
+
+        .see-all-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+    .see-all-link i {
+        font-size: 11px;
+        transition: transform 0.3s ease;
+    }
+
+    .see-all-link:hover i {
+        transform: translateX(3px);
+    }
+
+/* See All Button - For more prominent sections */
+.see-all-btn {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+    .see-all-btn:hover {
+        color: #ffffff;
+        background: rgba(229, 9, 20, 0.3);
+        border-color: #e50914;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+    }
+
+    .see-all-btn i {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .see-all-btn:hover i {
+        transform: translateX(3px);
+    }
+
+/* See All Minimal - For subtle sections */
+.see-all-minimal {
+    color: #e50914;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+    .see-all-minimal:hover {
+        color: #ff4757;
+    }
+
+    .see-all-minimal i {
+        font-size: 11px;
+        transition: transform 0.3s ease;
+    }
+
+    .see-all-minimal:hover i {
+        transform: translateX(3px);
+    }
+
+/* Section Header Wrapper - Standard for all sections */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+}
+
+    .section-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+/* Section Header with right alignment */
+.section-header-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+}
+
+    .section-header-right h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+/* Section Header centered */
+.section-header-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+    flex-direction: column;
+    text-align: center;
+}
+
+    .section-header-center h2 {
+        margin: 0 0 10px 0;
+        font-size: 24px;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
 /* CAMPAIGNS */
 .section-campaigns {
     margin-bottom: 40px;
 }
 
-.section-campaigns h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
-    color: #fff;
-}
 
 .campaign-item {
     flex: 0 0 220px;
