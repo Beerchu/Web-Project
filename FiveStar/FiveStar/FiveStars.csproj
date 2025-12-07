@@ -170,6 +170,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\FiveStars.mdf" />
+    <Content Include="App_Data\FiveStars_log.ldf">
+      <DependentUpon>FiveStars.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\about.css" />
     <Content Include="Content\campaigns.css" />
     <Content Include="Content\contact-style.css" />
@@ -254,9 +258,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Movies\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
