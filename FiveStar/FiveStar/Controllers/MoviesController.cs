@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
-using FiveStars.Models;
+using FiveStars.Models;   // BU ÖNEMLİ
 
 namespace FiveStars.Controllers
 {
@@ -62,9 +64,21 @@ namespace FiveStars.Controllers
             return View(vm);
         }
 
-        public ActionResult ComingSoon()
+
+        public ActionResult Details(int id)
         {
-            return View();
+            var movie = _db.Movies.Find(id);
+
+            if (movie == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(movie);
         }
+
+
+
+
     }
 }

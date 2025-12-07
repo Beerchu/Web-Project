@@ -1,0 +1,104 @@
+﻿@model FiveStars.Models.Movies
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Poster yolu
+    string posterPath = Url.Content("~/" +
+        (string.IsNullOrEmpty(Model.PosterUrl)
+            ? "images/default-poster.jpg"
+            : Model.PosterUrl));
+
+    // Sadece "Now Showing" ise bilet butonu aktif
+    bool isNowShowing = string.Equals(
+        Model.Status?.Trim(),
+        "Now Showing",
+        System.StringComparison.OrdinalIgnoreCase
+    );
+}
+
+<div class="movie-detail-page container">
+
+    <div class="movie-detail-hero">
+
+        <!-- SOL: BİLGİLER -->
+        <div class="movie-detail-info">
+
+            <div class="movie-detail-status-row">
+                @if (string.Equals(Model.Status, "Now Showing", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    <span class="movie-status-badge badge-now">NOW SHOWING</span>
+                }
+                else if (string.Equals(Model.Status, "Coming Soon", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    <span class="movie-status-badge badge-coming">COMING SOON</span>
+                }
+                else
+                {
+                    <span class="movie-status-badge badge-archived">ARCHIVED</span>
+                }
+            </div>
+
+            <h1 class="movie-detail-title">@Model.Title</h1>
+
+            <ul class="movie-detail-meta">
+                <li>
+                    <span class="label">Duration</span>
+                    <span class="value">@Model.Duration_min min</span>
+                </li>
+
+                <li>
+                    <span class="label">Release date</span>
+                    <span class="value">
+                        @(Model.ReleaseDate.HasValue
+                            ? Model.ReleaseDate.Value.ToString("dd.MM.yyyy")
+                            : "TBA")
+                    </span>
+                </li>
+
+                @if (Model.Ratings.HasValue)
+                {
+                    <li>
+                        <span class="label">Rating</span>
+                        <span class="value">⭐ @Model.Ratings.Value.ToString("0.0") / 10</span>
+                    </li>
+                }
+            </ul>
+
+            <!-- BUTONLAR -->
+            <div class="movie-detail-actions">
+                @if (isNowShowing)
+                {
+                    <a class="movie-detail-btn-primary"
+                       href="@Url.Action("SelectCinema", "Tickets", new { movieId = Model.MovieID })">
+                        BUY TICKET
+                    </a>
+                }
+                else
+                {
+                    <button class="movie-detail-btn-primary disabled" disabled>
+                        TICKETS UNAVAILABLE
+                    </button>
+                }
+
+                <a class="movie-detail-btn-secondary"
+                   href="@Url.Action("Index", "Home")">
+                    BACK TO HOME
+                </a>
+
+                <a class="movie-detail-btn-ghost"
+                   href="@Url.Action("Index", "Movies")">
+                    ← Back to Movies
+                </a>
+            </div>
+        </div>
+
+        <!-- SAĞ: POSTER -->
+        <div class="movie-detail-poster">
+            <img src="@posterPath" alt="@Model.Title" />
+        </div>
+
+    </div>
+
+</div>

@@ -17,7 +17,10 @@
             </a>
         </div>
 
-        <a href="#" class="buy-ticket-btn">BUY TICKETS NOW</a>
+        <!-- Hero butonu: Movies/Index'e götürüyor -->
+        <a href="@Url.Action("Index", "Movies")" class="buy-ticket-btn">
+            BUY TICKETS NOW
+        </a>
     </div>
 </div>
 
@@ -32,40 +35,82 @@
             </button>
 
             <div class="movie-carousel" id="now-showing-carousel">
+
+                <!-- 1: AVATAR: THE WAY OF WATER -->
                 <div class="movie-item-now-showing">
-                    <img src="@Url.Content("~/images/now1.jpg")" alt="AVATAR: THE WAY OF WATER" />
-                    <button class="book-now-btn">BOOK NOW</button>
-                    <p>AVATAR: THE WAY OF WATER</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 1 })" class="movie-link">
+                        <img src="@Url.Content("~/images/now1.jpg")" alt="AVATAR: THE WAY OF WATER" />
+                        <p>AVATAR: THE WAY OF WATER</p>
+                    </a>
+
+                    <button class="book-now-btn"
+                            onclick="window.location.href='@Url.Action("Details", "Movies", new { id = 1 })'">
+                        BOOK NOW
+                    </button>
+
                     <div class="showtimes">14:30 • 17:00 • 20:15</div>
                 </div>
 
+                <!-- 2: JOHN WICK 4 -->
                 <div class="movie-item-now-showing">
-                    <img src="@Url.Content("~/images/now2.jpg")" alt="JOHN WICK 4" />
-                    <button class="book-now-btn">BOOK NOW</button>
-                    <p>JOHN WICK 4</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 2 })" class="movie-link">
+                        <img src="@Url.Content("~/images/now2.jpg")" alt="JOHN WICK 4" />
+                        <p>JOHN WICK 4</p>
+                    </a>
+
+                    <button class="book-now-btn"
+                            onclick="window.location.href='@Url.Action("Details", "Movies", new { id = 2 })'">
+                        BOOK NOW
+                    </button>
+
                     <div class="showtimes">15:00 • 18:30 • 21:45</div>
                 </div>
 
+                <!-- 3: OPPENHEIMER -->
                 <div class="movie-item-now-showing">
-                    <img src="@Url.Content("~/images/now3.jpg")" alt="OPPENHEIMER" />
-                    <button class="book-now-btn">BOOK NOW</button>
-                    <p>OPPENHEIMER</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 3 })" class="movie-link">
+                        <img src="@Url.Content("~/images/now3.jpg")" alt="OPPENHEIMER" />
+                        <p>OPPENHEIMER</p>
+                    </a>
+
+                    <button class="book-now-btn"
+                            onclick="window.location.href='@Url.Action("Details", "Movies", new { id = 3 })'">
+                        BOOK NOW
+                    </button>
+
                     <div class="showtimes">16:15 • 19:00 • 22:30</div>
                 </div>
 
+                <!-- 4: SPIDER-MAN -->
                 <div class="movie-item-now-showing">
-                    <img src="@Url.Content("~/images/now4.jpg")" alt="SPIDER-MAN: ACROSS THE SPIDERVERSE" />
-                    <button class="book-now-btn">BOOK NOW</button>
-                    <p>SPIDER-MAN: ACROSS THE SPIDERVERSE</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 4 })" class="movie-link">
+                        <img src="@Url.Content("~/images/now4.jpg")" alt="SPIDER-MAN: ACROSS THE SPIDERVERSE" />
+                        <p>SPIDER-MAN: ACROSS THE SPIDERVERSE</p>
+                    </a>
+
+                    <button class="book-now-btn"
+                            onclick="window.location.href='@Url.Action("Details", "Movies", new { id = 4 })'">
+                        BOOK NOW
+                    </button>
+
                     <div class="showtimes">13:45 • 16:30 • 19:15</div>
                 </div>
 
+                <!-- 5: THE BATMAN -->
                 <div class="movie-item-now-showing">
-                    <img src="@Url.Content("~/images/now5.jpg")" alt="THE BATMAN" />
-                    <button class="book-now-btn">BOOK NOW</button>
-                    <p>THE BATMAN</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 5 })" class="movie-link">
+                        <img src="@Url.Content("~/images/now5.jpg")" alt="THE BATMAN" />
+                        <p>THE BATMAN</p>
+                    </a>
+
+                    <button class="book-now-btn"
+                            onclick="window.location.href='@Url.Action("Details", "Movies", new { id = 5 })'">
+                        BOOK NOW
+                    </button>
+
                     <div class="showtimes">14:00 • 17:30 • 20:45</div>
                 </div>
+
             </div>
 
             <button class="scroll-btn right" onclick="scrollCarousel('now-showing-carousel', 250)">
@@ -83,75 +128,107 @@
             </button>
 
             <div class="movie-carousel" id="trailers-carousel">
+
+                <!-- Interstellar (6) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie1.jpg")" alt="Interstellar" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>Interstellar</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 6 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie1.jpg")" alt="Interstellar" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>Interstellar</p>
+                    </a>
                     <div class="rating">⭐ 9.5/10</div>
                 </div>
 
+                <!-- The Matrix (22) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_7.jpg")" alt="The Matrix" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>The Matrix</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 22 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_7.jpg")" alt="The Matrix" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>The Matrix</p>
+                    </a>
                     <div class="rating">⭐ 9.3/10</div>
                 </div>
 
+                <!-- Charlie And The Chocolate Factory (23) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_8.jpg")" alt="Charlie And The Chocolate Factory" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>Charlie And The Chocolate Factory</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 23 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_8.jpg")" alt="Charlie And The Chocolate Factory" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>Charlie And The Chocolate Factory</p>
+                    </a>
                     <div class="rating">⭐ 9.1/10</div>
                 </div>
 
+                <!-- How To Train Your Dragon (11) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_thumbnail_6.jpg")" alt="How To Train Your Dragon" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>How To Train Your Dragon</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 11 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_thumbnail_6.jpg")" alt="How To Train Your Dragon" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>How To Train Your Dragon</p>
+                    </a>
                     <div class="rating">⭐ 9.0/10</div>
                 </div>
 
+                <!-- F1 Movie (7) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie2.jpg")" alt="F1 Movie" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>F1 Movie</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 7 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie2.jpg")" alt="F1 Movie" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>F1 Movie</p>
+                    </a>
                     <div class="rating">⭐ 8.7/10</div>
                 </div>
 
+                <!-- Mission Impossible (24) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_10.jpg")" alt="Mission Impossible" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>Mission Impossible</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 24 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_10.jpg")" alt="Mission Impossible" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>Mission Impossible</p>
+                    </a>
                     <div class="rating">⭐ 8.5/10</div>
                 </div>
 
+                <!-- Avengers Infinity War (8) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_thumbnail_3.jpg")" alt="Avengers Infinity War" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>Avengers Infinity War</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 8 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_thumbnail_3.jpg")" alt="Avengers Infinity War" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>Avengers Infinity War</p>
+                    </a>
                     <div class="rating">⭐ 8.2/10</div>
                 </div>
 
+                <!-- Barbie the Movie (9) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_thumbnail_4.jpg")" alt="Barbie the Movie" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>Barbie the Movie</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 9 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_thumbnail_4.jpg")" alt="Barbie the Movie" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>Barbie the Movie</p>
+                    </a>
                     <div class="rating">⭐ 7.7/10</div>
                 </div>
 
+                <!-- Demon Slayer Infinity Castle (10) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_thumbnail_5.jpg")" alt="Demon Slayer Infinity Castle" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>Demon Slayer Infinity Castle</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 10 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_thumbnail_5.jpg")" alt="Demon Slayer Infinity Castle" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>Demon Slayer Infinity Castle</p>
+                    </a>
                     <div class="rating">⭐ 7.5/10</div>
                 </div>
 
+                <!-- The Greatest Showman (25) -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/movie_9.jpg")" alt="The Greatest Showman" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>The Greatest Showman</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 25 })" class="movie-link">
+                        <img src="@Url.Content("~/images/movie_9.jpg")" alt="The Greatest Showman" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>The Greatest Showman</p>
+                    </a>
                     <div class="rating">⭐ 7.1/10</div>
                 </div>
+
             </div>
 
             <button class="scroll-btn right" onclick="scrollCarousel('trailers-carousel', 220)">
@@ -220,46 +297,61 @@
         </div>
 
         <div class="movie-carousel" id="yakinda-carousel">
+            <!-- 12: DEADPOOL & WOLVERINE -->
             <div class="movie-item-yakinda">
-                <img src="@Url.Content("~/images/coming_soon_1.jpg")" alt="Deadpool & Wolverine" />
-                <div class="overlay" data-date="JULY 26">
-                    DEADPOOL &amp; WOLVERINE
-                </div>
+                <a href="@Url.Action("Details", "Movies", new { id = 12 })" class="movie-link">
+                    <img src="@Url.Content("~/images/coming_soon_1.jpg")" alt="Deadpool & Wolverine" />
+                    <div class="overlay" data-date="JULY 26">
+                        DEADPOOL &amp; WOLVERINE
+                    </div>
+                </a>
             </div>
 
+            <!-- 13: JOKER: FOLIE À DEUX -->
             <div class="movie-item-yakinda">
-                <img src="@Url.Content("~/images/coming_soon_2.jpg")" alt="Joker: Folie à Deux" />
-                <div class="overlay" data-date="OCT 4">
-                    JOKER: FOLIE À DEUX
-                </div>
+                <a href="@Url.Action("Details", "Movies", new { id = 13 })" class="movie-link">
+                    <img src="@Url.Content("~/images/coming_soon_2.jpg")" alt="Joker: Folie à Deux" />
+                    <div class="overlay" data-date="OCT 4">
+                        JOKER: FOLIE À DEUX
+                    </div>
+                </a>
             </div>
 
+            <!-- 14: MOANA 2 -->
             <div class="movie-item-yakinda">
-                <img src="@Url.Content("~/images/coming_soon_3.jpg")" alt="Moana 2" />
-                <div class="overlay" data-date="NOV 27">
-                    MOANA 2
-                </div>
+                <a href="@Url.Action("Details", "Movies", new { id = 14 })" class="movie-link">
+                    <img src="@Url.Content("~/images/coming_soon_3.jpg")" alt="Moana 2" />
+                    <div class="overlay" data-date="NOV 27">
+                        MOANA 2
+                    </div>
+                </a>
             </div>
 
+            <!-- 15: MUFASA: THE LION KING -->
             <div class="movie-item-yakinda">
-                <img src="@Url.Content("~/images/coming_soon_4.jpg")" alt="Mufasa: The Lion King" />
-                <div class="overlay" data-date="DEC 20">
-                    MUFASA
-                </div>
+                <a href="@Url.Action("Details", "Movies", new { id = 15 })" class="movie-link">
+                    <img src="@Url.Content("~/images/coming_soon_4.jpg")" alt="Mufasa: The Lion King" />
+                    <div class="overlay" data-date="DEC 20">
+                        MUFASA
+                    </div>
+                </a>
             </div>
 
+            <!-- 16: AVATAR 3 -->
             <div class="movie-item-yakinda">
-                <img src="@Url.Content("~/images/coming_soon_5.jpg")" alt="Avatar 3" />
-                <div class="overlay" data-date="DEC 2025">
-                    AVATAR 3
-                </div>
+                <a href="@Url.Action("Details", "Movies", new { id = 16 })" class="movie-link">
+                    <img src="@Url.Content("~/images/coming_soon_5.jpg")" alt="Avatar 3" />
+                    <div class="overlay" data-date="DEC 2025">
+                        AVATAR 3
+                    </div>
+                </a>
             </div>
         </div>
 
         <button class="scroll-btn right" onclick="scrollCarousel('yakinda-carousel', 220)">
             <i class="fas fa-chevron-right"></i>
         </button>
-</section>
+    </section>
 
     <!-- LAST WEEK'S MOVIES -->
     <section class="section-last-weeks">
@@ -270,38 +362,54 @@
             </button>
 
             <div class="movie-carousel" id="last-weeks-carousel">
+
+                <!-- 17: DUNE: PART TWO -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/last_week_1.jpg")" alt="Dune: Part Two" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>DUNE: PART TWO</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 17 })" class="movie-link">
+                        <img src="@Url.Content("~/images/last_week_1.jpg")" alt="Dune: Part Two" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>DUNE: PART TWO</p>
+                    </a>
                     <div class="rating">⭐ 8.7/10</div>
                 </div>
 
+                <!-- 18: GODZILLA X KONG -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/last_week_2.jpg")" alt="Godzilla x Kong" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>GODZILLA X KONG</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 18 })" class="movie-link">
+                        <img src="@Url.Content("~/images/last_week_2.jpg")" alt="Godzilla x Kong" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>GODZILLA X KONG</p>
+                    </a>
                     <div class="rating">⭐ 7.2/10</div>
                 </div>
 
+                <!-- 19: KUNG FU PANDA 4 -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/last_week_3.jpg")" alt="Kung Fu Panda 4" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>KUNG FU PANDA 4</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 19 })" class="movie-link">
+                        <img src="@Url.Content("~/images/last_week_3.jpg")" alt="Kung Fu Panda 4" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>KUNG FU PANDA 4</p>
+                    </a>
                     <div class="rating">⭐ 6.8/10</div>
                 </div>
 
+                <!-- 20: GHOSTBUSTERS 4 -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/last_week_4.jpg")" alt="Ghostbusters: Frozen Empire" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>GHOSTBUSTERS 4</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 20 })" class="movie-link">
+                        <img src="@Url.Content("~/images/last_week_4.jpg")" alt="Ghostbusters 4" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>GHOSTBUSTERS 4</p>
+                    </a>
                     <div class="rating">⭐ 6.5/10</div>
                 </div>
 
+                <!-- 21: BOB MARLEY: ONE LOVE -->
                 <div class="movie-item">
-                    <img src="@Url.Content("~/images/last_week_5.jpg")" alt="Bob Marley: One Love" />
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <p>BOB MARLEY: ONE LOVE</p>
+                    <a href="@Url.Action("Details", "Movies", new { id = 21 })" class="movie-link">
+                        <img src="@Url.Content("~/images/last_week_5.jpg")" alt="Bob Marley: One Love" />
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                        <p>BOB MARLEY: ONE LOVE</p>
+                    </a>
                     <div class="rating">⭐ 6.7/10</div>
                 </div>
             </div>
