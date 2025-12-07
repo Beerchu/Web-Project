@@ -1,0 +1,105 @@
+﻿@model FiveStars.Models.ShowtimeSelectionViewModel
+
+@{
+    ViewBag.Title = "Select Showtime";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var posterPath = Url.Content("~/" + (string.IsNullOrEmpty(Model.PosterUrl)
+        ? "images/default-poster.jpg"
+        : Model.PosterUrl));
+
+    bool isNowShowing = string.Equals(Model.Status, "Now Showing",
+        System.StringComparison.OrdinalIgnoreCase);
+}
+
+<div class="showtime-page container">
+
+    <!-- ÜST KISIM: FİLM BİLGİLERİ + POSTER -->
+    <div class="showtime-header">
+        <div class="showtime-info">
+            @if (isNowShowing)
+            {
+                <span class="badge-now">NOW SHOWING</span>
+            }
+            else if (string.Equals(Model.Status, "Coming Soon", StringComparison.OrdinalIgnoreCase))
+            {
+                <span class="badge-coming">COMING SOON</span>
+            }
+            else
+            {
+                <span class="badge-archived">ARCHIVED</span>
+            }
+
+            <h1 class="showtime-title">@Model.MovieTitle</h1>
+
+            <p class="showtime-sub">
+                Please select a cinema and time for your movie.
+            </p>
+
+            <div class="showtime-back-links">
+                <a href="@Url.Action("Index", "Home")" class="link-back-home">← Back to Home</a>
+                <a href="@Url.Action("Index", "Movies")" class="link-back-movies">← Back to Movies</a>
+            </div>
+        </div>
+
+        <div class="showtime-poster">
+            <img src="@posterPath" alt="@Model.MovieTitle" />
+        </div>
+    </div>
+
+    <hr class="showtime-divider" />
+
+    <!-- SEANSLAR -->
+    @if (Model.Showtimes == null || !Model.Showtimes.Any())
+    {
+        <div class="showtime-empty">
+            There are no showtimes for this movie yet.
+        </div>
+    }
+    else
+    {
+        <div class="showtime-list">
+
+            @* Önce güne göre grupla, sonra sinema adına göre *@
+            @foreach (var dayGroup in Model.Showtimes
+                .OrderBy(s => s.ShowTime)
+                .GroupBy(s => s.ShowTime.Date))
+            {
+                <div class="showtime-day-block">
+                    <h2 class="showtime-day-title">
+                        @dayGroup.Key.ToString("dddd, dd MMMM yyyy")
+                    </h2>
+
+                    @* Gün içindeki sinemalar *@
+                    foreach (var cinemaGroup in dayGroup
+                    .GroupBy(s => s.CinemaName)
+                    .OrderBy(g => g.Key))
+                    {
+                    <div class="cinema-block">
+                        <h3 class="cinema-name">@cinemaGroup.Key</h3>
+
+                        <div class="showtime-buttons">
+                            foreach (var s in cinemaGroup)
+                            {
+                            <a class="showtime-btn"
+                               href="@Url.Action("SelectSeat", "Tickets",
+                                                new { showingId = s.ShowingId })">
+                                <span class="showtime-time">
+                                    @s.ShowTime.ToString("HH:mm")
+                                </span>
+                                <span class="showtime-hall">
+                                    @s.HallName
+                                </span>
+                                <span class="showtime-price">
+                                    @s.TicketPrice.ToString("0.00") TL
+                                </span>
+                            </a>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

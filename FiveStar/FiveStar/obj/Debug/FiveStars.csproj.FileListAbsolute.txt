@@ -446,3 +446,7 @@ C:\Web-Project3\FiveStar\FiveStar\bin\tr\System.Web.WebPages.Deployment.resource
 C:\Web-Project3\FiveStar\FiveStar\bin\tr\System.Web.WebPages.Razor.resources.dll
 C:\Web-Project3\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CopyComplete
 C:\Web-Project3\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.AssemblyReference.cache
+C:\Web-Project4\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.AssemblyReference.cache
+C:\Web-Project4\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CoreCompileInputs.cache
+C:\Web-Project4\FiveStar\FiveStar\obj\Debug\FiveStars.dll
+C:\Web-Project4\FiveStar\FiveStar\obj\Debug\FiveStars.pdb

@@ -60,7 +60,6 @@
                 </select>
             </div>
 
-           
         </form>
     </div>
 
@@ -80,6 +79,13 @@
                 var posterPath = Url.Content("~/" + (string.IsNullOrEmpty(movie.PosterUrl)
                     ? "images/default-poster.jpg"
                     : movie.PosterUrl));
+
+                // Şu an vizyonda mı?
+                bool isNowShowing = string.Equals(
+                    movie.Status,
+                    "Now Showing",
+                    System.StringComparison.OrdinalIgnoreCase
+                );
 
                 // Status badge sınıfı + yazısı
                 string badgeClass;
@@ -104,6 +110,7 @@
                 <div class="movie-card">
                     <!-- POSTER -->
                     <div class="movie-card-poster">
+                        <!-- Poster/title = DETAY SAYFASI -->
                         <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
                             <img src="@posterPath" alt="@movie.Title" />
                         </a>
@@ -139,7 +146,9 @@
                         <div class="movie-card-rating">
                             @if (movie.Ratings.HasValue)
                             {
-                                <span>⭐ @movie.Ratings.Value.ToString("0.0") / 10</span>
+                                <span class="movie-card-rating-score">
+                                    ⭐ @movie.Ratings.Value.ToString("0.0") / 10
+                                </span>
                             }
 
                             <span class="movie-status-badge @badgeClass">
@@ -147,17 +156,11 @@
                             </span>
 
                             @* SADE, BEYAZ YAZILI BOOK NOW – SADECE NOW SHOWING İÇİN *@
-                            @if (movie.Status == "Now Showing")
+                            @if (isNowShowing)
                             {
-                                <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })"
-                                   style="margin-left:auto;
-                                          font-size:11px;
-                                          text-transform:uppercase;
-                                          color:#ffffff;
-                                          border:1px solid #fff;
-                                          padding:2px 10px;
-                                          border-radius:999px;
-                                          text-decoration:none;">
+                                <!-- BOOK NOW = direkt seans/koltuk akışına giriş -->
+                                <a href="@Url.Action("SelectCinema", "Tickets", new { movieId = movie.MovieID })"
+                                   class="movie-card-booknow">
                                     BOOK&nbsp;NOW
                                 </a>
                             }

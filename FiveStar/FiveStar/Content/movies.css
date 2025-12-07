@@ -261,6 +261,34 @@
     letter-spacing: 0.5px;
 }
 
+
+
+.movie-card-rating-score {
+    margin-right: 8px;
+    font-weight: 600;
+    color: #ffd966; /* sarımsı, arka planda okunur */
+}
+
+.movie-card-booknow {
+    margin-left: auto;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 2px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: 0.06em;
+}
+
+    .movie-card-booknow:hover {
+        background-color: #ffffff;
+        color: #000000;
+    }
+
+
+
+
 .badge-now {
     background: #28a745;
     color: #fff;
@@ -431,4 +459,68 @@
         border-radius: 20px;
         object-fit: cover;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }
+
+
+
+.showtime-page {
+    padding: 60px 120px 80px;
+    color: #fff;
+}
+
+.showtime-header {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.showtime-movie-info {
+    flex: 1;
+}
+
+.showtime-poster img {
+    max-width: 320px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.showtime-section-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.cinema-block {
+    margin-bottom: 24px;
+}
+
+.cinema-name {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.showtime-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.showtime-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #111;
+    border: 1px solid #333;
+    font-size: 13px;
+    text-decoration: none;
+    color: #fff;
+    transition: background .2s, transform .2s, border-color .2s;
+}
+
+    .showtime-chip:hover {
+        background: #e50914;
+        border-color: #e50914;
+        transform: translateY(-1px);
     }
