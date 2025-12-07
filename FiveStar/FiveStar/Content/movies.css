@@ -217,6 +217,18 @@
     padding: 8px 10px 10px;
     font-size: 12px;
 }
+/* Movies sayfasındaki film isimlerinin rengi */
+.movie-card-title a,
+.movie-card-title a:visited {
+    color: #ffffff !important;      /* beyaz ve okunaklı */
+    text-decoration: none;
+}
+
+.movie-card-title a:hover,
+.movie-card-title a:focus {
+    color: #f5c518 !important;      /* hover'da sarımsı */
+    text-decoration: underline;     
+}
 
 .movie-card-title {
     font-size: 14px;

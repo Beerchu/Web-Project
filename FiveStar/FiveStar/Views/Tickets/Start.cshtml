@@ -1,0 +1,83 @@
+﻿
+@model FiveStars.Models.TicketStartViewModel
+
+@{
+    ViewBag.Title = "Bilet Al - " + Model.Movie.Title;
+}
+
+<div class="container ticket-start-page">
+
+    <div class="ticket-movie-header row">
+        <div class="col-md-3">
+            @if (!string.IsNullOrEmpty(Model.Movie.PosterUrl))
+            {
+                <img src="@Model.Movie.PosterUrl"
+                     alt="@Model.Movie.Title"
+                     class="img-fluid" />
+            }
+            else
+            {
+                <div class="border p-3 text-center">
+                    Poster yok
+                </div>
+            }
+        </div>
+
+        <div class="col-md-9">
+            <h2>@Model.Movie.Title</h2>
+            <p>Süre: @Model.Movie.Duration_min dk</p>
+            <p>Durum: @Model.Movie.Status</p>
+
+            @Html.ActionLink(
+                "Filme Geri Dön",
+                "Details",
+                "Movies",
+                new { id = Model.Movie.MovieID },
+                new { @class = "btn btn-outline-secondary btn-sm" }
+            )
+        </div>
+    </div>
+
+    <hr />
+
+    <h3>Seans Seç</h3>
+
+    @if (!Model.Showings.Any())
+    {
+        <p>Bu film için şu anda tanımlı seans yok.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sinema</th>
+                    <th>Salon</th>
+                    <th>Tarih &amp; Saat</th>
+                    <th>Fiyat</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model.Showings)
+                {
+                    <tr>
+                        <td>@s.CinemaName</td>
+                        <td>@s.HallType</td>
+                        <td>@s.ShowTime.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@s.TicketPrice.ToString("C")</td>
+                        <td>
+                            @Html.ActionLink(
+                                "Koltuk Seç",
+                                "SelectSeats",
+                                "Tickets",
+                                new { showingId = s.ShowingID },
+                                new { @class = "btn btn-primary btn-sm" }
+                            )
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

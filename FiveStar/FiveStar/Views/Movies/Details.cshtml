@@ -1,0 +1,116 @@
+﻿@model FiveStars.Models.Movies
+@{
+    ViewBag.Title = Model.Title;
+
+    // Duruma göre kendin stringleri ayarla:
+    // DB'de Status alanın neyse ona göre kontrol et
+    bool canBuyTicket = Model.Status == "Now Showing";
+}
+
+<div class="movie-details-page">
+
+    <div class="movie-details-header">
+        <h1>@Model.Title</h1>
+    </div>
+
+    <div class="movie-details-layout">
+        <div class="movie-details-poster">
+            @if (!string.IsNullOrEmpty(Model.PosterUrl))
+            {
+                <img src="@Model.PosterUrl" alt="@Model.Title" />
+            }
+        </div>
+
+        <div class="movie-details-info">
+            <p><strong>Duration:</strong> @Model.Duration_min dk</p>
+            <p><strong>Release date:</strong> @Model.ReleaseDate?.ToShortDateString()</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Rating:</strong> @Model.Ratings / 10</p>
+
+            <div class="movie-details-actions">
+
+                @if (canBuyTicket)
+                {
+                    @Html.ActionLink(
+                        "Bileti Al",
+                        "Start",
+                        "Tickets",
+                        new { movieId = Model.MovieID },
+                        new { @class = "btn btn-primary" }
+                    )
+                }
+                else
+                {
+                    <button class="btn btn-secondary" disabled>
+                        Ticket satışı yok
+                    </button>
+                }
+
+                @Html.ActionLink(
+                    "Ana Sayfaya Dön",
+                    "Index",
+                    "Home",
+                    null,
+                    new { @class = "btn btn-outline-light" }
+                )
+            </div>
+        </div>
+    </div>
+    <div>
+        <h4>Movies</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Duration_min)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Duration_min)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PosterUrl)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PosterUrl)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Ratings)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Ratings)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReleaseDate)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.MovieID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
