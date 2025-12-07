@@ -157,3 +157,152 @@
         max-width: 420px;
     }
 }
+/* === MOVIE DETAILS SAYFASI === */
+
+/* Details sayfasının genel padding’i */
+.movie-detail-page {
+    padding: 40px 40px 80px;
+}
+
+.movie-detail-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Sol taraftaki bilgi sütunu */
+.movie-detail-info {
+    flex: 0 0 40%;
+    color: #fff;
+}
+/* Detay sayfasında film ismi */
+.movie-detail-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+/* Detaydaki meta listesi (Duration, Release date, Rating vs.) */
+.movie-detail-meta {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    font-size: 14px;
+}
+
+    .movie-detail-meta li {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 4px;
+    }
+
+    /* "Duration", "Release date" gibi sol kolon label’lar */
+    .movie-detail-meta .label {
+        color: #bbbbbb;
+        min-width: 90px;
+    }
+
+    /* Label karşısındaki değerler */
+    .movie-detail-meta .value {
+        color: #ffffff;
+    }
+
+/* Status satırı (NOW SHOWING / COMING SOON vs.) */
+.movie-detail-status-row {
+    margin-bottom: 10px;
+}
+
+.badge-now { /* Details sayfasında durum renkleri (biraz farklı tonlar) */
+    background: #0bbf54;
+    color: #000;
+}
+
+.badge-coming {
+    background: #ffbf00;
+    color: #000;
+}
+
+.badge-archived {
+    background: #a12b2b;
+    color: #fff;
+}
+
+/* BUTONLAR */
+/* Ortak buton stilleri (hepsi için) */
+.movie-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+    /* Ortak buton stilleri (hepsi için) */
+    .movie-detail-actions a,
+    .movie-detail-actions button {
+        text-decoration: none;
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+/* Kırmızı ana buton (BUY TICKET) */
+.movie-detail-btn-primary {
+    background: #e50914;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(229, 9, 20, 0.5);
+}
+
+    .movie-detail-btn-primary:hover:not(.disabled) {
+        transform: translateY(-1px);
+        background: #ff1722;
+    }
+
+    /* Aktif primary buton hover animasyonu */
+    .movie-detail-btn-primary.disabled {
+        background: #444;
+        color: #999;
+        cursor: default;
+        box-shadow: none;
+    }
+
+/* "BACK TO HOME" butonu – beyaz çerçeveli */
+.movie-detail-btn-secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff55;
+}
+    /* Secondary hover – hafif beyaz dolgu */
+    .movie-detail-btn-secondary:hover {
+        background: #ffffff11;
+    }
+/* "Back to Movies" butonu – sadece yazı */
+.movie-detail-btn-ghost {
+    background: transparent;
+    color: #bbbbbb;
+}
+    /* Ghost hover – yazıyı beyaz yap */
+    .movie-detail-btn-ghost:hover {
+        color: #ffffff;
+    }
+
+/* SAĞ TARAF – POSTER */
+.movie-detail-poster {
+    flex: 0 0 55%;
+    display: flex;
+    justify-content: flex-end;
+}
+    /* Poster resminin maksimum boyu, shadow’u vs. */
+    .movie-detail-poster img {
+        max-width: 100%;
+        max-height: 520px; /* POSTERİ KÜÇÜLTEN KISIM */
+        border-radius: 20px;
+        object-fit: cover;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }

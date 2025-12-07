@@ -67,20 +67,26 @@
             </ul>
 
             <!-- BUTONLAR -->
+
+
+            @if (isNowShowing)
+            {
+                <a class="movie-detail-btn-primary"
+                   href="@Url.Action("Showtimes", "Tickets", new { movieId = Model.MovieID })">
+                    BUY TICKET
+                </a>
+            }
+            else
+            {
+                <button class="movie-detail-btn-primary disabled" disabled>
+                    TICKETS UNAVAILABLE
+                </button>
+            }
+
+
             <div class="movie-detail-actions">
-                @if (isNowShowing)
-                {
-                    <a class="movie-detail-btn-primary"
-                       href="@Url.Action("SelectCinema", "Tickets", new { movieId = Model.MovieID })">
-                        BUY TICKET
-                    </a>
-                }
-                else
-                {
-                    <button class="movie-detail-btn-primary disabled" disabled>
-                        TICKETS UNAVAILABLE
-                    </button>
-                }
+
+
 
                 <a class="movie-detail-btn-secondary"
                    href="@Url.Action("Index", "Home")">

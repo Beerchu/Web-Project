@@ -182,7 +182,9 @@
     <Content Include="Content\contact-style.css" />
     <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
+    <Content Include="Content\HtmlPage1.html" />
     <Content Include="Content\movies.css" />
+    <Content Include="Content\showtime.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

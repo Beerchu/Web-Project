@@ -1,4 +1,7 @@
 ﻿@model FiveStars.Models.ShowtimeSelectionViewModel
+@section Styles {
+    <link href="~/Content/showtime.css" rel="stylesheet" />
+}
 
 @{
     ViewBag.Title = "Select Showtime";
@@ -14,14 +17,14 @@
 
 <div class="showtime-page container">
 
-    <!-- ÜST KISIM: FİLM BİLGİLERİ + POSTER -->
+    <!-- ÜST: FİLM BİLGİSİ + POSTER -->
     <div class="showtime-header">
         <div class="showtime-info">
             @if (isNowShowing)
             {
                 <span class="badge-now">NOW SHOWING</span>
             }
-            else if (string.Equals(Model.Status, "Coming Soon", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(Model.Status, "Coming Soon", System.StringComparison.OrdinalIgnoreCase))
             {
                 <span class="badge-coming">COMING SOON</span>
             }
@@ -59,44 +62,43 @@
     else
     {
         <div class="showtime-list">
-
-            @* Önce güne göre grupla, sonra sinema adına göre *@
+            @* 1. GÜNE GÖRE GRUPLA *@
             @foreach (var dayGroup in Model.Showtimes
-                .OrderBy(s => s.ShowTime)
-                .GroupBy(s => s.ShowTime.Date))
+                .OrderBy(x => x.ShowTime)
+                .GroupBy(x => x.ShowTime.Date))
             {
                 <div class="showtime-day-block">
                     <h2 class="showtime-day-title">
                         @dayGroup.Key.ToString("dddd, dd MMMM yyyy")
                     </h2>
 
-                    @* Gün içindeki sinemalar *@
-                    foreach (var cinemaGroup in dayGroup
-                    .GroupBy(s => s.CinemaName)
-                    .OrderBy(g => g.Key))
+                    @* 2. O GÜN İÇİN SİNEMAYA GÖRE GRUP *@
+                    @foreach (var cinemaGroup in dayGroup
+                        .GroupBy(x => x.CinemaName)
+                        .OrderBy(x => x.Key))
                     {
-                    <div class="cinema-block">
-                        <h3 class="cinema-name">@cinemaGroup.Key</h3>
+                        <div class="cinema-block">
+                            <h3 class="cinema-name">@cinemaGroup.Key</h3>
 
-                        <div class="showtime-buttons">
-                            foreach (var s in cinemaGroup)
-                            {
-                            <a class="showtime-btn"
-                               href="@Url.Action("SelectSeat", "Tickets",
+                            <div class="showtime-buttons">
+                                @foreach (var s in cinemaGroup)
+                                {
+                                    <a class="showtime-btn"
+                                       href="@Url.Action("SelectSeat", "Tickets",
                                                 new { showingId = s.ShowingId })">
-                                <span class="showtime-time">
-                                    @s.ShowTime.ToString("HH:mm")
-                                </span>
-                                <span class="showtime-hall">
-                                    @s.HallName
-                                </span>
-                                <span class="showtime-price">
-                                    @s.TicketPrice.ToString("0.00") TL
-                                </span>
-                            </a>
-                            }
+                                        <span class="showtime-time">
+                                            @s.ShowTime.ToString("HH:mm")
+                                        </span>
+                                        <span class="showtime-hall">
+                                            @s.HallName
+                                        </span>
+                                        <span class="showtime-price">
+                                            @s.TicketPrice.ToString("0.00") TL
+                                        </span>
+                                    </a>
+                                }
+                            </div>
                         </div>
-                    </div>
                     }
                 </div>
             }

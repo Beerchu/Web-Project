@@ -156,15 +156,16 @@
                             </span>
 
                             @* SADE, BEYAZ YAZILI BOOK NOW – SADECE NOW SHOWING İÇİN *@
-                            @if (isNowShowing)
-                            {
-                                <!-- BOOK NOW = direkt seans/koltuk akışına giriş -->
-                                <a href="@Url.Action("SelectCinema", "Tickets", new { movieId = movie.MovieID })"
-                                   class="movie-card-booknow">
-                                    BOOK&nbsp;NOW
-                                </a>
-                            }
-                        </div>
+                          
+                                @if (isNowShowing)
+                                {
+                                    <a href="@Url.Action("Showtimes", "Tickets", new { movieId = movie.MovieID })"
+                                       class="movie-card-booknow">
+                                        BOOK&nbsp;NOW
+                                    </a>
+                                }
+
+                            </div>
                     </div>
                 </div>
             }

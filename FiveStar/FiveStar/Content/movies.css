@@ -1,11 +1,13 @@
 /* Movies page layout */
 
+/* Sayfanın genel padding ve yazı rengi */
 .movies-page {
     padding-top: 30px;
     padding-bottom: 40px;
     color: #fff;
 }
 
+/* Üstteki başlık + filtre barını yan yana tutan satır */
 .movies-header-row {
     display: flex;
     justify-content: space-between;
@@ -17,7 +19,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Başlığı biraz sağa al */
+/* "MOVIES" başlığının görünümü */
 .movies-title {
     font-size: 32px;
     font-weight: 800;
@@ -29,7 +31,7 @@
     position: relative;
 }
 
-    /* Alt çizgi geçişli */
+    /* Başlığın altındaki kırmızı gradient çizgi */
     .movies-title::after {
         content: "";
         position: relative;
@@ -44,8 +46,9 @@
 
 
 
-/* Filter bar */
+/* Filter bar (SEARCH + DROPDOWN) */
 
+/* Sağ üstteki siyah kapsül: search + genre + cinema */
 .movies-filter-form {
     display: flex;
     gap: 18px;
@@ -55,10 +58,10 @@
     background: rgba(0, 0, 0, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
-    margin-right: 30px; /* sağdan boşluk = kapsül biraz sola kayar */
-    border-color: #f17f7f;  /*≈ Froly*/ /*en dış çerçeve için */
+    margin-right: 30px; /* sağdan boşluk = kapsül biraz sola kayar - tamamen kenara yapışmasın*/
+    border-color: #f17f7f; /*≈ Froly*/ /*en dış çerçeve için */
 }
-
+/* "GENRE", "CINEMA" label + select grupları */
 .movies-filter-group {
     display: flex;
     flex-direction: row;
@@ -66,14 +69,14 @@
     gap: 8px;
     font-size: 12px;
 }
-
+/* Label yazıları (GENRE, CINEMA) */
 .movies-filter-label {
     text-transform: uppercase;
     letter-spacing: 0.6px;
     font-weight: 700;
     color: #f1f1f1;
 }
-
+/* Dropdownların görünümü */
 .movies-filter-select {
     min-width: 130px;
     padding: 4px 12px;
@@ -82,12 +85,12 @@
     background: #111;
     color: #fff;
     outline: none;
-   
+    /* Native arrow’ı gizlemek için */
     -moz-appearance: none;
     -webkit-appearance: none;
     background-image: linear-gradient(to bottom, #111, #050505);
 }
-
+    /* Dropdown odaktayken kırmızı glow */
  .movies-filter-select:focus { 
     border-color: #ff4040; /*Coral Red*/
     box-shadow: 0 0 0 2px rgba(255, 64, 64, 0.4);
@@ -95,7 +98,7 @@
 
 
 
-/* Header içinde sağ tarafı hizala: search + filtre kapsülü */
+/* Sağ tarafta search + filtre kapsülünü hizalayan wrapper */ /* Header içinde sağ tarafı hizala: search + filtre kapsülü */
 .movies-header-controls {
     display: flex;
     align-items: center;
@@ -105,14 +108,14 @@
 }
 
 /* ------------- SEARCH BAR ----------*/
-
+/* Search input’un dış wrapper’ı (ikonı konumlamak için relative) */
 .movies-search-wrapper {
     position: relative;
 }
-
+/* Asıl arama input’u */
 .movies-search-input {
     min-width: 220px;
-    padding: 7px 10px 7px 32px;
+    padding: 7px 10px 7px 32px; /* solda ikona yer bırakmak için extra padding */
     border-radius: 999px;
     border: 1px solid #666;
     background: #111;
@@ -120,16 +123,16 @@
     outline: none;
     font-size: 13px;
 }
-
+    /* Placeholder rengi */
     .movies-search-input::placeholder {
         color: #888;
     }
-
+/* Input focus olduğunda kırmızı border + glow */
     .movies-search-input:focus {
         border-color: #ff4040;
         box-shadow: 0 0 0 2px rgba(255, 64, 64, 0.3);
     }
-
+/* Küçük büyüteç ikonu */
 .movies-search-icon {
     position: absolute;
     left: 10px;
@@ -139,7 +142,7 @@
     font-size: 12px;
 }
 
-/* Filtre kapsülünde margin-right fazla kaçmasın */
+/* Küçük büyüteç ikonu */
 .movies-filter-form {
     display: flex;
     gap: 18px;
@@ -154,8 +157,7 @@
 
 
 
-
-
+/*  FİLM GRID YAPISI (KARTLAR) */
 
 /* Grid – desktop: 5 kolon */
 
@@ -165,7 +167,7 @@
     gap: 16px;
 }
 
-/* Daha küçük ekranlar için kırılımlar */
+/* Ekran daraldıkça kolon sayısını azalt */
 
 @media (max-width: 1200px) {
     .movies-grid {
@@ -191,7 +193,7 @@
     }
 }
 
-/* Kart */
+/* Tek bir film kartının arka planı ve hover animasyonu */
 
 .movie-card {
     background: #111;
@@ -200,11 +202,13 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+    /* Kartın hover’da hafif yukarı kalkması */
 
 .movie-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.8);
 }
+/* Kart içindeki poster görseli */
 
 .movie-card-poster img {
     width: 100%;
@@ -212,23 +216,27 @@
     object-fit: cover;
     display: block;
 }
+/* Kartın altındaki siyah bilgi bloğu */
 
 .movie-card-body {
     padding: 8px 10px 10px;
     font-size: 12px;
 }
-/* Movies sayfasındaki film isimlerinin rengi */
+/* Film isminin link rengi – her durumda beyaz */
 .movie-card-title a,
 .movie-card-title a:visited {
     color: #ffffff !important;      /* beyaz ve okunaklı */
     text-decoration: none;
 }
 
+    /* Film ismi hover/focus olduğunda sarımsı + altı çizili */
+
 .movie-card-title a:hover,
 .movie-card-title a:focus {
     color: #f5c518 !important;      /* hover'da sarımsı */
     text-decoration: underline;     
 }
+/* Film ismi font ayarları ve uzun isimlerde ... ile kesme */
 
 .movie-card-title {
     font-size: 14px;
@@ -238,48 +246,64 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+/* Release date, duration gibi küçük gri yazılar */
 
 .movie-card-meta {
     color: #bbb;
     margin-bottom: 2px;
 }
+/* Rating satırı: yıldız + skor + yeşil etiket + BOOK NOW */
 
 .movie-card-rating {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 4px;
+    gap: 6px; /**kesin bak **/
+    margin-top: 4px; /**kesin bak **/
     font-weight: 600;
     font-size: 12px;
+    color: #f5f5f5; /**kesin bak **/
 }
 
+    /* Rating satırındaki ilk span (skor) – sarı */
+.movie-card-rating span:first-child {
+    color: #f8d34a;        /* yıldız sarısı */
+}
+
+
+/* Yeşil / sarı / kırmızı durum etiketleri için temel stil
+   (Movies sayfasında kartların üstündeki badge’ler) */
 .movie-status-badge {
-    font-size: 10px;
-    padding: 2px 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
     border-radius: 999px;
+    font-size: 10px;
+    font-weight: 650;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
+    line-height: 1;
 }
 
-
-
+/* Rating skorunun ayrı class’ı (kullanıyorsan) */
 .movie-card-rating-score {
     margin-right: 8px;
     font-weight: 600;
     color: #ffd966; /* sarımsı, arka planda okunur */
 }
-
+/* Kart içindeki beyaz çerçeveli BOOK NOW butonu */
 .movie-card-booknow {
     margin-left: auto;
-    font-size: 11px;
+    font-size: 9px; /**kesin bak **/
     text-transform: uppercase;
     color: #ffffff;
     border: 1px solid #ffffff;
-    padding: 2px 12px;
+    padding: 2px 9px; /**kesin bak **/
     border-radius: 999px;
     text-decoration: none;
     letter-spacing: 0.06em;
 }
+    /* BOOK NOW hover – beyaz dolu, yazı siyah */
 
     .movie-card-booknow:hover {
         background-color: #ffffff;
@@ -289,9 +313,10 @@
 
 
 
+/* Durumlara göre etiket renkleri (Now / Coming / Archived) */
 .badge-now {
-    background: #28a745;
-    color: #fff;
+    background: #00b341;
+    color: #000;
 }
 
 .badge-coming {
@@ -303,224 +328,11 @@
     background: #dc3545;
     color: #fff;
 }
-
+/* Filtre sonucunda hiç film yoksa çıkan mesaj */
 .movies-no-results {
     margin-top: 20px;
     font-style: italic;
     color: #ccc;
-}
-/* === MOVIE DETAILS LAYOUT === */
-
-.movie-detail-page {
-    padding: 40px 40px 80px;
-}
-
-.movie-detail-hero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* SOL TARAF – BİLGİLER */
-.movie-detail-info {
-    flex: 0 0 40%;
-    color: #fff;
-}
-
-.movie-detail-title {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-}
-
-.movie-detail-meta {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 24px 0;
-    font-size: 14px;
-}
-
-    .movie-detail-meta li {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 4px;
-    }
-
-    .movie-detail-meta .label {
-        color: #bbbbbb;
-        min-width: 90px;
-    }
-
-    .movie-detail-meta .value {
-        color: #ffffff;
-    }
-
-/* STATUS BADGE */
-.movie-detail-status-row {
-    margin-bottom: 10px;
-}
-
-.movie-status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .5px;
-}
-
-.badge-now {
-    background: #0bbf54;
-    color: #000;
-}
-
-.badge-coming {
-    background: #ffbf00;
-    color: #000;
-}
-
-.badge-archived {
-    background: #a12b2b;
-    color: #fff;
-}
-
-/* BUTONLAR */
-.movie-detail-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-    .movie-detail-actions a,
-    .movie-detail-actions button {
-        text-decoration: none;
-        border: none;
-        outline: none;
-        padding: 10px 20px;
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
-    }
-
-.movie-detail-btn-primary {
-    background: #e50914;
-    color: #fff;
-    box-shadow: 0 4px 14px rgba(229, 9, 20, 0.5);
-}
-
-    .movie-detail-btn-primary:hover:not(.disabled) {
-        transform: translateY(-1px);
-        background: #ff1722;
-    }
-
-    .movie-detail-btn-primary.disabled {
-        background: #444;
-        color: #999;
-        cursor: default;
-        box-shadow: none;
-    }
-
-.movie-detail-btn-secondary {
-    background: transparent;
-    color: #ffffff;
-    border: 1px solid #ffffff55;
-}
-
-    .movie-detail-btn-secondary:hover {
-        background: #ffffff11;
-    }
-
-.movie-detail-btn-ghost {
-    background: transparent;
-    color: #bbbbbb;
-}
-
-    .movie-detail-btn-ghost:hover {
-        color: #ffffff;
-    }
-
-/* SAĞ TARAF – POSTER */
-.movie-detail-poster {
-    flex: 0 0 55%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-    .movie-detail-poster img {
-        max-width: 100%;
-        max-height: 520px; /* POSTERİ KÜÇÜLTEN KISIM */
-        border-radius: 20px;
-        object-fit: cover;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-    }
 
 
 
-.showtime-page {
-    padding: 60px 120px 80px;
-    color: #fff;
-}
-
-.showtime-header {
-    display: flex;
-    gap: 60px;
-    align-items: flex-start;
-    margin-bottom: 40px;
-}
-
-.showtime-movie-info {
-    flex: 1;
-}
-
-.showtime-poster img {
-    max-width: 320px;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-}
-
-.showtime-section-title {
-    font-size: 22px;
-    margin-bottom: 16px;
-}
-
-.cinema-block {
-    margin-bottom: 24px;
-}
-
-.cinema-name {
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-.showtime-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.showtime-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: #111;
-    border: 1px solid #333;
-    font-size: 13px;
-    text-decoration: none;
-    color: #fff;
-    transition: background .2s, transform .2s, border-color .2s;
-}
-
-    .showtime-chip:hover {
-        background: #e50914;
-        border-color: #e50914;
-        transform: translateY(-1px);
-    }
