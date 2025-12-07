@@ -179,6 +179,7 @@
     <Content Include="Content\about.css" />
     <Content Include="Content\campaigns.css" />
     <Content Include="Content\contact-style.css" />
+    <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\movies.css" />
     <Content Include="favicon.ico" />

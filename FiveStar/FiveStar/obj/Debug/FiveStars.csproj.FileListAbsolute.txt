@@ -445,3 +445,4 @@ C:\Web-Project3\FiveStar\FiveStar\bin\tr\System.Web.WebPages.resources.dll
 C:\Web-Project3\FiveStar\FiveStar\bin\tr\System.Web.WebPages.Deployment.resources.dll
 C:\Web-Project3\FiveStar\FiveStar\bin\tr\System.Web.WebPages.Razor.resources.dll
 C:\Web-Project3\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CopyComplete
+C:\Web-Project3\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.AssemblyReference.cache

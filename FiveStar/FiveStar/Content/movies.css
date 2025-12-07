@@ -39,7 +39,7 @@
         height: 3px;
         border-radius: 999px;
         background: linear-gradient(90deg, #d00000, #f17f7f); /*renk geçişli*/
-        */
+        
     }
 
 
@@ -82,7 +82,7 @@
     background: #111;
     color: #fff;
     outline: none;
-    appearance: none;
+   
     -moz-appearance: none;
     -webkit-appearance: none;
     background-image: linear-gradient(to bottom, #111, #050505);
@@ -281,3 +281,154 @@
     font-style: italic;
     color: #ccc;
 }
+/* === MOVIE DETAILS LAYOUT === */
+
+.movie-detail-page {
+    padding: 40px 40px 80px;
+}
+
+.movie-detail-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* SOL TARAF – BİLGİLER */
+.movie-detail-info {
+    flex: 0 0 40%;
+    color: #fff;
+}
+
+.movie-detail-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.movie-detail-meta {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    font-size: 14px;
+}
+
+    .movie-detail-meta li {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 4px;
+    }
+
+    .movie-detail-meta .label {
+        color: #bbbbbb;
+        min-width: 90px;
+    }
+
+    .movie-detail-meta .value {
+        color: #ffffff;
+    }
+
+/* STATUS BADGE */
+.movie-detail-status-row {
+    margin-bottom: 10px;
+}
+
+.movie-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.badge-now {
+    background: #0bbf54;
+    color: #000;
+}
+
+.badge-coming {
+    background: #ffbf00;
+    color: #000;
+}
+
+.badge-archived {
+    background: #a12b2b;
+    color: #fff;
+}
+
+/* BUTONLAR */
+.movie-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    .movie-detail-actions a,
+    .movie-detail-actions button {
+        text-decoration: none;
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+
+.movie-detail-btn-primary {
+    background: #e50914;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(229, 9, 20, 0.5);
+}
+
+    .movie-detail-btn-primary:hover:not(.disabled) {
+        transform: translateY(-1px);
+        background: #ff1722;
+    }
+
+    .movie-detail-btn-primary.disabled {
+        background: #444;
+        color: #999;
+        cursor: default;
+        box-shadow: none;
+    }
+
+.movie-detail-btn-secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff55;
+}
+
+    .movie-detail-btn-secondary:hover {
+        background: #ffffff11;
+    }
+
+.movie-detail-btn-ghost {
+    background: transparent;
+    color: #bbbbbb;
+}
+
+    .movie-detail-btn-ghost:hover {
+        color: #ffffff;
+    }
+
+/* SAĞ TARAF – POSTER */
+.movie-detail-poster {
+    flex: 0 0 55%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .movie-detail-poster img {
+        max-width: 100%;
+        max-height: 520px; /* POSTERİ KÜÇÜLTEN KISIM */
+        border-radius: 20px;
+        object-fit: cover;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }
