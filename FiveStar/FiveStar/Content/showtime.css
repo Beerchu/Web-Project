@@ -1,26 +1,10 @@
 ﻿/* --------------- SHOWTIME (SEANS SEÇİMİ) SAYFASI -----------------------*/
 
+
 /* Showtime sayfasının genel padding’i */
 .showtime-page {
     padding: 60px 120px 80px;
     color: #fff;
-}
-/* Üstteki film bilgisi + poster alanını yan yana tutan flex */
-.showtime-header {
-    display: flex;
-    gap: 60px;
-    align-items: flex-start;
-    margin-bottom: 40px;
-}
-
-.showtime-movie-info { /* Sol tarafta film adı, açıklama vs. */
-    flex: 1;
-}
-
-.showtime-poster img { /* Showtime sayfasındaki poster görünümü */
-    max-width: 320px;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 }
 
 /* "Please select a cinema and time..." altındaki başlıklar
@@ -28,11 +12,6 @@
 .showtime-section-title {
     font-size: 22px;
     margin-bottom: 16px;
-}
-
-/* Her sinema bloğu (Cinema A Plus, Cinema B vs.) */
-.cinema-block {
-    margin-bottom: 24px;
 }
 
 /* Sinema adı için başlık */
@@ -45,10 +24,10 @@
 .showtime-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
-/* Tek tek seans butonu (chip) – saat + fiyat */
+/* Tek tek seans butonu (chip) – saat */
 .showtime-chip {
     display: inline-flex;
     align-items: center;
@@ -57,6 +36,7 @@
     border-radius: 999px;
     background: #111;
     border: 1px solid #333;
+    border-color:#e50914;
     font-size: 13px;
     text-decoration: none;
     color: #fff;
