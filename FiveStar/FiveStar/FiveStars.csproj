@@ -168,6 +168,7 @@
     <Compile Include="Models\Showings.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ShowtimeSelectionViewModel.cs" />
     <Compile Include="Models\TicketViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -181,7 +182,9 @@
     <Content Include="Content\contact-style.css" />
     <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
+    <Content Include="Content\HtmlPage1.html" />
     <Content Include="Content\movies.css" />
+    <Content Include="Content\showtime.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -274,7 +277,7 @@
     <Content Include="Views\Home\Campaigns.cshtml" />
     <Content Include="Views\Movies\Details.cshtml" />
     <Content Include="Views\Tickets.cshtml" />
-    <Content Include="Views\Tickets\Start.cshtml" />
+    <Content Include="Views\Tickets\Showtimes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

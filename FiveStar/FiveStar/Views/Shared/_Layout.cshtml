@@ -9,19 +9,14 @@
     @Styles.Render("~/Content/css")
 
     <!-- Genel site stilleri -->
-
     <link rel="stylesheet" href="@Url.Content("~/Content/about.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/contact-style.css")" />
-
     <link rel="stylesheet" href="@Url.Content("~/Content/movies.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/home.css")" />
 
-    <!-- İkonlar -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("Styles", required: false)
 </head>
+
 <body>
     <div class="main-wrapper">
 
@@ -67,12 +62,12 @@
         </header>
 
 
-      
+
         <div class="container body-content">
             @RenderBody()
         </div>
 
-        
+
 
     </div>
 
@@ -81,6 +76,6 @@
     <script src="@Url.Content("~/Scripts/home-script.js")"></script>
     <script src="@Url.Content("~/Scripts/movies.js")"></script>
 
-    @RenderSection("scripts", required: false)
+
 </body>
 </html>
