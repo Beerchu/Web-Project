@@ -1,167 +1,9 @@
 /* === MOVIE DETAILS PAGE === */
 
-.movie-detail-page {
-    padding: 40px 0 80px;
-    color: #ffffff;
-}
-
-.movie-detail-hero {
-    display: flex;
-    gap: 40px;
-    align-items: flex-start;
-}
-
-.movie-detail-poster img {
-    width: 320px;
-    max-width: 100%;
-    border-radius: 18px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-    object-fit: cover;
-}
-
-/* Sağ panel */
-.movie-detail-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.movie-detail-status-row {
-    margin-bottom: 4px;
-}
-
-.movie-detail-title {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    margin: 0;
-}
-
-/* Meta bilgileri */
-.movie-detail-meta {
-    list-style: none;
-    padding: 0;
-    margin: 8px 0 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 24px;
-    font-size: 14px;
-}
-
-.movie-detail-meta li {
-    display: flex;
-    gap: 6px;
-}
-
-.movie-detail-meta .label {
-    color: #9f9f9f;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-}
-
-.movie-detail-meta .value {
-    color: #ffffff;
-}
-
-/* Açıklama */
-.movie-detail-description {
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 1.6;
-    max-width: 680px;
-    color: #e0e0e0;
-}
-
-/* Butonlar */
-.movie-detail-actions {
-    margin-top: 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-/* Ana kırmızı buton */
-.movie-detail-btn-primary {
-    background: #ff2020;
-    color: #fff;
-    border-radius: 999px;
-    padding: 10px 28px;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
-}
-
-.movie-detail-btn-primary:hover:not(.disabled) {
-    background: #ff4040;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
-}
-
-.movie-detail-btn-primary.disabled {
-    background: #555;
-    cursor: default;
-    box-shadow: none;
-}
-
-/* İkincil buton */
-.movie-detail-btn-secondary {
-    background: transparent;
-    border-radius: 999px;
-    padding: 10px 22px;
-    font-size: 13px;
-    text-transform: uppercase;
-    border: 1px solid #ffffff;
-    color: #ffffff;
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    transition: background 0.1s ease, color 0.1s ease;
-}
-
-.movie-detail-btn-secondary:hover {
-    background: #ffffff;
-    color: #000000;
-}
-
-/* Link gibi görünen geri butonu */
-.movie-detail-btn-ghost {
-    border: none;
-    background: none;
-    color: #bbbbbb;
-    font-size: 13px;
-    text-decoration: none;
-    padding: 10px 0;
-}
-
-.movie-detail-btn-ghost:hover {
-    color: #ffffff;
-}
-
-/* Küçük ekranlar için */
-@media (max-width: 900px) {
-    .movie-detail-hero {
-        flex-direction: column;
-    }
-
-    .movie-detail-poster img {
-        width: 100%;
-        max-width: 420px;
-    }
-}
-/* === MOVIE DETAILS SAYFASI === */
-
 /* Details sayfasının genel padding’i */
 .movie-detail-page {
     padding: 40px 40px 80px;
+    color: #ffffff;
 }
 
 .movie-detail-hero {
@@ -173,11 +15,35 @@
     margin: 0 auto;
 }
 
+
+.movie-detail-poster img {
+    width: 320px;
+    max-width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    object-fit: cover;
+}
+/* SAĞ TARAF – POSTER */
+.movie-detail-poster {
+    flex: 0 0 55%;
+    display: flex;
+    justify-content: flex-end;
+}
+
 /* Sol taraftaki bilgi sütunu */
 .movie-detail-info {
-    flex: 0 0 40%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     color: #fff;
 }
+
+/* Status satırı (NOW SHOWING /s COMING SOON vs.) */
+.movie-detail-status-row {
+    margin-bottom: 10px;
+}
+
 /* Detay sayfasında film ismi */
 .movie-detail-title {
     font-size: 32px;
@@ -185,6 +51,7 @@
     letter-spacing: 1px;
     margin-bottom: 16px;
 }
+/* Meta bilgileri */
 
 /* Detaydaki meta listesi (Duration, Release date, Rating vs.) */
 .movie-detail-meta {
@@ -192,6 +59,9 @@
     padding: 0;
     margin: 0 0 24px 0;
     font-size: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 24px;
 }
 
     .movie-detail-meta li {
@@ -204,6 +74,9 @@
     .movie-detail-meta .label {
         color: #bbbbbb;
         min-width: 90px;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.08em;
     }
 
     /* Label karşısındaki değerler */
@@ -211,24 +84,13 @@
         color: #ffffff;
     }
 
-/* Status satırı (NOW SHOWING / COMING SOON vs.) */
-.movie-detail-status-row {
-    margin-bottom: 10px;
-}
-
-.badge-now { /* Details sayfasında durum renkleri (biraz farklı tonlar) */
-    background: #0bbf54;
-    color: #000;
-}
-
-.badge-coming {
-    background: #ffbf00;
-    color: #000;
-}
-
-.badge-archived {
-    background: #a12b2b;
-    color: #fff;
+/* Açıklama */
+.movie-detail-description {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 680px;
+    color: #e0e0e0;
 }
 
 /* BUTONLAR */
@@ -238,20 +100,26 @@
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 20px;
+} 
+
+/* Ana kırmızı buton */
+/* Kırmızı ana buton (BUY TICKET) */
+.movie-detail-btn-primary {
+    background: #ff2020;
+    color: #fff;
+    border-radius: 999px;
+    padding: 10px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
 }
-    /* Ortak buton stilleri (hepsi için) */
-    .movie-detail-actions a,
-    .movie-detail-actions button {
-        text-decoration: none;
-        border: none;
-        outline: none;
-        padding: 10px 20px;
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
-    }
 /* Kırmızı ana buton (BUY TICKET) */
 .movie-detail-btn-primary {
     background: #e50914;
@@ -260,8 +128,9 @@
 }
 
     .movie-detail-btn-primary:hover:not(.disabled) {
+        background: #ff4040;
         transform: translateY(-1px);
-        background: #ff1722;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
     }
 
     /* Aktif primary buton hover animasyonu */
@@ -272,32 +141,53 @@
         box-shadow: none;
     }
 
+
+/* İkincil buton */
 /* "BACK TO HOME" butonu – beyaz çerçeveli */
 .movie-detail-btn-secondary {
     background: transparent;
+    border-radius: 999px;
+    padding: 10px 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    border: 1px solid #ffffff;
     color: #ffffff;
-    border: 1px solid #ffffff55;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: background 0.1s ease, color 0.1s ease;
 }
+
     /* Secondary hover – hafif beyaz dolgu */
     .movie-detail-btn-secondary:hover {
-        background: #ffffff11;
+        background: #ffffff11;color: #000000;
     }
-/* "Back to Movies" butonu – sadece yazı */
+
+/* Link gibi görünen geri butonu *//* "Back to Movies" butonu – sadece yazı */
 .movie-detail-btn-ghost {
-    background: transparent;
+    border: none;
+    background: none;
     color: #bbbbbb;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 10px 0;
 }
+
     /* Ghost hover – yazıyı beyaz yap */
     .movie-detail-btn-ghost:hover {
         color: #ffffff;
     }
 
-/* SAĞ TARAF – POSTER */
-.movie-detail-poster {
-    flex: 0 0 55%;
-    display: flex;
-    justify-content: flex-end;
-}
+
+/* Küçük ekranlar için */
+@media (max-width: 900px) {
+    .movie-detail-hero {
+        flex-direction: column;
+    }
+
+    .movie-detail-poster img {
+        width: 100%;
+        max-width: 420px;
+    }
     /* Poster resminin maksimum boyu, shadow’u vs. */
     .movie-detail-poster img {
         max-width: 100%;
@@ -306,3 +196,5 @@
         object-fit: cover;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
+}
+

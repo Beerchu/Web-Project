@@ -265,7 +265,6 @@
     <Content Include="Views\Movies\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\ShowtimeSelectionViewModel\" />
     <Folder Include="Views\TicketViewModels\" />
   </ItemGroup>
   <ItemGroup>

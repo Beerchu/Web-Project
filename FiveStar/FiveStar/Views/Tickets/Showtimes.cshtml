@@ -1,7 +1,5 @@
 ﻿@model FiveStars.Models.ShowtimeSelectionViewModel
-@section Styles {
-    <link href="~/Content/showtime.css" rel="stylesheet" />
-}
+
 
 @{
     ViewBag.Title = "Select Showtime";
@@ -13,6 +11,10 @@
 
     bool isNowShowing = string.Equals(Model.Status, "Now Showing",
         System.StringComparison.OrdinalIgnoreCase);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/showtime.css")" />
 }
 
 <div class="showtime-page container">
