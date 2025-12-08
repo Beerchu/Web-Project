@@ -1,0 +1,33 @@
+﻿@{ ViewBag.Title = "Sign Up"; }
+
+<div class="login-container">
+
+    <h2>Sign Up</h2>
+
+    <form method="post">
+
+        <div class="login-group">
+            <label>Full Name</label>
+            <input type="text" name="fullName" placeholder="Enter your full name" required />
+        </div>
+
+        <div class="login-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="login-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Create a password" required />
+        </div>
+
+        <button type="submit" class="login-btn">Create Account</button>
+
+    </form>
+
+    <div class="login-footer">
+        Already have an account?
+        <a href="@Url.Action("Login", "Account")" style="color:#00bcd4;">Sign In</a>
+    </div>
+
+</div>

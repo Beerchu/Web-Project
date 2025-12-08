@@ -15,6 +15,8 @@
 
     <link rel="stylesheet" href="@Url.Content("~/Content/movies.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/home.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/login.css")" />
+
 
     <!-- İkonlar -->
     <link rel="stylesheet"
@@ -55,10 +57,28 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="dropdown-content" id="userDropdown">
-                        <a href="#" class="dropdown-action-btn sign-in">Sign In</a>
-                        <a href="#" class="dropdown-action-btn sign-up">Sign Up</a>
+                        @if (Session["User"] == null)
+                        {
+                            <a href="@Url.Action("Login", "Account")" class="dropdown-action-btn sign-in">
+                                Sign In
+                            </a>
+                            <a href="@Url.Action("Register", "Account")" class="dropdown-action-btn sign-up">
+                                Sign Up
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Profile", "Account")" class="dropdown-action-btn">
+                                My Profile
+                            </a>
+                            <a href="@Url.Action("Logout", "Account")" class="dropdown-action-btn">
+                                Sign Out
+                            </a>
+                        }
+
                         <hr />
-                        <a href="#" class="dropdown-action-btn cart">
+
+                        <a href="@Url.Action("MyCart", "Cart")" class="dropdown-action-btn cart">
                             <i class="fas fa-shopping-cart"></i> Go To Cart
                         </a>
                     </div>
