@@ -165,6 +165,7 @@
     <Compile Include="Models\Movies.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SeatSelectionViewModel.cs" />
     <Compile Include="Models\Showings.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
@@ -182,6 +183,7 @@
     <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\movies.css" />
+    <Content Include="Content\tickets.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -245,6 +247,7 @@
     <Content Include="Scripts\contact-script.js" />
     <Content Include="Scripts\home-script.js" />
     <Content Include="Scripts\movies.js" />
+    <Content Include="Scripts\seat-selection.js" />
     <Content Include="videos\main-trailer.mp4" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -261,9 +264,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Movies\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\TicketViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -275,6 +276,7 @@
     <Content Include="Views\Movies\Details.cshtml" />
     <Content Include="Views\Tickets.cshtml" />
     <Content Include="Views\Tickets\Start.cshtml" />
+    <Content Include="Views\TicketViewModels\SelectSeats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
