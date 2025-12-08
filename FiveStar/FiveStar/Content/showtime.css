@@ -1,17 +1,22 @@
-﻿/* --------------- SHOWTIME (SEANS SEÇİMİ) SAYFASI -----------------------*/
-
-
+﻿﻿ /* --------------- SHOWTIME (SEANS SEÇİMİ) SAYFASI -----------------------*/
 /* Showtime sayfasının genel padding’i */
 .showtime-page {
-    padding: 60px 120px 80px;
+    padding: 40px 120px 80px;
     color: #fff;
+}
+/* Üstteki film bilgisi + poster alanını yan yana tutan flex */
+.showtime-header {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 0px;
 }
 
 /* "Please select a cinema and time..." altındaki başlıklar
    (örn. "Cumartesi, 08 Kasım 2025") */
 .showtime-section-title {
     font-size: 22px;
-    margin-bottom: 16px;
+    margin-bottom: 40px;
 }
 
 /* Sinema adı için başlık */
@@ -24,10 +29,10 @@
 .showtime-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
-/* Tek tek seans butonu (chip) – saat */
+/* Tek tek seans butonu (chip) – saat + fiyat */
 .showtime-chip {
     display: inline-flex;
     align-items: center;
@@ -36,7 +41,6 @@
     border-radius: 999px;
     background: #111;
     border: 1px solid #333;
-    border-color:#e50914;
     font-size: 13px;
     text-decoration: none;
     color: #fff;

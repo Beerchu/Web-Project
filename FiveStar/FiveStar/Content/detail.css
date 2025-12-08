@@ -15,7 +15,6 @@
     margin: 0 auto;
 }
 
-
 .movie-detail-poster img {
     width: 320px;
     max-width: 100%;
@@ -141,7 +140,6 @@
         box-shadow: none;
     }
 
-
 /* İkincil buton */
 /* "BACK TO HOME" butonu – beyaz çerçeveli */
 .movie-detail-btn-secondary {
@@ -176,7 +174,6 @@
     .movie-detail-btn-ghost:hover {
         color: #ffffff;
     }
-
 
 /* Küçük ekranlar için */
 @media (max-width: 900px) {
