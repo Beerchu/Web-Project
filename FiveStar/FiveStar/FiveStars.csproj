@@ -165,6 +165,7 @@
     <Compile Include="Models\Movies.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SeatSelectionViewModel.cs" />
     <Compile Include="Models\Showings.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
@@ -185,6 +186,7 @@
     <Content Include="Content\HtmlPage1.html" />
     <Content Include="Content\movies.css" />
     <Content Include="Content\showtime.css" />
+    <Content Include="Content\tickets.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -278,6 +280,7 @@
     <Content Include="Views\Movies\Details.cshtml" />
     <Content Include="Views\Tickets.cshtml" />
     <Content Include="Views\Tickets\Showtimes.cshtml" />
+    <Content Include="Views\Tickets\SelectSeats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

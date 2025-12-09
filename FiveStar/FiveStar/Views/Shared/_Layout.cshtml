@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/contact-style.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/movies.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/home.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tickets.css")" />
 
     @RenderSection("Styles", required: false)
 </head>
@@ -75,7 +76,7 @@
 
     <script src="@Url.Content("~/Scripts/home-script.js")"></script>
     <script src="@Url.Content("~/Scripts/movies.js")"></script>
-
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>

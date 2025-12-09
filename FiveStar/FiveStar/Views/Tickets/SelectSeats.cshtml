@@ -1,0 +1,133 @@
+﻿@model FiveStars.Models.SeatSelectionViewModel
+
+@{
+    ViewBag.Title = "Select Seats - " + Model.MovieTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="movie-detail-page container" style="max-width: 1400px; padding: 20px;">
+
+    <h1 class="movie-detail-title" style="margin-bottom: 5px;">
+        Select Seats for @Model.MovieTitle
+    </h1>
+    <p style="color: #bbb; font-size: 14px; margin-bottom: 25px;">
+        @Model.CinemaName - @Model.StartTime.ToString("dd MMMM yyyy HH:mm") (@Model.ScreenType)
+    </p>
+
+    <div class="seating-area">
+
+        <div class="screen-area">
+            <div class="screen">SCREEN</div>
+            <p class="screen-caption">All eyes this way please!</p>
+        </div>
+
+        <div class="seating-plan">
+
+            @foreach (var row in Model.SeatingPlan)
+            {
+                <div class="seat-row" data-row="@row.RowName">
+                    <span class="row-label">@row.RowName</span>
+                    @foreach (var seat in row.Seats)
+                    {
+                        if (seat == null)
+                        {
+                            <div class="seat-spacer"></div> // Orta koridor için boşluk
+                        }
+                        else
+                        {
+                            var seatClass = "seat-item seat-" + seat.Status.ToLower();
+                            var seatTypeClass = "seat-type-" + seat.Type.ToLower();
+
+                            <button type="button"
+                                    class="@(seatClass) @(seatTypeClass)"
+                                    data-id="@seat.SeatID"
+                                    data-status="@seat.Status"
+                                    data-price="@(Model.TicketPrice + seat.ExtraPrice)"
+                                    @(seat.Status == "Sold" ? "disabled" : "")
+                                    onclick="toggleSeatSelection(this)">
+                                @* <<< Bu satır kritik! *@
+                                @seat.SeatNumber.Last()
+                            </button>
+                        }
+                    }
+                    <span class="row-label">@row.RowName</span>
+                </div>
+            }
+        </div>
+
+        <div class="seating-legend">
+            <div class="legend-item"><span class="legend-box seat-available"></span>Available</div>
+            <div class="legend-item"><span class="legend-box seat-selected"></span>Selected</div>
+            <div class="legend-item"><span class="legend-box seat-sold"></span>Sold</div>
+            <div class="legend-item"><span class="legend-box seat-recliner"></span>Recliner (VIP)</div>
+        </div>
+
+    </div>
+
+    <div class="checkout-summary">
+        <span id="selected-seats-info">Seats: 0</span> |
+        <span id="total-price">Total: 0.00 TL</span>
+        <a href="#" class="movie-detail-btn-primary" id="checkout-btn" disabled>
+            Proceed to Payment
+        </a>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        const TICKET_PRICE = parseFloat('@Model.TicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)');
+        function toggleSeatSelection(button) {
+            if (button.dataset.status === "Sold") {
+                return;
+            }
+
+            let currentStatus = button.dataset.status;
+            let newStatus;
+
+            if (currentStatus === "Available") {
+                newStatus = "Selected";
+                button.classList.remove('seat-available');
+                button.classList.add('seat-selected');
+            } else if (currentStatus === "Selected") {
+                newStatus = "Available";
+                button.classList.remove('seat-selected');
+                button.classList.add('seat-available');
+            } else {
+                return;
+            }
+
+            button.dataset.status = newStatus;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            let selectedSeats = document.querySelectorAll('.seat-item[data-status="Selected"]');
+            let totalTickets = selectedSeats.length;
+            let totalPrice = 0;
+            let selectedSeatNumbers = [];
+
+            selectedSeats.forEach(seat => {
+                let price = parseFloat(seat.dataset.price);
+                totalPrice += price;
+                selectedSeatNumbers.push(seat.textContent.trim());
+            });
+
+            document.getElementById('selected-seats-info').textContent = `Seats: ${totalTickets} (${selectedSeatNumbers.join(', ')})`;
+            document.getElementById('total-price').textContent = `Total: ${totalPrice.toFixed(2)} TL`;
+
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            if (totalTickets > 0) {
+                checkoutBtn.removeAttribute('disabled');
+                checkoutBtn.style.opacity = 1;
+            } else {
+                checkoutBtn.setAttribute('disabled', 'disabled');
+                checkoutBtn.style.opacity = 0.5;
+                checkoutBtn.href = "#";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateSummary);
+    </script>
+}
