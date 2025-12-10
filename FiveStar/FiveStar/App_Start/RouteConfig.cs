@@ -13,12 +13,18 @@ namespace FiveStars
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Admin routes
             routes.MapRoute(
-     name: "Default",
-     url: "{controller}/{action}/{id}",
-     defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
- );
+                name: "Admin",
+                url: "admin/{action}/{id}",
+                defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional }
+            );
 
+            // Default route
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
         }
-    }
 }

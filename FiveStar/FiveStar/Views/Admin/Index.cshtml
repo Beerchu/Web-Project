@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-film fa-3x mb-3 text-primary"></i>
+                    <h4 class="card-title">Movie Management</h4>
+                    <p class="card-text">Add, edit, or remove movies from the system.</p>
+                    <a href="@Url.Action("Movies", "Admin")" class="btn btn-primary btn-block">Manage Movies</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-calendar-alt fa-3x mb-3 text-success"></i>
+                    <h4 class="card-title">Showtimes Management</h4>
+                    <p class="card-text">Manage movie showtimes and schedules.</p>
+                    <a href="@Url.Action("Showtimes", "Admin")" class="btn btn-success btn-block">Manage Showtimes</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-bullhorn fa-3x mb-3 text-warning"></i>
+                    <h4 class="card-title">Campaign Management</h4>
+                    <p class="card-text">Create and manage promotional campaigns.</p>
+                    <a href="@Url.Action("Campaigns", "Admin")" class="btn btn-warning btn-block">Manage Campaigns</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: 0.3s;
+        height: 100%;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transform: translateY(-5px);
+        }
+
+    .card-body {
+        padding: 2rem;
+    }
+</style>
