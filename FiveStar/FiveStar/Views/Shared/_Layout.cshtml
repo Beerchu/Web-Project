@@ -8,26 +8,34 @@
 
     @Styles.Render("~/Content/css")
 
-    <!-- Genel site stilleri -->
+    <!-- Page-level styles -->
     <link rel="stylesheet" href="@Url.Content("~/Content/about.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/contact-style.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/movies.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/home.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/tickets.css")" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/Content/login.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/profile.css")" />
 
-    @RenderSection("Styles", required: false)
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    @Scripts.Render("~/bundles/modernizr")
 </head>
-
 <body>
     <div class="main-wrapper">
 
+        <!-- ====================== NAVBAR ====================== -->
         <header class="navbar">
-            <!-- LOGO - Left -->
+
+            <!-- LOGO (Left) -->
             <a href="@Url.Action("Index", "Home")" class="logo-link">
                 <img src="@Url.Content("~/images/logo.png")" alt="Site Logo" class="logo" />
             </a>
 
-            <!-- NAVIGATION - Center -->
+            <!-- NAVIGATION (Center) -->
             <nav>
                 <ul>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
@@ -35,48 +43,88 @@
                     <li>@Html.ActionLink("Cinemas", "Index", "Cinemas")</li>
                     <li>@Html.ActionLink("About Us", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Admin")">
+                                <i class="fas fa-cog"></i> Admin Panel
+                            </a>
+                        </li>
+                    }
                 </ul>
             </nav>
 
-            <!-- SEARCH + USER MENU - Right -->
+            <!-- RIGHT SECTION (Search + User Menu) -->
             <div class="navbar-right-section">
+
                 <!-- Search Icon -->
                 <a href="#" class="search-button" aria-label="Search">
                     <i class="fas fa-search"></i>
                 </a>
 
-                <!-- User Menu Dropdown -->
+                <!-- Hamburger + Dropdown -->
                 <div class="user-menu-dropdown">
+
                     <button class="menu-button" onclick="toggleDropdown()">
                         <i class="fas fa-bars"></i>
                     </button>
+
                     <div class="dropdown-content" id="userDropdown">
-                        <a href="#" class="dropdown-action-btn sign-in">Sign In</a>
-                        <a href="#" class="dropdown-action-btn sign-up">Sign Up</a>
+
+                        @if (Session["User"] == null)
+                        {
+            <a href="@Url.Action("Login", "Account")"
+               class="dropdown-action-btn sign-in">Sign In</a>
+
+                            <a href="@Url.Action("Register", "Account")"
+                               class="dropdown-action-btn sign-up">Sign Up</a> }
+                                        else
+                                        {
+                            <a href="@Url.Action("UserProfile", "Account")"
+                               class="dropdown-action-btn">My Profile</a>
+
+                                            <a href="@Url.Action("Logout", "Account")"
+                                               class="dropdown-action-btn">Sign Out</a>}
+
                         <hr />
-                        <a href="#" class="dropdown-action-btn cart">
+
+                        <a href="@Url.Action("MyCart", "Cart")"
+                           class="dropdown-action-btn cart">
                             <i class="fas fa-shopping-cart"></i> Go To Cart
                         </a>
                     </div>
+
                 </div>
             </div>
+
         </header>
-
-
-
+        <!-- ====================== END NAVBAR ====================== -->
+        <!-- PAGE CONTENT -->
         <div class="container body-content">
             @RenderBody()
         </div>
 
-
-
     </div>
 
+
+    <!-- ====================== SCRIPTS ====================== -->
     @Scripts.Render("~/bundles/jquery")
 
+    <!-- Your custom JS -->
     <script src="@Url.Content("~/Scripts/home-script.js")"></script>
     <script src="@Url.Content("~/Scripts/movies.js")"></script>
+
     @RenderSection("scripts", required: false)
+
+    <!-- Dropdown logic -->
+    <script>
+        function toggleDropdown() {
+            var menu = document.getElementById("userDropdown");
+            if (menu)
+                menu.classList.toggle("show");
+        }
+    </script>
 
 </body>
 </html>
+

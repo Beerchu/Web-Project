@@ -1,0 +1,42 @@
+﻿@using FiveStars.Models
+
+@{ ViewBag.Title = "My Profile";
+                var user = (User)Session["User"]; }
+
+<div class="profile-wrapper">
+
+    <div class="profile-card">
+
+        <!-- Header -->
+        <div class="profile-header">
+            <img src="@Url.Content("~/images/temppic.jpg")" class="profile-pic" />
+
+            <div class="profile-info">
+                <h2>@user.FullName</h2>
+                <p>@user.Email</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- Tickets -->
+        <div class="profile-section">
+            <h3>Your Tickets</h3>
+            <div class="placeholder-box">
+                <p>No tickets yet — feature coming soon.</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- Coupons -->
+        <div class="profile-section">
+            <h3>Your Coupons</h3>
+            <div class="placeholder-box">
+                <p>No coupons available — feature coming soon.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
