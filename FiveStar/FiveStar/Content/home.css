@@ -1075,4 +1075,24 @@ body::before {
   .footer .footer-links a{ margin: 0 12px; }
 }
 
+/* DROPDOWN MENU FIX */
+.user-menu-dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: rgba(0,0,0,0.9);
+    padding: 10px;
+    min-width: 150px;
+    border-radius: 8px;
+    z-index: 9999;
+}
+
+    .dropdown-content.show {
+        display: block;
+    }
 
