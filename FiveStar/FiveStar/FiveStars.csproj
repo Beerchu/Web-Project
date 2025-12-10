@@ -128,6 +128,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
@@ -171,6 +172,7 @@
     </Compile>
     <Compile Include="Models\ShowtimeSelectionViewModel.cs" />
     <Compile Include="Models\TicketViewModels.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +186,9 @@
     <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\HtmlPage1.html" />
+    <Content Include="Content\login.css" />
     <Content Include="Content\movies.css" />
+    <Content Include="Content\profile.css" />
     <Content Include="Content\showtime.css" />
     <Content Include="Content\tickets.css" />
     <Content Include="favicon.ico" />
@@ -227,6 +231,7 @@
     <Content Include="images\now4.jpg" />
     <Content Include="images\now5.jpg" />
     <Content Include="images\samira.jpg" />
+    <Content Include="images\temppic.jpg" />
     <Content Include="images\tugce.jpg" />
     <Content Include="Models\CinemaModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -281,6 +286,9 @@
     <Content Include="Views\Tickets.cshtml" />
     <Content Include="Views\Tickets\Showtimes.cshtml" />
     <Content Include="Views\Tickets\SelectSeats.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
