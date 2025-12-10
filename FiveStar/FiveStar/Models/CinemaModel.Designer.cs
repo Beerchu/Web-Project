@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\EXCALIBUR\source\repos\Web-Project\movie-filtre-sistemi\movie-filtre-sistemi\Models\CinemaModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\irmak\Source\Repos\Web-Project2\FiveStar\FiveStar\Models\CinemaModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
