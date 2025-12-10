@@ -1,0 +1,29 @@
+﻿@model RegisterViewModel
+@{ ViewBag.Title = "Sign Up"; }
+
+<div class="login-container">
+    <div class="login-box">
+
+        <h2>Sign Up</h2>
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+<label>First Name</label>
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "input-box" })
+                                @Html.ValidationMessageFor(m => m.FirstName)
+
+                                                <label>Last Name (optional)</label>
+                                                                @Html.TextBoxFor(m => m.LastName, new { @class = "input-box" })
+                                                                                @Html.ValidationMessageFor(m => m.LastName)
+
+                                                                                                <label>Email</label>
+                                                                                                                @Html.TextBoxFor(m => m.Email, new { @class = "input-box" })
+                                                                                                                                @Html.ValidationMessageFor(m => m.Email)
+
+                                                                                                                                                <label>Password</label>
+                                                                                                                                                                @Html.PasswordFor(m => m.Password, new { @class = "input-box" })
+
+                                                                                                                                                                                <button type="submit" class="login-btn">CREATE ACCOUNT</button>}
+    </div>
+</div>
+

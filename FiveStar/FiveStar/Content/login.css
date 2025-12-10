@@ -1,0 +1,73 @@
+﻿/* LOGIN PAGE — inspired by Contact Us design */
+
+.login-container {
+    max-width: 420px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.75);
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    color: white;
+    text-align: center;
+    position: relative;
+    top: 260px;
+}
+
+    .login-container h2 {
+        margin-bottom: 25px;
+        font-size: 28px;
+        letter-spacing: 1px;
+    }
+
+.login-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+    .login-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        opacity: 0.85;
+    }
+
+    .login-group input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+    }
+
+        .login-group input:focus {
+            box-shadow: 0 0 5px #00bcd4;
+        }
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #00bcd4;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .login-btn:hover {
+        background: #0097a7;
+    }
+
+.login-error {
+    margin-top: 15px;
+    color: #ff5252;
+    font-size: 14px;
+}
+
+.login-footer {
+    margin-top: 20px;
+    font-size: 13px;
+    opacity: 0.7;
+}
