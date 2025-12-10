@@ -18,6 +18,9 @@ namespace FiveStars.Models
         public Movies()
         {
             this.Showings = new HashSet<Showings>();
+            this.Genres_Movies = new HashSet<Genres_Movies>();
+            this.Top10Movies = new HashSet<Top10Movies>();
+            this.Reservations = new HashSet<Reservations>();
         }
     
         public int MovieID { get; set; }
@@ -27,8 +30,15 @@ namespace FiveStars.Models
         public Nullable<decimal> Ratings { get; set; }
         public string Status { get; set; }
         public Nullable<System.DateTime> ReleaseDate { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Showings> Showings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Genres_Movies> Genres_Movies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Top10Movies> Top10Movies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reservations> Reservations { get; set; }
     }
 }

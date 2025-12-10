@@ -18,6 +18,7 @@ namespace FiveStars.Models
         public Halls()
         {
             this.Showings = new HashSet<Showings>();
+            this.Seats = new HashSet<Seats>();
         }
     
         public int HallID { get; set; }
@@ -28,5 +29,7 @@ namespace FiveStars.Models
         public virtual Cinemas Cinemas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Showings> Showings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Seats> Seats { get; set; }
     }
 }

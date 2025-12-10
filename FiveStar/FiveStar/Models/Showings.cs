@@ -14,6 +14,14 @@ namespace FiveStars.Models
     
     public partial class Showings
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Showings()
+        {
+            this.Cart = new HashSet<Cart>();
+            this.Reservations = new HashSet<Reservations>();
+            this.Tickets = new HashSet<Tickets>();
+        }
+    
         public int ShowingID { get; set; }
         public System.DateTime ShowTime { get; set; }
         public decimal TicketPrice { get; set; }
@@ -22,5 +30,11 @@ namespace FiveStars.Models
     
         public virtual Halls Halls { get; set; }
         public virtual Movies Movies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Cart { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reservations> Reservations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tickets> Tickets { get; set; }
     }
 }

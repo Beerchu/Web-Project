@@ -24,6 +24,8 @@ namespace FiveStars.Models
         public string CinemaName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
+        public string District { get; set; }
+        public string PhoneNumber { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Halls> Halls { get; set; }

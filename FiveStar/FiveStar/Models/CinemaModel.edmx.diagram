@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="001ffc157b12475caef5fa1b14628942" Name="Diagram1" ZoomLevel="70">
+      <Diagram DiagramId="001ffc157b12475caef5fa1b14628942" Name="Diagram1" ZoomLevel="26">
         <EntityTypeShape EntityType="CinemaDBModel.Cinemas" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaDBModel.Genres" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaDBModel.Genres_Movies" Width="1.5" PointX="5" PointY="4.125" IsExpanded="true" />
@@ -15,6 +15,37 @@
         <AssociationConnector Association="CinemaDBModel.FK__Genres_Mo__Genre__48CFD27E" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaDBModel.FK__Showings__HallID__4D94879B" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaDBModel.FK__Showings__MovieI__4CA06362" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CinemaDBModel.Campaigns" Width="1.5" PointX="7.375" PointY="5.75" />
+        <EntityTypeShape EntityType="CinemaDBModel.Cart" Width="1.5" PointX="12.625" PointY="5.75" />
+        <EntityTypeShape EntityType="CinemaDBModel.Orders" Width="1.5" PointX="9.625" PointY="10.75" />
+        <EntityTypeShape EntityType="CinemaDBModel.Payments" Width="1.5" PointX="17.125" PointY="8.5" />
+        <EntityTypeShape EntityType="CinemaDBModel.Reservations" Width="1.5" PointX="9.625" PointY="4.75" />
+        <EntityTypeShape EntityType="CinemaDBModel.Seats" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CinemaDBModel.Tickets" Width="1.5" PointX="14.875" PointY="5.5" />
+        <EntityTypeShape EntityType="CinemaDBModel.Top10Movies" Width="1.5" PointX="3.125" PointY="7.375" />
+        <EntityTypeShape EntityType="CinemaDBModel.User_Campaigns" Width="1.5" PointX="12.625" PointY="10.25" />
+        <EntityTypeShape EntityType="CinemaDBModel.Users" Width="1.5" PointX="7.375" PointY="9.5" />
+        <AssociationConnector Association="CinemaDBModel.FK_Orders_Campaigns" />
+        <AssociationConnector Association="CinemaDBModel.FK_Reservations_Campaigns" />
+        <AssociationConnector Association="CinemaDBModel.FK_User_Campaigns_Campaigns" />
+        <AssociationConnector Association="CinemaDBModel.FK_Cart_Seats" />
+        <AssociationConnector Association="CinemaDBModel.FK_Cart_Showings" />
+        <AssociationConnector Association="CinemaDBModel.FK_Cart_Users" />
+        <AssociationConnector Association="CinemaDBModel.FK_Genres_Movies_Movies" />
+        <AssociationConnector Association="CinemaDBModel.FK_Seats_Halls" />
+        <AssociationConnector Association="CinemaDBModel.FK__Top10Movi__Movie__6B24EA82" />
+        <AssociationConnector Association="CinemaDBModel.FK_Reservations_Movies" />
+        <AssociationConnector Association="CinemaDBModel.FK_Orders_Users" />
+        <AssociationConnector Association="CinemaDBModel.FK_Payments_Orders" />
+        <AssociationConnector Association="CinemaDBModel.FK_Tickets_Orders" />
+        <AssociationConnector Association="CinemaDBModel.FK__Payments__Ticket__5DCAEF64" />
+        <AssociationConnector Association="CinemaDBModel.FK_Reservations_Showings" />
+        <AssociationConnector Association="CinemaDBModel.FK_Reservations_Users" />
+        <AssociationConnector Association="CinemaDBModel.FK_Tickets_Reservations" />
+        <AssociationConnector Association="CinemaDBModel.FK_Tickets_Seats" />
+        <AssociationConnector Association="CinemaDBModel.FK__Tickets__Showing__66603565" />
+        <AssociationConnector Association="CinemaDBModel.FK__Tickets__UserID__6754599E" />
+        <AssociationConnector Association="CinemaDBModel.FK_User_Campaigns_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

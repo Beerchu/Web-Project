@@ -1,49 +1,43 @@
-﻿// Controllers/CinemasController.cs
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using FiveStars.Models; // ViewModel'ler için gerekli
-using System.Data.Entity; // Halls kapasitesi çekimi için gerekli
-
-// Projenin ana namespace'ini ekliyoruz. 
-// CinemaDBEntities büyük ihtimalle buradadır.
-using FiveStars;
+using FiveStars.Models;
 
 namespace FiveStars.Controllers
 {
-    // CinemaDBEntities'i bu using ifadesi bulmalıdır.
     public class CinemasController : Controller
     {
-        // Veritabanı Context'ini başlatma
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // GET: /Cinemas/Index
         public ActionResult Index()
         {
-            // Sinemaların sadece İstanbul'da olanları için filtreleme
-            // Bu, örnek olarak kalabilir veya projenin ihtiyacına göre değiştirilebilir.
             const string targetCity = "İstanbul";
 
-            // 1. Veritabanından sinemaları çekme
+            // FIXED: Proper lambda expression in Where clause
             var allCinemas = _db.Cinemas
-                .Where(c => c.City == targetCity)
+                .Include(c => c.Halls)
+                .Where(c => c.City == targetCity)  // This is correct
                 .ToList();
 
-            // 2. Sinemaları ŞEHİRE göre gruplama (EDMX'te tanımlı olan c.City kullanıldı)
-            // NOT: Her sinema İstanbul'da olduğu için, bu gruplama tek bir 'İstanbul' grubu oluşturacaktır.
+            // If you're still getting errors, try this alternative:
+            // var allCinemas = (from c in _db.Cinemas.Include(c => c.Halls)
+            //                  where c.City == targetCity
+            //                  select c).ToList();
+
+            // Group cinemas by District
             var regionGroups = allCinemas
-                .GroupBy(c => c.City) // Gruplama, tanimli olan c.City alanına göre yapildi.
+                .GroupBy(c => c.District)
                 .Select(g => new CinemaRegionGroup
                 {
-                    RegionName = g.Key, // Anahtar (Key) olarak Şehir Adı (İstanbul)
+                    RegionName = g.Key ?? "Other",
                     Cinemas = g.Select(c => new CinemaItem
                     {
                         CinemaID = c.CinemaID,
                         Name = c.CinemaName,
                         Address = c.Address,
-                        Phone = c.ContactNumber, // EDMX'e göre ContactNumber
-                        // Kapasite bilgisini Halls tablosundan çekiyoruz (EDMX'e göre)
-                        Capacity = c.Halls.Sum(h => (int?)h.Capacity)
+                        Phone = c.PhoneNumber,
+                        Capacity = c.Halls != null ? c.Halls.Sum(h => h.Capacity ?? 0) : 0
                     }).ToList()
                 })
                 .OrderBy(g => g.RegionName)

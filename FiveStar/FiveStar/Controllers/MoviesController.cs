@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
-using FiveStars.Models;   // BU ÖNEMLİ
+using FiveStars.Models;
 
 namespace FiveStars.Controllers
 {
@@ -11,64 +8,62 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        public ActionResult Index(int? genreId, int? cinemaId, string searchTerm)
+        // GET: Movies
+        public ActionResult Index(string searchTerm = "", int? selectedGenreId = null, int? selectedCinemaId = null)
         {
-            var moviesQuery = _db.Movies.AsQueryable();
+            // Start with all movies
+            var query = _db.Movies.AsQueryable();
 
-            // Tür filtresi
-            if (genreId.HasValue)
+            // Apply search filter
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                int gId = genreId.Value;
-
-                moviesQuery = moviesQuery
-                    .Where(m => _db.Genres_Movies
-                        .Any(gm => gm.MovieID == m.MovieID && gm.GenreID == gId));
+                query = query.Where(m => m.Title.Contains(searchTerm) ||
+                                         (m.Description != null && m.Description.Contains(searchTerm)));
             }
 
-
-            // Sinema filtresi
-            if (cinemaId.HasValue)
+            // Apply genre filter (if you have Genre-Movie relationship)
+            if (selectedGenreId.HasValue)
             {
-                moviesQuery = moviesQuery
-                    .Where(m => m.Showings.Any(s => s.Halls.Cinemas.CinemaID == cinemaId.Value));
+                // Assuming you have a Genres_Movies table
+                query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId));
             }
 
-            // ARAMA: başlıkta geçen filmler
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            // Apply cinema filter (if you have Showings)
+            if (selectedCinemaId.HasValue)
             {
-                var lower = searchTerm.ToLower();
-                moviesQuery = moviesQuery
-                    .Where(m => m.Title.ToLower().Contains(lower));
+                query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId));
             }
 
-            var genres = _db.Genres
-                .OrderBy(g => g.Name)
-                .ToList();
+            // Order and get results
+            var movies = query.OrderByDescending(m => m.ReleaseDate).ToList();
 
-            var cinemas = _db.Cinemas
-                // sadece İstanbul istiyorsan aç:
-                // .Where(c => c.City == "İstanbul")
-                .OrderBy(c => c.CinemaName)
-                .ToList();
+            // Get genres for dropdown - CORRECT TYPE: List<Genres>
+            var genres = _db.Genres.OrderBy(g => g.Name).ToList();
 
-            var vm = new MovieFilterViewModel
+            // Get cinemas for dropdown - CORRECT TYPE: List<Cinemas>
+            var cinemas = _db.Cinemas.OrderBy(c => c.CinemaName).ToList();
+
+            // Create the view model - MATCHING YOUR ACTUAL CLASS
+            var viewModel = new MovieFilterViewModel
             {
-                SelectedGenreId = genreId,
-                SelectedCinemaId = cinemaId,
+                Movies = movies,
                 SearchTerm = searchTerm,
-                Genres = genres,
-                Cinemas = cinemas,
-                Movies = moviesQuery.ToList()
+                SelectedGenreId = selectedGenreId,
+                SelectedCinemaId = selectedCinemaId,
+                Genres = genres,    // List<Genres>
+                Cinemas = cinemas   // List<Cinemas>
+
+                // NOTE: Your class doesn't have SelectedStatus or StatusList properties
+                // So we removed those from here
             };
 
-            return View(vm);
+            return View(viewModel);
         }
 
-
+        // GET: Movies/Details/5
         public ActionResult Details(int id)
         {
             var movie = _db.Movies.Find(id);
-
             if (movie == null)
             {
                 return HttpNotFound();
@@ -77,8 +72,13 @@ namespace FiveStars.Controllers
             return View(movie);
         }
 
-
-
-
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

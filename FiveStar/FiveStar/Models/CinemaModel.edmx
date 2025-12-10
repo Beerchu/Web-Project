@@ -4,7 +4,29 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CinemaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CinemaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Campaigns">
+          <Key>
+            <PropertyRef Name="CampaignID" />
+          </Key>
+          <Property Name="CampaignID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ImageUrl" Type="nvarchar" MaxLength="255" />
+          <Property Name="DurationText" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ShowingID" Type="int" Nullable="false" />
+          <Property Name="SeatNumber" Type="nvarchar" MaxLength="10" />
+          <Property Name="AddedAt" Type="datetime2" Precision="7" />
+          <Property Name="SeatID" Type="int" />
+        </EntityType>
         <EntityType Name="Cinemas">
           <Key>
             <PropertyRef Name="CinemaID" />
@@ -13,6 +35,8 @@
           <Property Name="CinemaName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Address" Type="nvarchar" MaxLength="255" />
           <Property Name="City" Type="nvarchar" MaxLength="100" />
+          <Property Name="District" Type="nvarchar" MaxLength="100" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Genres">
           <Key>
@@ -49,6 +73,60 @@
           <Property Name="Ratings" Type="decimal" Precision="3" Scale="1" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ReleaseDate" Type="date" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="2" Nullable="false" />
+          <Property Name="TotalAmount" Type="money" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
+          <Property Name="CampaignID" Type="int" />
+          <Property Name="DiscountAmount" Type="money" />
+        </EntityType>
+        <EntityType Name="Payments">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Amount" Type="money" Nullable="false" />
+          <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" />
+          <Property Name="TicketID" Type="int" />
+          <Property Name="PaymentTimestamp" Type="datetime2" Precision="2" />
+          <Property Name="OrderID" Type="int" />
+        </EntityType>
+        <EntityType Name="Reservations">
+          <Key>
+            <PropertyRef Name="ReservationID" />
+          </Key>
+          <Property Name="ReservationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="MovieID" Type="int" Nullable="false" />
+          <Property Name="ShowingID" Type="int" />
+          <Property Name="CampaignID" Type="int" />
+          <Property Name="SeatCount" Type="int" Nullable="false" />
+          <Property Name="BaseTotal" Type="money" Nullable="false" />
+          <Property Name="DiscountAmount" Type="money" Nullable="false" />
+          <Property Name="FinalTotal" Type="money" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="PaymentDate" Type="datetime2" Precision="7" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="255" />
+          <Property Name="CustomerEmail" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Seats">
+          <Key>
+            <PropertyRef Name="SeatID" />
+          </Key>
+          <Property Name="SeatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HallID" Type="int" Nullable="false" />
+          <Property Name="RowLabel" Type="nvarchar" MaxLength="5" />
+          <Property Name="SeatNumber" Type="int" Nullable="false" />
+          <Property Name="SeatType" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Showings">
           <Key>
@@ -60,7 +138,53 @@
           <Property Name="MovieID" Type="int" />
           <Property Name="HallID" Type="int" />
         </EntityType>
-        <Association Name="FK__Genres_Mo__Genre__48CFD27E">
+        <EntityType Name="Tickets">
+          <Key>
+            <PropertyRef Name="TicketID" />
+          </Key>
+          <Property Name="TicketID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeatNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="ShowingID" Type="int" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="SeatID" Type="int" />
+          <Property Name="ReservationID" Type="int" />
+          <Property Name="PurchaseDate" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Top10Movies">
+          <Key>
+            <PropertyRef Name="TopMovieID" />
+          </Key>
+          <Property Name="TopMovieID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieID" Type="int" Nullable="false" />
+          <Property Name="RankOrder" Type="int" Nullable="false" />
+          <Property Name="WeekOf" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_Campaigns">
+          <Key>
+            <PropertyRef Name="UserCampaignID" />
+          </Key>
+          <Property Name="UserCampaignID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CampaignID" Type="int" Nullable="false" />
+          <Property Name="RedeemedDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ProfileImagePath" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK__Genres_Mo__Genre__59063A47">
           <End Role="Genres" Type="Self.Genres" Multiplicity="0..1" />
           <End Role="Genres_Movies" Type="Self.Genres_Movies" Multiplicity="*" />
           <ReferentialConstraint>
@@ -72,7 +196,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Halls__CinemaID__44FF419A">
+        <Association Name="FK__Halls__CinemaID__5AEE82B9">
           <End Role="Cinemas" Type="Self.Cinemas" Multiplicity="0..1" />
           <End Role="Halls" Type="Self.Halls" Multiplicity="*" />
           <ReferentialConstraint>
@@ -84,7 +208,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Showings__HallID__4D94879B">
+        <Association Name="FK__Payments__Ticket__5DCAEF64">
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="0..1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tickets">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Showings__HallID__6477ECF3">
           <End Role="Halls" Type="Self.Halls" Multiplicity="0..1" />
           <End Role="Showings" Type="Self.Showings" Multiplicity="*" />
           <ReferentialConstraint>
@@ -96,7 +232,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Showings__MovieI__4CA06362">
+        <Association Name="FK__Showings__MovieI__656C112C">
           <End Role="Movies" Type="Self.Movies" Multiplicity="0..1" />
           <End Role="Showings" Type="Self.Showings" Multiplicity="*" />
           <ReferentialConstraint>
@@ -108,32 +244,365 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Tickets__Showing__66603565">
+          <End Role="Showings" Type="Self.Showings" Multiplicity="0..1" />
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Showings">
+              <PropertyRef Name="ShowingID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="ShowingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tickets__UserID__6754599E">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Top10Movi__Movie__6B24EA82">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="Top10Movies" Type="Self.Top10Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Top10Movies">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Seats">
+          <End Role="Seats" Type="Self.Seats" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="SeatID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="SeatID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Showings">
+          <End Role="Showings" Type="Self.Showings" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Showings">
+              <PropertyRef Name="ShowingID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ShowingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Genres_Movies_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="0..1" />
+          <End Role="Genres_Movies" Type="Self.Genres_Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Genres_Movies">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Campaigns">
+          <End Role="Campaigns" Type="Self.Campaigns" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CampaignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payments_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Campaigns">
+          <End Role="Campaigns" Type="Self.Campaigns" Multiplicity="0..1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="CampaignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Showings">
+          <End Role="Showings" Type="Self.Showings" Multiplicity="0..1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Showings">
+              <PropertyRef Name="ShowingID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="ShowingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seats_Halls">
+          <End Role="Halls" Type="Self.Halls" Multiplicity="1" />
+          <End Role="Seats" Type="Self.Seats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Halls">
+              <PropertyRef Name="HallID" />
+            </Principal>
+            <Dependent Role="Seats">
+              <PropertyRef Name="HallID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_Reservations">
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="0..1" />
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reservations">
+              <PropertyRef Name="ReservationID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="ReservationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_Seats">
+          <End Role="Seats" Type="Self.Seats" Multiplicity="0..1" />
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="SeatID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="SeatID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Campaigns_Campaigns">
+          <End Role="Campaigns" Type="Self.Campaigns" Multiplicity="1" />
+          <End Role="User_Campaigns" Type="Self.User_Campaigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Principal>
+            <Dependent Role="User_Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Campaigns_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="User_Campaigns" Type="Self.User_Campaigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="User_Campaigns">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CinemaDBModelStoreContainer">
+          <EntitySet Name="Campaigns" EntityType="Self.Campaigns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cinemas" EntityType="Self.Cinemas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genres" EntityType="Self.Genres" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genres_Movies" EntityType="Self.Genres_Movies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Halls" EntityType="Self.Halls" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Movies" EntityType="Self.Movies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seats" EntityType="Self.Seats" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Showings" EntityType="Self.Showings" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Genres_Mo__Genre__48CFD27E" Association="Self.FK__Genres_Mo__Genre__48CFD27E">
+          <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Top10Movies" EntityType="Self.Top10Movies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Campaigns" EntityType="Self.User_Campaigns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Genres_Mo__Genre__59063A47" Association="Self.FK__Genres_Mo__Genre__59063A47">
             <End Role="Genres" EntitySet="Genres" />
             <End Role="Genres_Movies" EntitySet="Genres_Movies" />
           </AssociationSet>
-          <AssociationSet Name="FK__Halls__CinemaID__44FF419A" Association="Self.FK__Halls__CinemaID__44FF419A">
+          <AssociationSet Name="FK__Halls__CinemaID__5AEE82B9" Association="Self.FK__Halls__CinemaID__5AEE82B9">
             <End Role="Cinemas" EntitySet="Cinemas" />
             <End Role="Halls" EntitySet="Halls" />
           </AssociationSet>
-          <AssociationSet Name="FK__Showings__HallID__4D94879B" Association="Self.FK__Showings__HallID__4D94879B">
+          <AssociationSet Name="FK__Payments__Ticket__5DCAEF64" Association="Self.FK__Payments__Ticket__5DCAEF64">
+            <End Role="Tickets" EntitySet="Tickets" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Showings__HallID__6477ECF3" Association="Self.FK__Showings__HallID__6477ECF3">
             <End Role="Halls" EntitySet="Halls" />
             <End Role="Showings" EntitySet="Showings" />
           </AssociationSet>
-          <AssociationSet Name="FK__Showings__MovieI__4CA06362" Association="Self.FK__Showings__MovieI__4CA06362">
+          <AssociationSet Name="FK__Showings__MovieI__656C112C" Association="Self.FK__Showings__MovieI__656C112C">
             <End Role="Movies" EntitySet="Movies" />
             <End Role="Showings" EntitySet="Showings" />
           </AssociationSet>
+          <AssociationSet Name="FK__Tickets__Showing__66603565" Association="Self.FK__Tickets__Showing__66603565">
+            <End Role="Showings" EntitySet="Showings" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tickets__UserID__6754599E" Association="Self.FK__Tickets__UserID__6754599E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Top10Movi__Movie__6B24EA82" Association="Self.FK__Top10Movi__Movie__6B24EA82">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Top10Movies" EntitySet="Top10Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Seats" Association="Self.FK_Cart_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Showings" Association="Self.FK_Cart_Showings">
+            <End Role="Showings" EntitySet="Showings" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Users" Association="Self.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Genres_Movies_Movies" Association="Self.FK_Genres_Movies_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Genres_Movies" EntitySet="Genres_Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Campaigns" Association="Self.FK_Orders_Campaigns">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payments_Orders" Association="Self.FK_Payments_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Campaigns" Association="Self.FK_Reservations_Campaigns">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Movies" Association="Self.FK_Reservations_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Showings" Association="Self.FK_Reservations_Showings">
+            <End Role="Showings" EntitySet="Showings" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Users" Association="Self.FK_Reservations_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Seats_Halls" Association="Self.FK_Seats_Halls">
+            <End Role="Halls" EntitySet="Halls" />
+            <End Role="Seats" EntitySet="Seats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_Orders" Association="Self.FK_Tickets_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_Reservations" Association="Self.FK_Tickets_Reservations">
+            <End Role="Reservations" EntitySet="Reservations" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_Seats" Association="Self.FK_Tickets_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Campaigns_Campaigns" Association="Self.FK_User_Campaigns_Campaigns">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="User_Campaigns" EntitySet="User_Campaigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Campaigns_Users" Association="Self.FK_User_Campaigns_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="User_Campaigns" EntitySet="User_Campaigns" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CinemaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -146,6 +615,8 @@
           <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Halls" Relationship="Self.FK__Halls__CinemaID__44FF419A" FromRole="Cinemas" ToRole="Halls" />
+          <Property Name="District" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Genres">
           <Key>
@@ -163,6 +634,7 @@
           <Property Name="GenreID" Type="Int32" />
           <Property Name="MovieID" Type="Int32" />
           <NavigationProperty Name="Genres" Relationship="Self.FK__Genres_Mo__Genre__48CFD27E" FromRole="Genres_Movies" ToRole="Genres" />
+          <NavigationProperty Name="Movies" Relationship="CinemaDBModel.FK_Genres_Movies_Movies" FromRole="Genres_Movies" ToRole="Movies" />
         </EntityType>
         <EntityType Name="Halls">
           <Key>
@@ -174,6 +646,7 @@
           <Property Name="CinemaID" Type="Int32" />
           <NavigationProperty Name="Cinemas" Relationship="Self.FK__Halls__CinemaID__44FF419A" FromRole="Halls" ToRole="Cinemas" />
           <NavigationProperty Name="Showings" Relationship="Self.FK__Showings__HallID__4D94879B" FromRole="Halls" ToRole="Showings" />
+          <NavigationProperty Name="Seats" Relationship="CinemaDBModel.FK_Seats_Halls" FromRole="Halls" ToRole="Seats" />
         </EntityType>
         <EntityType Name="Movies">
           <Key>
@@ -187,6 +660,10 @@
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ReleaseDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Showings" Relationship="Self.FK__Showings__MovieI__4CA06362" FromRole="Movies" ToRole="Showings" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Genres_Movies" Relationship="CinemaDBModel.FK_Genres_Movies_Movies" FromRole="Movies" ToRole="Genres_Movies" />
+          <NavigationProperty Name="Top10Movies" Relationship="CinemaDBModel.FK__Top10Movi__Movie__6B24EA82" FromRole="Movies" ToRole="Top10Movies" />
+          <NavigationProperty Name="Reservations" Relationship="CinemaDBModel.FK_Reservations_Movies" FromRole="Movies" ToRole="Reservations" />
         </EntityType>
         <EntityType Name="Showings">
           <Key>
@@ -199,6 +676,9 @@
           <Property Name="HallID" Type="Int32" />
           <NavigationProperty Name="Halls" Relationship="Self.FK__Showings__HallID__4D94879B" FromRole="Showings" ToRole="Halls" />
           <NavigationProperty Name="Movies" Relationship="Self.FK__Showings__MovieI__4CA06362" FromRole="Showings" ToRole="Movies" />
+          <NavigationProperty Name="Cart" Relationship="CinemaDBModel.FK_Cart_Showings" FromRole="Showings" ToRole="Cart" />
+          <NavigationProperty Name="Reservations" Relationship="CinemaDBModel.FK_Reservations_Showings" FromRole="Showings" ToRole="Reservations" />
+          <NavigationProperty Name="Tickets" Relationship="CinemaDBModel.FK__Tickets__Showing__66603565" FromRole="Showings" ToRole="Tickets" />
         </EntityType>
         <Association Name="FK__Halls__CinemaID__44FF419A">
           <End Role="Cinemas" Type="Self.Cinemas" Multiplicity="0..1" />
@@ -271,7 +751,508 @@
             <End Role="Movies" EntitySet="Movies" />
             <End Role="Showings" EntitySet="Showings" />
           </AssociationSet>
+          <EntitySet Name="Campaigns" EntityType="CinemaDBModel.Campaigns" />
+          <EntitySet Name="Cart" EntityType="CinemaDBModel.Cart" />
+          <EntitySet Name="Orders" EntityType="CinemaDBModel.Orders" />
+          <EntitySet Name="Payments" EntityType="CinemaDBModel.Payments" />
+          <EntitySet Name="Reservations" EntityType="CinemaDBModel.Reservations" />
+          <EntitySet Name="Seats" EntityType="CinemaDBModel.Seats" />
+          <EntitySet Name="Tickets" EntityType="CinemaDBModel.Tickets" />
+          <EntitySet Name="Top10Movies" EntityType="CinemaDBModel.Top10Movies" />
+          <EntitySet Name="User_Campaigns" EntityType="CinemaDBModel.User_Campaigns" />
+          <EntitySet Name="Users" EntityType="CinemaDBModel.Users" />
+          <AssociationSet Name="FK_Orders_Campaigns" Association="CinemaDBModel.FK_Orders_Campaigns">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Campaigns" Association="CinemaDBModel.FK_Reservations_Campaigns">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Campaigns_Campaigns" Association="CinemaDBModel.FK_User_Campaigns_Campaigns">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="User_Campaigns" EntitySet="User_Campaigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Seats" Association="CinemaDBModel.FK_Cart_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Showings" Association="CinemaDBModel.FK_Cart_Showings">
+            <End Role="Showings" EntitySet="Showings" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Users" Association="CinemaDBModel.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Genres_Movies_Movies" Association="CinemaDBModel.FK_Genres_Movies_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Genres_Movies" EntitySet="Genres_Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Seats_Halls" Association="CinemaDBModel.FK_Seats_Halls">
+            <End Role="Halls" EntitySet="Halls" />
+            <End Role="Seats" EntitySet="Seats" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Top10Movi__Movie__6B24EA82" Association="CinemaDBModel.FK__Top10Movi__Movie__6B24EA82">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Top10Movies" EntitySet="Top10Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Movies" Association="CinemaDBModel.FK_Reservations_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="CinemaDBModel.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payments_Orders" Association="CinemaDBModel.FK_Payments_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_Orders" Association="CinemaDBModel.FK_Tickets_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payments__Ticket__5DCAEF64" Association="CinemaDBModel.FK__Payments__Ticket__5DCAEF64">
+            <End Role="Tickets" EntitySet="Tickets" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Showings" Association="CinemaDBModel.FK_Reservations_Showings">
+            <End Role="Showings" EntitySet="Showings" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Users" Association="CinemaDBModel.FK_Reservations_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_Reservations" Association="CinemaDBModel.FK_Tickets_Reservations">
+            <End Role="Reservations" EntitySet="Reservations" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_Seats" Association="CinemaDBModel.FK_Tickets_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tickets__Showing__66603565" Association="CinemaDBModel.FK__Tickets__Showing__66603565">
+            <End Role="Showings" EntitySet="Showings" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tickets__UserID__6754599E" Association="CinemaDBModel.FK__Tickets__UserID__6754599E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Campaigns_Users" Association="CinemaDBModel.FK_User_Campaigns_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="User_Campaigns" EntitySet="User_Campaigns" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Campaigns">
+          <Key>
+            <PropertyRef Name="CampaignID" />
+          </Key>
+          <Property Name="CampaignID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DurationText" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="CinemaDBModel.FK_Orders_Campaigns" FromRole="Campaigns" ToRole="Orders" />
+          <NavigationProperty Name="Reservations" Relationship="CinemaDBModel.FK_Reservations_Campaigns" FromRole="Campaigns" ToRole="Reservations" />
+          <NavigationProperty Name="User_Campaigns" Relationship="CinemaDBModel.FK_User_Campaigns_Campaigns" FromRole="Campaigns" ToRole="User_Campaigns" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ShowingID" Type="Int32" Nullable="false" />
+          <Property Name="SeatNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="AddedAt" Type="DateTime" Precision="7" />
+          <Property Name="SeatID" Type="Int32" />
+          <NavigationProperty Name="Seats" Relationship="CinemaDBModel.FK_Cart_Seats" FromRole="Cart" ToRole="Seats" />
+          <NavigationProperty Name="Showings" Relationship="CinemaDBModel.FK_Cart_Showings" FromRole="Cart" ToRole="Showings" />
+          <NavigationProperty Name="Users" Relationship="CinemaDBModel.FK_Cart_Users" FromRole="Cart" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="2" />
+          <Property Name="TotalAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CampaignID" Type="Int32" />
+          <Property Name="DiscountAmount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Campaigns" Relationship="CinemaDBModel.FK_Orders_Campaigns" FromRole="Orders" ToRole="Campaigns" />
+          <NavigationProperty Name="Users" Relationship="CinemaDBModel.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+          <NavigationProperty Name="Payments" Relationship="CinemaDBModel.FK_Payments_Orders" FromRole="Orders" ToRole="Payments" />
+          <NavigationProperty Name="Tickets" Relationship="CinemaDBModel.FK_Tickets_Orders" FromRole="Orders" ToRole="Tickets" />
+        </EntityType>
+        <EntityType Name="Payments">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TicketID" Type="Int32" />
+          <Property Name="PaymentTimestamp" Type="DateTime" Precision="2" />
+          <Property Name="OrderID" Type="Int32" />
+          <NavigationProperty Name="Orders" Relationship="CinemaDBModel.FK_Payments_Orders" FromRole="Payments" ToRole="Orders" />
+          <NavigationProperty Name="Tickets" Relationship="CinemaDBModel.FK__Payments__Ticket__5DCAEF64" FromRole="Payments" ToRole="Tickets" />
+        </EntityType>
+        <EntityType Name="Reservations">
+          <Key>
+            <PropertyRef Name="ReservationID" />
+          </Key>
+          <Property Name="ReservationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="MovieID" Type="Int32" Nullable="false" />
+          <Property Name="ShowingID" Type="Int32" />
+          <Property Name="CampaignID" Type="Int32" />
+          <Property Name="SeatCount" Type="Int32" Nullable="false" />
+          <Property Name="BaseTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="DiscountAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="FinalTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="7" />
+          <Property Name="CustomerName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Campaigns" Relationship="CinemaDBModel.FK_Reservations_Campaigns" FromRole="Reservations" ToRole="Campaigns" />
+          <NavigationProperty Name="Movies" Relationship="CinemaDBModel.FK_Reservations_Movies" FromRole="Reservations" ToRole="Movies" />
+          <NavigationProperty Name="Showings" Relationship="CinemaDBModel.FK_Reservations_Showings" FromRole="Reservations" ToRole="Showings" />
+          <NavigationProperty Name="Users" Relationship="CinemaDBModel.FK_Reservations_Users" FromRole="Reservations" ToRole="Users" />
+          <NavigationProperty Name="Tickets" Relationship="CinemaDBModel.FK_Tickets_Reservations" FromRole="Reservations" ToRole="Tickets" />
+        </EntityType>
+        <EntityType Name="Seats">
+          <Key>
+            <PropertyRef Name="SeatID" />
+          </Key>
+          <Property Name="SeatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HallID" Type="Int32" Nullable="false" />
+          <Property Name="RowLabel" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="SeatNumber" Type="Int32" Nullable="false" />
+          <Property Name="SeatType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cart" Relationship="CinemaDBModel.FK_Cart_Seats" FromRole="Seats" ToRole="Cart" />
+          <NavigationProperty Name="Halls" Relationship="CinemaDBModel.FK_Seats_Halls" FromRole="Seats" ToRole="Halls" />
+          <NavigationProperty Name="Tickets" Relationship="CinemaDBModel.FK_Tickets_Seats" FromRole="Seats" ToRole="Tickets" />
+        </EntityType>
+        <EntityType Name="Tickets">
+          <Key>
+            <PropertyRef Name="TicketID" />
+          </Key>
+          <Property Name="TicketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeatNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="ShowingID" Type="Int32" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="SeatID" Type="Int32" />
+          <Property Name="ReservationID" Type="Int32" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Orders" Relationship="CinemaDBModel.FK_Tickets_Orders" FromRole="Tickets" ToRole="Orders" />
+          <NavigationProperty Name="Payments" Relationship="CinemaDBModel.FK__Payments__Ticket__5DCAEF64" FromRole="Tickets" ToRole="Payments" />
+          <NavigationProperty Name="Reservations" Relationship="CinemaDBModel.FK_Tickets_Reservations" FromRole="Tickets" ToRole="Reservations" />
+          <NavigationProperty Name="Seats" Relationship="CinemaDBModel.FK_Tickets_Seats" FromRole="Tickets" ToRole="Seats" />
+          <NavigationProperty Name="Showings" Relationship="CinemaDBModel.FK__Tickets__Showing__66603565" FromRole="Tickets" ToRole="Showings" />
+          <NavigationProperty Name="Users" Relationship="CinemaDBModel.FK__Tickets__UserID__6754599E" FromRole="Tickets" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Top10Movies">
+          <Key>
+            <PropertyRef Name="TopMovieID" />
+          </Key>
+          <Property Name="TopMovieID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieID" Type="Int32" Nullable="false" />
+          <Property Name="RankOrder" Type="Int32" Nullable="false" />
+          <Property Name="WeekOf" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Movies" Relationship="CinemaDBModel.FK__Top10Movi__Movie__6B24EA82" FromRole="Top10Movies" ToRole="Movies" />
+        </EntityType>
+        <EntityType Name="User_Campaigns">
+          <Key>
+            <PropertyRef Name="UserCampaignID" />
+          </Key>
+          <Property Name="UserCampaignID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CampaignID" Type="Int32" Nullable="false" />
+          <Property Name="RedeemedDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Campaigns" Relationship="CinemaDBModel.FK_User_Campaigns_Campaigns" FromRole="User_Campaigns" ToRole="Campaigns" />
+          <NavigationProperty Name="Users" Relationship="CinemaDBModel.FK_User_Campaigns_Users" FromRole="User_Campaigns" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="7" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProfileImagePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cart" Relationship="CinemaDBModel.FK_Cart_Users" FromRole="Users" ToRole="Cart" />
+          <NavigationProperty Name="Orders" Relationship="CinemaDBModel.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+          <NavigationProperty Name="Reservations" Relationship="CinemaDBModel.FK_Reservations_Users" FromRole="Users" ToRole="Reservations" />
+          <NavigationProperty Name="Tickets" Relationship="CinemaDBModel.FK__Tickets__UserID__6754599E" FromRole="Users" ToRole="Tickets" />
+          <NavigationProperty Name="User_Campaigns" Relationship="CinemaDBModel.FK_User_Campaigns_Users" FromRole="Users" ToRole="User_Campaigns" />
+        </EntityType>
+        <Association Name="FK_Orders_Campaigns">
+          <End Type="CinemaDBModel.Campaigns" Role="Campaigns" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CampaignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Campaigns">
+          <End Type="CinemaDBModel.Campaigns" Role="Campaigns" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Reservations" Role="Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="CampaignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Campaigns_Campaigns">
+          <End Type="CinemaDBModel.Campaigns" Role="Campaigns" Multiplicity="1" />
+          <End Type="CinemaDBModel.User_Campaigns" Role="User_Campaigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Principal>
+            <Dependent Role="User_Campaigns">
+              <PropertyRef Name="CampaignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Seats">
+          <End Type="CinemaDBModel.Seats" Role="Seats" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="SeatID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="SeatID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Showings">
+          <End Type="CinemaDBModel.Showings" Role="Showings" Multiplicity="1" />
+          <End Type="CinemaDBModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Showings">
+              <PropertyRef Name="ShowingID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ShowingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Users">
+          <End Type="CinemaDBModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="CinemaDBModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Genres_Movies_Movies">
+          <End Type="CinemaDBModel.Movies" Role="Movies" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Genres_Movies" Role="Genres_Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Genres_Movies">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seats_Halls">
+          <End Type="CinemaDBModel.Halls" Role="Halls" Multiplicity="1" />
+          <End Type="CinemaDBModel.Seats" Role="Seats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Halls">
+              <PropertyRef Name="HallID" />
+            </Principal>
+            <Dependent Role="Seats">
+              <PropertyRef Name="HallID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Top10Movi__Movie__6B24EA82">
+          <End Type="CinemaDBModel.Movies" Role="Movies" Multiplicity="1" />
+          <End Type="CinemaDBModel.Top10Movies" Role="Top10Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Top10Movies">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Movies">
+          <End Type="CinemaDBModel.Movies" Role="Movies" Multiplicity="1" />
+          <End Type="CinemaDBModel.Reservations" Role="Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Type="CinemaDBModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="CinemaDBModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payments_Orders">
+          <End Type="CinemaDBModel.Orders" Role="Orders" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Payments" Role="Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_Orders">
+          <End Type="CinemaDBModel.Orders" Role="Orders" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Tickets" Role="Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payments__Ticket__5DCAEF64">
+          <End Type="CinemaDBModel.Tickets" Role="Tickets" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Payments" Role="Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tickets">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Showings">
+          <End Type="CinemaDBModel.Showings" Role="Showings" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Reservations" Role="Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Showings">
+              <PropertyRef Name="ShowingID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="ShowingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Users">
+          <End Type="CinemaDBModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Reservations" Role="Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_Reservations">
+          <End Type="CinemaDBModel.Reservations" Role="Reservations" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Tickets" Role="Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reservations">
+              <PropertyRef Name="ReservationID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="ReservationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_Seats">
+          <End Type="CinemaDBModel.Seats" Role="Seats" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Tickets" Role="Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="SeatID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="SeatID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tickets__Showing__66603565">
+          <End Type="CinemaDBModel.Showings" Role="Showings" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Tickets" Role="Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Showings">
+              <PropertyRef Name="ShowingID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="ShowingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tickets__UserID__6754599E">
+          <End Type="CinemaDBModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="CinemaDBModel.Tickets" Role="Tickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tickets">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Campaigns_Users">
+          <End Type="CinemaDBModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="CinemaDBModel.User_Campaigns" Role="User_Campaigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="User_Campaigns">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -281,6 +1262,8 @@
           <EntitySetMapping Name="Cinemas">
             <EntityTypeMapping TypeName="CinemaDBModel.Cinemas">
               <MappingFragment StoreEntitySet="Cinemas">
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="District" ColumnName="District" />
                 <ScalarProperty Name="CinemaID" ColumnName="CinemaID" />
                 <ScalarProperty Name="CinemaName" ColumnName="CinemaName" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
@@ -318,6 +1301,7 @@
           <EntitySetMapping Name="Movies">
             <EntityTypeMapping TypeName="CinemaDBModel.Movies">
               <MappingFragment StoreEntitySet="Movies">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="MovieID" ColumnName="MovieID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Duration_min" ColumnName="Duration_min" />
@@ -336,6 +1320,137 @@
                 <ScalarProperty Name="TicketPrice" ColumnName="TicketPrice" />
                 <ScalarProperty Name="MovieID" ColumnName="MovieID" />
                 <ScalarProperty Name="HallID" ColumnName="HallID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Campaigns">
+            <EntityTypeMapping TypeName="CinemaDBModel.Campaigns">
+              <MappingFragment StoreEntitySet="Campaigns">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DurationText" ColumnName="DurationText" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CampaignID" ColumnName="CampaignID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cart">
+            <EntityTypeMapping TypeName="CinemaDBModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
+                <ScalarProperty Name="AddedAt" ColumnName="AddedAt" />
+                <ScalarProperty Name="SeatNumber" ColumnName="SeatNumber" />
+                <ScalarProperty Name="ShowingID" ColumnName="ShowingID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CartID" ColumnName="CartID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="CinemaDBModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="CampaignID" ColumnName="CampaignID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="CinemaDBModel.Payments">
+              <MappingFragment StoreEntitySet="Payments">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="PaymentTimestamp" ColumnName="PaymentTimestamp" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservations">
+            <EntityTypeMapping TypeName="CinemaDBModel.Reservations">
+              <MappingFragment StoreEntitySet="Reservations">
+                <ScalarProperty Name="CustomerEmail" ColumnName="CustomerEmail" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FinalTotal" ColumnName="FinalTotal" />
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="BaseTotal" ColumnName="BaseTotal" />
+                <ScalarProperty Name="SeatCount" ColumnName="SeatCount" />
+                <ScalarProperty Name="CampaignID" ColumnName="CampaignID" />
+                <ScalarProperty Name="ShowingID" ColumnName="ShowingID" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ReservationID" ColumnName="ReservationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seats">
+            <EntityTypeMapping TypeName="CinemaDBModel.Seats">
+              <MappingFragment StoreEntitySet="Seats">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SeatType" ColumnName="SeatType" />
+                <ScalarProperty Name="SeatNumber" ColumnName="SeatNumber" />
+                <ScalarProperty Name="RowLabel" ColumnName="RowLabel" />
+                <ScalarProperty Name="HallID" ColumnName="HallID" />
+                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="CinemaDBModel.Tickets">
+              <MappingFragment StoreEntitySet="Tickets">
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="ReservationID" ColumnName="ReservationID" />
+                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ShowingID" ColumnName="ShowingID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SeatNumber" ColumnName="SeatNumber" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Top10Movies">
+            <EntityTypeMapping TypeName="CinemaDBModel.Top10Movies">
+              <MappingFragment StoreEntitySet="Top10Movies">
+                <ScalarProperty Name="WeekOf" ColumnName="WeekOf" />
+                <ScalarProperty Name="RankOrder" ColumnName="RankOrder" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+                <ScalarProperty Name="TopMovieID" ColumnName="TopMovieID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Campaigns">
+            <EntityTypeMapping TypeName="CinemaDBModel.User_Campaigns">
+              <MappingFragment StoreEntitySet="User_Campaigns">
+                <ScalarProperty Name="RedeemedDate" ColumnName="RedeemedDate" />
+                <ScalarProperty Name="CampaignID" ColumnName="CampaignID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserCampaignID" ColumnName="UserCampaignID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CinemaDBModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ProfileImagePath" ColumnName="ProfileImagePath" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -138,6 +138,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Campaign.cs" />
+    <Compile Include="Models\Campaigns.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cart.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cinema.cs" />
     <Compile Include="Models\CinemaListViewModel.cs" />
     <Compile Include="Models\CinemaModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -163,6 +170,7 @@
     <Compile Include="Models\Genres_Movies.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Hall.cs" />
     <Compile Include="Models\Halls.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
@@ -171,14 +179,38 @@
     <Compile Include="Models\Movies.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Orders.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Payments.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Reservations.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Seats.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SeatSelectionViewModel.cs" />
     <Compile Include="Models\Showing.cs" />
     <Compile Include="Models\Showings.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ShowtimeSelectionViewModel.cs" />
+    <Compile Include="Models\Tickets.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TicketViewModels.cs" />
+    <Compile Include="Models\Top10Movies.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Users.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User_Campaigns.cs">
+      <DependentUpon>CinemaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

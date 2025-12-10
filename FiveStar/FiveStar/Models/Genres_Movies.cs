@@ -19,5 +19,6 @@ namespace FiveStars.Models
         public Nullable<int> MovieID { get; set; }
     
         public virtual Genres Genres { get; set; }
+        public virtual Movies Movies { get; set; }
     }
 }
