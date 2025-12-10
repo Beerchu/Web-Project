@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/movies.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/home.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/tickets.css")" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     @RenderSection("Styles", required: false)
 </head>
@@ -35,6 +36,14 @@
                     <li>@Html.ActionLink("Cinemas", "Index", "Home")</li>
                     <li>@Html.ActionLink("About Us", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Admin")">
+                                <i class="fas fa-cog"></i> Admin Panel
+                            </a>
+                        </li>
+                    }
                 </ul>
             </nav>
 
