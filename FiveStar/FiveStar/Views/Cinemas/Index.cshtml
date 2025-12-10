@@ -1,0 +1,63 @@
+﻿@model FiveStars.Models.CinemaListViewModel
+
+@{
+    ViewBag.Title = Model.CityName + " Cinemas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/cinemas.css")" />
+}
+
+<div class="cinemas-page container">
+
+    <div class="cinemas-header-row">
+        <h1 class="cinemas-title">@Model.CityName CINEMAS</h1>
+    </div>
+
+    @if (Model.RegionGroups == null || !Model.RegionGroups.Any())
+    {
+        @* @: kullanarak Razor'a bunun tek bir HTML satırı olduğunu söylüyoruz *@
+        <div class="cinemas-no-results">No cinemas found in @Model.CityName.</div>
+    }
+    else
+    {
+        @* Tüm döngü ve HTML çıktısını @: ile güvenli hale getiriyoruz *@
+        foreach (var group in Model.RegionGroups)
+        {
+            <div class="region-group">
+                <h2 class="region-name">@group.RegionName</h2>
+
+                <div class="cinemas-list">
+                    @foreach (var cinema in group.Cinemas)
+                    {
+                        <div class="cinema-card">
+                            <h3 class="cinema-name">
+                                <a href="@Url.Action("Details", "Cinemas", new { id = cinema.CinemaID })">
+                                    @cinema.Name
+                                </a>
+                            </h3>
+
+                            <div class="cinema-meta">
+                                <span class="meta-icon"><i class="fas fa-map-marker-alt"></i></span>
+                                <span class="meta-text">@cinema.Address</span>
+                            </div>
+
+                            <div class="cinema-meta">
+                                <span class="meta-icon"><i class="fas fa-phone"></i></span>
+                                <span class="meta-text">@cinema.Phone</span>
+                            </div>
+
+                            @if (cinema.Capacity.HasValue)
+                            {
+                                <div class="cinema-meta badge-capacity">
+                                    Capacity: @cinema.Capacity
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
