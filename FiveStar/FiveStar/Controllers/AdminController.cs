@@ -1,210 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using FiveStars.Models;
 
 namespace FiveStars.Controllers
 {
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
-        private string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // GET: Admin
+        // GET: Admin/Index
         public ActionResult Index()
         {
+            ViewBag.TotalMovies = _db.Movies.Count();
+            ViewBag.ActiveShowings = _db.Showings.Count(s => s.ShowTime > DateTime.Now);
+            ViewBag.TotalUsers = _db.Users.Count();
+            ViewBag.ActiveCampaigns = _db.Campaigns.Count(c => c.IsActive);
+
             return View();
         }
 
         #region Movie Management
 
-        // GET: Admin/Movies
         public ActionResult Movies()
         {
-            var movies = new List<Movie>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Movies ORDER BY ReleaseDate DESC";
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    movies.Add(new Movie
-                    {
-                        MovieID = Convert.ToInt32(reader["MovieID"]),
-                        Title = reader["Title"].ToString(),
-                        Duration_min = reader["Duration_min"] != DBNull.Value ? (int?)Convert.ToInt32(reader["Duration_min"]) : null,
-                        PosterUrl = reader["PosterUrl"] != DBNull.Value ? reader["PosterUrl"].ToString() : null,
-                        Ratings = reader["Ratings"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["Ratings"]) : null,
-                        Status = reader["Status"].ToString(),
-                        ReleaseDate = reader["ReleaseDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["ReleaseDate"]) : null,
-                        Description = reader["Description"] != DBNull.Value ? reader["Description"].ToString() : null
-                    });
-                }
-                reader.Close();
-            }
-
+            var movies = _db.Movies.OrderByDescending(m => m.ReleaseDate).ToList();
             return View(movies);
         }
 
-        // GET: Admin/CreateMovie
         public ActionResult CreateMovie()
         {
             return View();
         }
 
-        // POST: Admin/CreateMovie
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateMovie(Movie movie)
+        public ActionResult CreateMovie(Movies movie)
         {
             if (ModelState.IsValid)
             {
-                // Handle file upload
-                if (movie.PosterFile != null && movie.PosterFile.ContentLength > 0)
-                {
-                    string fileName = Path.GetFileName(movie.PosterFile.FileName);
-                    string path = Path.Combine(Server.MapPath("~/images/"), fileName);
-                    movie.PosterFile.SaveAs(path);
-                    movie.PosterUrl = "images/" + fileName;
-                }
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = @"INSERT INTO Movies (Title, Duration_min, PosterUrl, Ratings, Status, ReleaseDate, Description) 
-                                   VALUES (@Title, @Duration, @PosterUrl, @Ratings, @Status, @ReleaseDate, @Description)";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@Title", movie.Title);
-                    cmd.Parameters.AddWithValue("@Duration", movie.Duration_min ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@PosterUrl", movie.PosterUrl ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Ratings", movie.Ratings ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Status", movie.Status);
-                    cmd.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Description", movie.Description ?? (object)DBNull.Value);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
+                _db.Movies.Add(movie);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Movie created successfully!";
                 return RedirectToAction("Movies");
             }
-
             return View(movie);
         }
 
-        // GET: Admin/EditMovie/5
         public ActionResult EditMovie(int id)
         {
-            Movie movie = null;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Movies WHERE MovieID = @MovieID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@MovieID", id);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    movie = new Movie
-                    {
-                        MovieID = Convert.ToInt32(reader["MovieID"]),
-                        Title = reader["Title"].ToString(),
-                        Duration_min = reader["Duration_min"] != DBNull.Value ? (int?)Convert.ToInt32(reader["Duration_min"]) : null,
-                        PosterUrl = reader["PosterUrl"] != DBNull.Value ? reader["PosterUrl"].ToString() : null,
-                        Ratings = reader["Ratings"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["Ratings"]) : null,
-                        Status = reader["Status"].ToString(),
-                        ReleaseDate = reader["ReleaseDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["ReleaseDate"]) : null,
-                        Description = reader["Description"] != DBNull.Value ? reader["Description"].ToString() : null
-                    };
-                }
-                reader.Close();
-            }
-
-            if (movie == null)
-            {
-                return HttpNotFound();
-            }
-
+            var movie = _db.Movies.Find(id);
+            if (movie == null) return HttpNotFound();
             return View(movie);
         }
 
-        // POST: Admin/EditMovie/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditMovie(Movie movie)
+        public ActionResult EditMovie(Movies movie)
         {
             if (ModelState.IsValid)
             {
-                // Handle file upload
-                if (movie.PosterFile != null && movie.PosterFile.ContentLength > 0)
-                {
-                    string fileName = Path.GetFileName(movie.PosterFile.FileName);
-                    string path = Path.Combine(Server.MapPath("~/images/"), fileName);
-                    movie.PosterFile.SaveAs(path);
-                    movie.PosterUrl = "images/" + fileName;
-                }
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = @"UPDATE Movies SET 
-                                   Title = @Title, 
-                                   Duration_min = @Duration,
-                                   PosterUrl = @PosterUrl,
-                                   Ratings = @Ratings,
-                                   Status = @Status,
-                                   ReleaseDate = @ReleaseDate,
-                                   Description = @Description
-                                   WHERE MovieID = @MovieID";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@MovieID", movie.MovieID);
-                    cmd.Parameters.AddWithValue("@Title", movie.Title);
-                    cmd.Parameters.AddWithValue("@Duration", movie.Duration_min ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@PosterUrl", movie.PosterUrl ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Ratings", movie.Ratings ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Status", movie.Status);
-                    cmd.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Description", movie.Description ?? (object)DBNull.Value);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
+                _db.Entry(movie).State = EntityState.Modified;
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Movie updated successfully!";
                 return RedirectToAction("Movies");
             }
-
             return View(movie);
         }
 
-        // POST: Admin/DeleteMovie/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteMovie(int id)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            var movie = _db.Movies.Find(id);
+            if (movie != null)
             {
-                string query = "DELETE FROM Movies WHERE MovieID = @MovieID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@MovieID", id);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                _db.Movies.Remove(movie);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Movie deleted successfully!";
             }
-
             return RedirectToAction("Movies");
         }
 
@@ -212,184 +89,124 @@ namespace FiveStars.Controllers
 
         #region Showtimes Management
 
-        // GET: Admin/Showtimes
         public ActionResult Showtimes()
         {
-            var showings = new List<Showing>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = @"SELECT s.*, m.Title as MovieTitle, h.HallType, c.CinemaName 
-                               FROM Showings s
-                               LEFT JOIN Movies m ON s.MovieID = m.MovieID
-                               LEFT JOIN Halls h ON s.HallID = h.HallID
-                               LEFT JOIN Cinemas c ON h.CinemaID = c.CinemaID
-                               ORDER BY s.ShowTime DESC";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    showings.Add(new Showing
-                    {
-                        ShowingID = Convert.ToInt32(reader["ShowingID"]),
-                        ShowTime = Convert.ToDateTime(reader["ShowTime"]),
-                        TicketPrice = Convert.ToDecimal(reader["TicketPrice"]),
-                        MovieID = reader["MovieID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["MovieID"]) : null,
-                        HallID = reader["HallID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["HallID"]) : null,
-                        MovieTitle = reader["MovieTitle"].ToString(),
-                        HallType = reader["HallType"] != DBNull.Value ? reader["HallType"].ToString() : null,
-                        CinemaName = reader["CinemaName"] != DBNull.Value ? reader["CinemaName"].ToString() : null
-                    });
-                }
-                reader.Close();
-            }
-
+            var showings = _db.Showings
+                .Include(s => s.Movies)
+                .Include(s => s.Halls)
+                .Include(s => s.Halls.Cinemas)
+                .OrderByDescending(s => s.ShowTime)
+                .ToList();
             return View(showings);
         }
 
-        // GET: Admin/CreateShowtime
         public ActionResult CreateShowtime()
         {
-            var showing = new Showing();
+            ViewBag.MovieID = new SelectList(_db.Movies, "MovieID", "Title");
 
-            // Get movies for dropdown
-            var movies = GetMoviesSelectList();
-            ViewBag.MoviesList = movies;
+            var halls = (from h in _db.Halls
+                         join c in _db.Cinemas on h.CinemaID equals c.CinemaID
+                         select new
+                         {
+                             h.HallID,
+                             DisplayName = c.CinemaName + " - " + h.HallType
+                         }).ToList();
 
-            // Get halls for dropdown
-            var halls = GetHallsSelectList();
-            ViewBag.HallsList = halls;
 
-            showing.ShowTime = DateTime.Now.AddHours(1);
+            ViewBag.HallID = new SelectList(halls, "HallID", "DisplayName");
 
-            return View(showing);
+            return View();
         }
 
-        // POST: Admin/CreateShowtime
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateShowtime(Showing showing)
+        public ActionResult CreateShowtime(Showings showing)
         {
             if (ModelState.IsValid)
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = @"INSERT INTO Showings (ShowTime, TicketPrice, MovieID, HallID) 
-                           VALUES (@ShowTime, @TicketPrice, @MovieID, @HallID)";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@ShowTime", showing.ShowTime);
-                    cmd.Parameters.AddWithValue("@TicketPrice", showing.TicketPrice);
-                    cmd.Parameters.AddWithValue("@MovieID", showing.MovieID);
-                    cmd.Parameters.AddWithValue("@HallID", showing.HallID);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
+                _db.Showings.Add(showing);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Showtime created successfully!";
                 return RedirectToAction("Showtimes");
             }
 
-            // Repopulate dropdowns if validation fails
-            ViewBag.MoviesList = GetMoviesSelectList();
-            ViewBag.HallsList = GetHallsSelectList();
+            ViewBag.MovieID = new SelectList(_db.Movies, "MovieID", "Title", showing.MovieID);
+
+            var halls = (from h in _db.Halls
+                         join c in _db.Cinemas on h.CinemaID equals c.CinemaID
+                         select new
+                         {
+                             h.HallID,
+                             DisplayName = $"{c.CinemaName} - {h.HallType}"
+                         }).ToList();
+
+            ViewBag.HallID = new SelectList(halls, "HallID", "DisplayName", showing.HallID);
+
             return View(showing);
         }
 
-        // GET: Admin/EditShowtime/5
         public ActionResult EditShowtime(int id)
         {
-            Showing showing = null;
+            var showing = _db.Showings.Find(id);
+            if (showing == null) return HttpNotFound();
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Showings WHERE ShowingID = @ShowingID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@ShowingID", id);
+            ViewBag.MovieID = new SelectList(_db.Movies, "MovieID", "Title", showing.MovieID);
 
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
+            var halls = (from h in _db.Halls
+                         join c in _db.Cinemas on h.CinemaID equals c.CinemaID
+                         select new
+                         {
+                             h.HallID,
+                             DisplayName = c.CinemaName + " - " + h.HallType
+                         }).ToList();
 
-                if (reader.Read())
-                {
-                    showing = new Showing
-                    {
-                        ShowingID = Convert.ToInt32(reader["ShowingID"]),
-                        ShowTime = Convert.ToDateTime(reader["ShowTime"]),
-                        TicketPrice = Convert.ToDecimal(reader["TicketPrice"]),
-                        MovieID = reader["MovieID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["MovieID"]) : null,
-                        HallID = reader["HallID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["HallID"]) : null
-                    };
-                }
-                reader.Close();
-            }
+            ViewBag.HallID = new SelectList(halls, "HallID", "DisplayName", showing.HallID);
 
-            if (showing == null)
-            {
-                return HttpNotFound();
-            }
-
-            showing.MoviesList = GetMoviesSelectList();
-            showing.HallsList = GetHallsSelectList();
             return View(showing);
         }
 
-        // POST: Admin/EditShowtime/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditShowtime(Showing showing)
+        public ActionResult EditShowtime(Showings showing)
         {
             if (ModelState.IsValid)
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = @"UPDATE Showings SET 
-                                   ShowTime = @ShowTime, 
-                                   TicketPrice = @TicketPrice,
-                                   MovieID = @MovieID,
-                                   HallID = @HallID
-                                   WHERE ShowingID = @ShowingID";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@ShowingID", showing.ShowingID);
-                    cmd.Parameters.AddWithValue("@ShowTime", showing.ShowTime);
-                    cmd.Parameters.AddWithValue("@TicketPrice", showing.TicketPrice);
-                    cmd.Parameters.AddWithValue("@MovieID", showing.MovieID);
-                    cmd.Parameters.AddWithValue("@HallID", showing.HallID);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
+                _db.Entry(showing).State = EntityState.Modified;
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Showtime updated successfully!";
                 return RedirectToAction("Showtimes");
             }
 
-            showing.MoviesList = GetMoviesSelectList();
-            showing.HallsList = GetHallsSelectList();
+            // re-populate dropdowns if validation fails
+            ViewBag.MovieID = new SelectList(_db.Movies, "MovieID", "Title", showing.MovieID);
+
+            var halls = (from h in _db.Halls
+                         join c in _db.Cinemas on h.CinemaID equals c.CinemaID
+                         select new
+                         {
+                             h.HallID,
+                             DisplayName = c.CinemaName + " - " + h.HallType
+                         }).ToList();
+
+            ViewBag.HallID = new SelectList(halls, "HallID", "DisplayName", showing.HallID);
+
             return View(showing);
         }
 
-        // POST: Admin/DeleteShowtime/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteShowtime(int id)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            var showing = _db.Showings.Find(id);
+            if (showing != null)
             {
-                string query = "DELETE FROM Showings WHERE ShowingID = @ShowingID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@ShowingID", id);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                _db.Showings.Remove(showing);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Showtime deleted successfully!";
             }
-
             return RedirectToAction("Showtimes");
         }
 
@@ -397,241 +214,138 @@ namespace FiveStars.Controllers
 
         #region Campaign Management
 
-        // GET: Admin/Campaigns
         public ActionResult Campaigns()
         {
-            var campaigns = new List<Campaign>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Campaigns ORDER BY CampaignID DESC";
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    campaigns.Add(new Campaign
-                    {
-                        CampaignID = Convert.ToInt32(reader["CampaignID"]),
-                        Title = reader["Title"].ToString(),
-                        Description = reader["Description"] != DBNull.Value ? reader["Description"].ToString() : null,
-                        ImageUrl = reader["ImageUrl"] != DBNull.Value ? reader["ImageUrl"].ToString() : null,
-                        DurationText = reader["DurationText"] != DBNull.Value ? reader["DurationText"].ToString() : null,
-                        IsActive = Convert.ToBoolean(reader["IsActive"])
-                    });
-                }
-                reader.Close();
-            }
-
+            var campaigns = _db.Campaigns.OrderByDescending(c => c.CampaignID).ToList();
             return View(campaigns);
         }
 
-        // GET: Admin/CreateCampaign
         public ActionResult CreateCampaign()
         {
             return View();
         }
 
-        // POST: Admin/CreateCampaign
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateCampaign(Campaign campaign)
+        public ActionResult CreateCampaign(Campaigns campaign)
         {
             if (ModelState.IsValid)
             {
-                // Handle file upload
-                if (campaign.ImageFile != null && campaign.ImageFile.ContentLength > 0)
-                {
-                    string fileName = Path.GetFileName(campaign.ImageFile.FileName);
-                    string path = Path.Combine(Server.MapPath("~/images/"), fileName);
-                    campaign.ImageFile.SaveAs(path);
-                    campaign.ImageUrl = "images/" + fileName;
-                }
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = @"INSERT INTO Campaigns (Title, Description, ImageUrl, DurationText, IsActive) 
-                                   VALUES (@Title, @Description, @ImageUrl, @DurationText, @IsActive)";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@Title", campaign.Title);
-                    cmd.Parameters.AddWithValue("@Description", campaign.Description ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ImageUrl", campaign.ImageUrl ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@DurationText", campaign.DurationText ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@IsActive", campaign.IsActive);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
+                _db.Campaigns.Add(campaign);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Campaign created successfully!";
                 return RedirectToAction("Campaigns");
             }
-
             return View(campaign);
         }
 
-        // GET: Admin/EditCampaign/5
+
         public ActionResult EditCampaign(int id)
         {
-            Campaign campaign = null;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Campaigns WHERE CampaignID = @CampaignID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@CampaignID", id);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    campaign = new Campaign
-                    {
-                        CampaignID = Convert.ToInt32(reader["CampaignID"]),
-                        Title = reader["Title"].ToString(),
-                        Description = reader["Description"] != DBNull.Value ? reader["Description"].ToString() : null,
-                        ImageUrl = reader["ImageUrl"] != DBNull.Value ? reader["ImageUrl"].ToString() : null,
-                        DurationText = reader["DurationText"] != DBNull.Value ? reader["DurationText"].ToString() : null,
-                        IsActive = Convert.ToBoolean(reader["IsActive"])
-                    };
-                }
-                reader.Close();
-            }
-
-            if (campaign == null)
-            {
-                return HttpNotFound();
-            }
-
+            var campaign = _db.Campaigns.Find(id);
+            if (campaign == null) return HttpNotFound();
             return View(campaign);
         }
 
-        // POST: Admin/EditCampaign/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditCampaign(Campaign campaign)
+        public ActionResult EditCampaign(Campaigns campaign)
         {
             if (ModelState.IsValid)
             {
-                // Handle file upload
-                if (campaign.ImageFile != null && campaign.ImageFile.ContentLength > 0)
-                {
-                    string fileName = Path.GetFileName(campaign.ImageFile.FileName);
-                    string path = Path.Combine(Server.MapPath("~/images/"), fileName);
-                    campaign.ImageFile.SaveAs(path);
-                    campaign.ImageUrl = "images/" + fileName;
-                }
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = @"UPDATE Campaigns SET 
-                                   Title = @Title, 
-                                   Description = @Description,
-                                   ImageUrl = @ImageUrl,
-                                   DurationText = @DurationText,
-                                   IsActive = @IsActive
-                                   WHERE CampaignID = @CampaignID";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@CampaignID", campaign.CampaignID);
-                    cmd.Parameters.AddWithValue("@Title", campaign.Title);
-                    cmd.Parameters.AddWithValue("@Description", campaign.Description ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ImageUrl", campaign.ImageUrl ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@DurationText", campaign.DurationText ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@IsActive", campaign.IsActive);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
+                _db.Entry(campaign).State = EntityState.Modified;
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Campaign updated successfully!";
                 return RedirectToAction("Campaigns");
             }
-
             return View(campaign);
         }
 
-        // POST: Admin/DeleteCampaign/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteCampaign(int id)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            var campaign = _db.Campaigns.Find(id);
+            if (campaign != null)
             {
-                string query = "DELETE FROM Campaigns WHERE CampaignID = @CampaignID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@CampaignID", id);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                _db.Campaigns.Remove(campaign);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Campaign deleted successfully!";
             }
-
             return RedirectToAction("Campaigns");
         }
 
         #endregion
 
-        #region Helper Methods
+        #region User Management
 
-        private SelectList GetMoviesSelectList()
+        public ActionResult Users()
         {
-            var movies = new List<SelectListItem>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT MovieID, Title FROM Movies ORDER BY Title";
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    movies.Add(new SelectListItem
-                    {
-                        Value = reader["MovieID"].ToString(),
-                        Text = reader["Title"].ToString()
-                    });
-                }
-                reader.Close();
-            }
-
-            return new SelectList(movies, "Value", "Text");
+            var users = _db.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName).ToList();
+            return View(users);
         }
 
-        private SelectList GetHallsSelectList()
+        public ActionResult EditUser(int id)
         {
-            var halls = new List<SelectListItem>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            var user = _db.Users.Find(id);
+            if (user == null) return HttpNotFound();
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditUser(Users user, string Password, bool? IsActive)
+        {
+            if (ModelState.IsValid)
             {
-                string query = @"SELECT h.HallID, c.CinemaName + ' - ' + h.HallType as HallInfo 
-                               FROM Halls h
-                               LEFT JOIN Cinemas c ON h.CinemaID = c.CinemaID
-                               ORDER BY c.CinemaName, h.HallType";
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                var existingUser = _db.Users.Find(user.UserID);
+                if (existingUser != null)
                 {
-                    halls.Add(new SelectListItem
-                    {
-                        Value = reader["HallID"].ToString(),
-                        Text = reader["HallInfo"].ToString()
-                    });
-                }
-                reader.Close();
-            }
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.LastName = user.LastName;
+                    existingUser.Email = user.Email;
+                    existingUser.Role = user.Role;
+                    existingUser.IsActive = IsActive ?? false;  // Handle nullable
 
-            return new SelectList(halls, "Value", "Text");
+                    if (!string.IsNullOrEmpty(Password))
+                    {
+                        existingUser.PasswordHash = Password;
+                    }
+
+                    _db.SaveChanges();
+                    TempData["SuccessMessage"] = "User updated successfully!";
+                }
+                return RedirectToAction("Users");
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUser(int id)
+        {
+            var user = _db.Users.Find(id);
+            if (user != null && user.UserID != 1) // Don't delete the main admin
+            {
+                _db.Users.Remove(user);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "User deleted successfully!";
+            }
+            else if (user != null && user.UserID == 1)
+            {
+                TempData["ErrorMessage"] = "Cannot delete the main administrator!";
+            }
+            return RedirectToAction("Users");
         }
 
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

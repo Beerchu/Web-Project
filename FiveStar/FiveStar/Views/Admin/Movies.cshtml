@@ -1,0 +1,64 @@
+﻿@model IEnumerable<FiveStars.Models.Movies>
+
+@{
+    ViewBag.Title = "Movie Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movie Management</h2>
+
+<p>
+    @Html.ActionLink("Create New Movie", "CreateMovie", null, new { @class = "btn btn-success" })
+</p>
+
+<a href="@Url.Action("Index", "Admin")" class="btn btn-outline-secondary btn-block mt-2">
+    <i class="fas fa-home"></i> Back to Dashboard
+</a>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Poster</th>
+            <th>Title</th>
+            <th>Duration</th>
+            <th>Rating</th>
+            <th>Status</th>
+            <th>Release Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(movie.PosterUrl))
+                    {
+                        <img src="@movie.PosterUrl" alt="@movie.Title" style="width: 50px; height: 75px;" />
+                    }
+                </td>
+                <td>@movie.Title</td>
+                <td>@(movie.Duration_min.HasValue ? $"{movie.Duration_min} min" : "-")</td>
+                <td>@(movie.Ratings?.ToString("0.0") ?? "-")</td>
+                <td>@movie.Status</td>
+                <td>@(movie.ReleaseDate?.ToString("dd.MM.yyyy") ?? "-")</td>
+                <td>
+                    @Html.ActionLink("Edit", "EditMovie", new { id = movie.MovieID }, new { @class = "btn btn-warning btn-sm" })
+                    @using (Html.BeginForm("DeleteMovie", "Admin", new { id = movie.MovieID }, FormMethod.Post, new { style = "display:inline;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
