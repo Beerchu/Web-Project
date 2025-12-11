@@ -1,26 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;      // Include() metodu için gerekli
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using FiveStars.Models;
 
+ 
+
+using FiveStars;
+
+
 namespace FiveStars.Controllers
 {
+    // *** YENİ: Koltuk Seçim Sayfasından POST edilen veriyi karşılayacak model ***
+    public class SeatSelectionPostModel
+    {
+        public int ShowingID { get; set; }
+        public decimal BaseTotal { get; set; }
+        public List<int> SelectedSeatIDs { get; set; }
+        public List<string> SelectedSeatNumbers { get; set; }
+    }
+
     public class TicketsController : Controller
     {
+        // CinemaDBEntities içinde Order ve Ticket'a erişim Entity Framework tarafından sağlanır.
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // Yardımcı Metot: Koltuk Düzenini Oluşturur
-        // Controllers/TicketsController.cs dosyasında GetDummySeatingPlan metodu yerine bu kodu kullanın.
-
+        // Yardımcı Metot: Koltuk Düzenini Oluşturur (MEVCUT)
         private IEnumerable<SeatRow> GetDummySeatingPlan(string hallType)
         {
-            // Rastgelelik için basit bir Random nesnesi
             var random = new Random();
             var seatingPlan = new List<SeatRow>();
 
-            // Toplam satılmış koltuk sayısını rastgele belirleyelim (Örn: 5 ile 15 arasında)
             int soldCount = random.Next(5, 16);
             var allSeats = new List<Seat>();
 
@@ -32,7 +43,7 @@ namespace FiveStars.Controllers
                 {
                     SeatID = 100 + i,
                     SeatNumber = "R" + i,
-                    Status = "Available", // Başlangıçta hepsi müsait
+                    Status = "Available",
                     Type = "Recliner",
                     ExtraPrice = 15.00m
                 });
@@ -50,23 +61,20 @@ namespace FiveStars.Controllers
                     {
                         SeatID = (int)row * 100 + i,
                         SeatNumber = row.ToString() + i,
-                        Status = "Available", // Başlangıçta hepsi müsait
+                        Status = "Available",
                         Type = "Standard",
                         ExtraPrice = 0
                     });
                 }
-                // Orta koridor boşluğunu ekle
                 standardRow.Seats.Insert(10, null);
                 standardRow.Seats.Insert(11, null);
 
-                // Null olmayan koltukları ana listeye ekle
                 allSeats.AddRange(standardRow.Seats.Where(s => s != null));
                 seatingPlan.Add(standardRow);
             }
 
             // 3. Rastgele Koltukları Satılmış Olarak İşaretle (Sold)
-            // Tüm müsait koltuklar arasından rastgele soldCount kadarını seç
-            var seatsToSell = allSeats.OrderBy(s => random.Next()).Take(soldCount).ToList();
+            var seatsToSell = allSeats.Where(s => s != null).OrderBy(s => random.Next()).Take(soldCount).ToList();
 
             foreach (var seat in seatsToSell)
             {
@@ -76,7 +84,7 @@ namespace FiveStars.Controllers
             return seatingPlan;
         }
 
-        // Mevcut Action: Film Detayından Gelinen Seans Seçim Sayfası
+        // Mevcut Action: Film Detayından Gelinen Seans Seçim Sayfası (MEVCUT)
         public ActionResult Showtimes(int movieId)
         {
             var movie = _db.Movies.Find(movieId);
@@ -107,8 +115,7 @@ namespace FiveStars.Controllers
             return View(vm);
         }
 
-        // YENİ ACTION: Koltuk Seçim Sayfası
-        // Showtimes.cshtml sayfasından gelen 'showingId' parametresini bekler.
+        // YENİ ACTION: Koltuk Seçim Sayfası (MEVCUT)
         public ActionResult SelectSeats(int showingId)
         {
             var showing = _db.Showings
@@ -137,6 +144,56 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
+        // *** BAĞLANTIYI TAMAMLAYAN KRİTİK ACTION: ORDER OLUŞTURMA VE YÖNLENDİRME ***
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOrderAndRedirectToPayment(SeatSelectionPostModel model)
+        {
+            // Kullanıcı girişi kontrolü (Session'dan çekilir)
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            int currentUserId = (int)Session["UserID"];
+
+            if (model == null || model.SelectedSeatIDs == null || !model.SelectedSeatIDs.Any())
+            {
+                // Koltuk seçim ekranına geri dön
+                return RedirectToAction("SelectSeats", new { showingId = model.ShowingID });
+            }
+
+            // 1. Yeni Order kaydı oluştur
+            var newOrder = new Orders
+            {
+                UserID = currentUserId,
+                CreatedAt = DateTime.Now,
+                TotalAmount = model.BaseTotal,
+                Status = "Pending",
+            };
+            _db.Orders.Add(newOrder);
+            _db.SaveChanges();
+
+            // 2. Her bir koltuk için Ticket kaydı oluştur
+            for (int i = 0; i < model.SelectedSeatIDs.Count; i++)
+            {
+                var newTicket = new Tickets
+                {
+                    SeatID = model.SelectedSeatIDs[i],
+                    ShowingID = model.ShowingID,
+                    UserID = currentUserId,
+                    OrderID = newOrder.OrderID,
+                    SeatNumber = model.SelectedSeatNumbers[i],
+                    Status = "booked"
+                };
+                _db.Tickets.Add(newTicket);
+            }
+            _db.SaveChanges();
+
+            // 3. Kullanıcıyı Payment sayfasına yönlendir
+            return RedirectToAction("Payment", "Payment", new { orderId = newOrder.OrderID });
+        }
+
+        // Dispoz metodu (MEVCUT)
         protected override void Dispose(bool disposing)
         {
             if (disposing)
