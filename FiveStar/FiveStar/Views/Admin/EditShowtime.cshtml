@@ -1,0 +1,104 @@
+﻿@model FiveStars.Models.Showings
+
+@{
+    ViewBag.Title = "Edit Showtime";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Edit Showtime</h2>
+
+    @using (Html.BeginForm("EditShowtime", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @* Primary key hidden so EF can track the existing row *@
+        @Html.HiddenFor(m => m.ShowingID)
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="MovieID">Movie</label>
+                                    @* ViewBag.MovieID is filled in AdminController EditShowtime GET *@
+                                    @Html.DropDownList(
+                                        "MovieID",
+                                        (SelectList)ViewBag.MovieID,
+                                        "Select Movie",
+                                        new { @class = "form-control" }
+                                    )
+                                    @Html.ValidationMessageFor(m => m.MovieID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="HallID">Hall</label>
+                                    @* ViewBag.HallID is filled in AdminController EditShowtime GET *@
+                                    @Html.DropDownList(
+                                        "HallID",
+                                        (SelectList)ViewBag.HallID,
+                                        "Select Hall",
+                                        new { @class = "form-control" }
+                                    )
+                                    @Html.ValidationMessageFor(m => m.HallID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.ShowTime)
+                                    @Html.TextBoxFor(
+                                        m => m.ShowTime,
+                                        "{0:yyyy-MM-ddTHH:mm}",
+                                        new { @class = "form-control", type = "datetime-local" }
+                                    )
+                                    @Html.ValidationMessageFor(m => m.ShowTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.TicketPrice)
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">₺</span>
+                                        </div>
+                                        @Html.TextBoxFor(
+                                            m => m.TicketPrice,
+                                            new { @class = "form-control", type = "number", step = "0.01" }
+                                        )
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.TicketPrice, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Actions</h5>
+
+                        <button type="submit" class="btn btn-primary btn-block mb-2">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+
+                        <a href="@Url.Action("Showtimes", "Admin")" class="btn btn-secondary btn-block">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

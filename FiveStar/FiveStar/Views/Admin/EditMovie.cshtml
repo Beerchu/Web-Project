@@ -1,4 +1,5 @@
-﻿@model FiveStars.Models.Movie
+﻿@model FiveStars.Models.Movies
+
 
 @{
     ViewBag.Title = "Edit Movie";
@@ -55,19 +56,20 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(m => m.PosterFile)
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="posterFile" name="PosterFile">
-                                <label class="custom-file-label" for="posterFile">Choose new poster image</label>
-                            </div>
+                            @Html.LabelFor(m => m.PosterUrl, "Poster URL")
+                            @Html.TextBoxFor(m => m.PosterUrl, new { @class = "form-control" })
+
                             @if (!string.IsNullOrEmpty(Model.PosterUrl))
                             {
-                                <small class="form-text text-muted">Current: @Model.PosterUrl</small>
+                                <small class="form-text text-muted">Current poster preview:</small>
                                 <div class="mt-2">
-                                    <img src="@Url.Content("~/" + Model.PosterUrl)" class="img-thumbnail" style="max-width: 200px;" />
+                                    <img src="@Url.Content(Model.PosterUrl)"
+                                         class="img-thumbnail"
+                                         style="max-width: 200px;" />
                                 </div>
                             }
                         </div>
+
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Description)
@@ -96,7 +98,7 @@
 
 @section Scripts {
     <script>
-        $('.custom-file-input').on('change', function() {
+        $('.custom-file-input').on('change', function () {
             var fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').html(fileName);
         });

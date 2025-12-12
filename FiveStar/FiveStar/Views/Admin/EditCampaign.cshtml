@@ -1,0 +1,21 @@
+﻿@model FiveStars.Models.Campaigns
+
+@{
+    ViewBag.Title = "Edit Campaign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Campaign</h2>
+
+@using (Html.BeginForm("EditCampaign", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(m => m.CampaignID)
+
+    @Html.EditorForModel() <!-- Tüm scalar alanlar için otomatik form -->
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Back to list", "Campaigns", null, new { @class = "btn btn-secondary" })
+}

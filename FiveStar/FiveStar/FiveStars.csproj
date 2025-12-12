@@ -384,8 +384,14 @@
     <Content Include="Views\Admin\CreateShowtime.cshtml" />
     <Content Include="Views\Admin\EditMovie.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\Movie.cshtml" />
+    <Content Include="Views\Admin\Movies.cshtml" />
     <Content Include="Views\Admin\Showtimes.cshtml" />
+    <Content Include="Views\Admin\Campaigns.cshtml" />
+    <Content Include="Views\Admin\Users.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\EditCampaign.cshtml" />
+    <Content Include="Views\Admin\EditShowtime.cshtml" />
+    <Content Include="Views\Admin\CreateCampaign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

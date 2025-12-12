@@ -1,0 +1,71 @@
+﻿@model IEnumerable<FiveStars.Models.Campaigns>
+
+@{
+    ViewBag.Title = "Campaign Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Campaign Management</h2>
+
+<p>
+    @Html.ActionLink("Create New Campaign", "CreateCampaign", null, new { @class = "btn btn-success" })
+</p>
+
+<a href="@Url.Action("Index", "Admin")" class="btn btn-outline-secondary btn-block mt-2">
+    <i class="fas fa-home"></i> Back to Dashboard
+</a>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Duration</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var campaign in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(campaign.ImageUrl))
+                    {
+                        <img src="@campaign.ImageUrl" alt="@campaign.Title" style="width: 50px; height: 50px;" />
+                    }
+                </td>
+                <td>@campaign.Title</td>
+                <td>@(campaign.Description?.Length > 50 ? campaign.Description.Substring(0, 50) + "..." : campaign.Description)</td>
+                <td>@campaign.DurationText</td>
+                <td>
+                    @if (campaign.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditCampaign", new { id = campaign.CampaignID }, new { @class = "btn btn-warning btn-sm" })
+                    @using (Html.BeginForm("DeleteCampaign", "Admin", new { id = campaign.CampaignID }, FormMethod.Post, new { style = "display:inline;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
