@@ -1,0 +1,111 @@
+@model YourProjectName.Models.PaymentViewModel
+@{
+    ViewData["Title"] = "Ödeme Sayfasý";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Ödeme Onayý</h1>
+
+    <div class="card mb-4 p-3 bg-light">
+        <h4>Rezervasyon Detaylarý</h4>
+        <p><strong>Seçilen Koltuklar:</strong> @string.Join(", ", Model.SelectedSeats)</p>
+        <p>
+            <strong>Temel Toplam (Ýndirimsiz):</strong>
+            <span id="base-total" style="font-size: 1.1em; font-weight: bold;">@Model.BaseTotal.ToString("C")</span>
+        </p>
+    </div>
+
+    @* ---------------------------------------------------- *@
+    @* Ödeme Formu: ConfirmPayment aksiyonuna POST yapacak *@
+    @* SelectedCampaignID gizli alaný, Ajax ile güncellediðimiz deðeri Controller'a taþýmalýdýr. *@
+    @using (Html.BeginForm("ConfirmPayment", "Payment", FormMethod.Post, new { id = "payment-form" }))
+    {
+    @Html.AntiForgeryToken()
+
+    @* Controller'a göndermek için gerekli gizli alanlar *@
+    @Html.HiddenFor(m => m.OrderID)
+    @Html.HiddenFor(m => m.SelectedCampaignID)  @* AJAX sonucu güncellenen CampaignID'yi tutar * @
+
+        <div class="form-group mb-4">
+            <label for="campaign-dropdown"><h5>Kullanýlabilir Kampanyalar:</h5></label>
+            @Html.DropDownListFor(m => m.SelectedCampaignID,
+                                  new SelectList(Model.AvailableCampaigns, "CampaignID", "Title", Model.SelectedCampaignID),
+                                  "Kampanya Seçiniz",
+                                  new { @class = "form-control", id = "campaign-dropdown" })
+            @Html.ValidationMessageFor(m => m.SelectedCampaignID, "", new { @class = "text-danger" })
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="card p-4 shadow-sm">
+            <h4>Ödeme Özeti</h4>
+            <p>
+                Ýndirim Miktarý:
+                <span id="discount-amount" class="text-danger" style="font-weight: bold;">@Model.DiscountAmount.ToString("C")</span>
+            </p>
+            <h3 class="mt-3">
+                Ödenecek Son Toplam:
+                <span id="final-total" class="text-success" style="font-weight: bold;">@Model.FinalTotal.ToString("C")</span>
+            </h3>
+        </div>
+
+        @* --- Ödeme Kart Bilgileri Alaný (Bu kýsým, projenizin ödeme entegrasyonuna göre deðiþir) --- *@
+    <div class="my-4">
+        <h5>Kart Bilgileri</h5>
+    </div>
+    @* ------------------------------------------------------------------------------------------ *@
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-lg btn-success w-100">Ödemeyi Onayla ve Bileti Kes</button>
+    </div>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger mt-3" })
+    }
+</div>
+
+@* ========================================================================= *@
+@* 4. JAVASCRIPT / AJAX ÝÞLEVÝ *@
+@* ========================================================================= *@
+<script>
+    $(document).ready(function () {
+
+        // Kampanya Dropdown'ý deðiþtiðinde tetiklenecek olay
+        $('#campaign-dropdown').change(function () {
+            var selectedCampaignId = $(this).val();
+            // Eðer "Kampanya Seçiniz" seçilirse (value = boþ string), 0 olarak göndeririz.
+            var campaignIdToSend = selectedCampaignId || 0;
+            var orderId = $('#OrderID').val(); // Gizli alandan OrderID'yi al
+
+            // AJAX çaðrýsý baþlatýlýyor
+            //
+            $.ajax({
+                url: '@Url.Action("RecalculatePrice", "Payment")',
+                type: 'POST',
+                data: {
+                    orderId: orderId,
+                    campaignId: campaignIdToSend
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Controller'dan gelen güncel fiyatlarý DOM'a yaz
+                        $('#discount-amount').text(response.discount);
+                        $('#final-total').text(response.finalTotal);
+
+                        // Önemli: ConfirmPayment metoduna doðru veriyi göndermek için
+                        // formun gizli alanýndaki SelectedCampaignID deðerini güncelle.
+                        $('#SelectedCampaignID').val(response.selectedCampaignId);
+                    } else {
+                        // Sunucu taraflý hata oluþursa
+                        alert("Fiyat hesaplanýrken bir hata oluþtu: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Ajax Error:", status, error);
+                    alert("Sunucu ile iletiþimde beklenmedik bir hata oluþtu.");
+                }
+            });
+        });
+    });
+</script>
