@@ -16,10 +16,8 @@
 
     @using (Html.BeginForm("CreateOrderAndRedirectToPayment", "Tickets", FormMethod.Post, new { id = "seat-selection-form" }))
     {
-        // 👇 HttpAntiForgeryException HATASINI ÇÖZEN GÜVENLİK JETONU 👇
         @Html.AntiForgeryToken()
 
-        // GİZLİ ALANLAR: Controller'a göndereceğimiz zorunlu veriler.
         <input type="hidden" name="ShowingID" value="@Model.SessionTimeID" />
         <input type="hidden" id="BaseTotal" name="BaseTotal" value="0.00" />
 
@@ -34,26 +32,38 @@
 
             @foreach (var row in Model.SeatingPlan)
             {
-            <div class="seat-row" data-row="@row.RowName">
-                <span class="row-label">@row.RowName</span>
-                @foreach (var seat in row.Seats.Where(s => s != null)) // Sadece gerçek koltukları döngüye al
-                {
-                    // Var olan koltuk butonu kodu buraya gelir.
-                    var seatClass = "seat-item seat-" + seat.Status.ToLower();
-                    var seatTypeClass = "seat-type-" + seat.Type.ToLower();
+                <div class="seat-row" data-row="@row.RowName">
+                    <span class="row-label">@row.RowName</span>
+                    @foreach (var seat in row.Seats)
+                    {
+                        if (seat == null)
+                        {
+                            <div class="seat-spacer"></div>
+                        }
+                        else
+                        {
+                            var seatClass = "seat-item seat-" + seat.Status.ToLower();
+                            var seatTypeClass = "seat-type-" + seat.Type.ToLower();
 
-                    <button type="button"
-                            class="@(seatClass) @(seatTypeClass)"
-                            data-id="@seat.SeatID"
-                            data-status="@seat.Status"
-                            data-price="@(Model.TicketPrice + seat.ExtraPrice)"
-                            @(seat.Status == "Sold" ? "disabled" : "")
-                            onclick="toggleSeatSelection(this)">
-                        @seat.SeatNumber.Substring(1)
-                    </button>
-                }
-                <span class="row-label">@row.RowName</span>
-            </div>
+                            // Koltuğun tam numarasını data-seat-name olarak ekle. (Örn: A5)
+                            string fullSeatName = row.RowName + seat.SeatNumber;
+
+                            <button type="button"
+                                    class="@(seatClass) @(seatTypeClass)"
+                                    data-id="@seat.SeatID"
+                                    data-status="@seat.Status"
+                                    data-price="@(Model.TicketPrice + seat.ExtraPrice)"
+                                    data-seat-name="@fullSeatName"
+                                    @(seat.Status == "Sold" ? "disabled" : "")
+                                    onclick="toggleSeatSelection(this)">
+
+                                @seat.SeatNumber
+
+                            </button>
+                        }
+                    }
+                    <span class="row-label">@row.RowName</span>
+                </div>
             }
         </div>
 
@@ -71,11 +81,9 @@
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // KÜLTÜR AYARINDAN BAĞIMSIZ DOĞRU FİYATI ALMAK İÇİN
         const TICKET_PRICE = parseFloat('@Model.TicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)');
         const hiddenInputsContainer = document.getElementById('hidden-inputs-container');
 
-        // Koltuk seçim durumunu değiştirir
         function toggleSeatSelection(button) {
             if (button.dataset.status === "Sold") {
                 return;
@@ -100,50 +108,45 @@
             updateSummary();
         }
 
-        // Özeti ve en önemlisi gizli form inputlarını günceller
         function updateSummary() {
             let selectedSeats = document.querySelectorAll('.seat-item[data-status="Selected"]');
             let totalTickets = selectedSeats.length;
             let totalPrice = 0;
             let selectedSeatNumbers = [];
 
-            // Gizli inputları temizle
             hiddenInputsContainer.innerHTML = '';
 
             selectedSeats.forEach(seat => {
                 let price = parseFloat(seat.dataset.price);
                 totalPrice += price;
 
-                // Seçilen koltuk Numaralarını topla (Görüntüleme için)
-                selectedSeatNumbers.push(seat.dataset.name);
+                const fullSeatName = seat.dataset.seatName;
+                selectedSeatNumbers.push(fullSeatName);
 
                 // --- Gizli Inputları Dinamik Olarak Oluşturma ---
 
-                // 1. SelectedSeatIDs (Controller'da List<int> yakalamak için)
+                // 1. SelectedSeatIDs
                 const idInput = document.createElement('input');
                 idInput.type = 'hidden';
                 idInput.name = 'SelectedSeatIDs';
                 idInput.value = seat.dataset.id;
                 hiddenInputsContainer.appendChild(idInput);
 
-                // 2. SelectedSeatNumbers (Controller'da List<string> yakalamak için)
+                // 2. SelectedSeatNumbers
                 const numberInput = document.createElement('input');
                 numberInput.type = 'hidden';
                 numberInput.name = 'SelectedSeatNumbers';
-                numberInput.value = seat.dataset.name;
+                numberInput.value = fullSeatName;
                 hiddenInputsContainer.appendChild(numberInput);
             });
 
             // Görüntüleme alanlarını güncelle
             document.getElementById('selected-seats-info').textContent = `Seats: ${totalTickets} (${selectedSeatNumbers.join(', ')})`;
 
-            // Türk Lirası formatında gösterim
             const formattedPrice = totalPrice.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' });
             document.getElementById('total-price').textContent = `Total: ${formattedPrice}`;
 
-            // Base Total gizli inputunu güncelle (Controller'ın beklediği nokta formatında)
             document.getElementById('BaseTotal').value = totalPrice.toFixed(2);
-
 
             const checkoutBtn = document.getElementById('checkout-btn');
 
