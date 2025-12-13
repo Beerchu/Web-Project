@@ -32,46 +32,29 @@
                 <p class="screen-caption">All eyes this way please!</p>
             </div>
 
-            <div class="seating-plan">
-                @foreach (var row in Model.SeatingPlan)
+            @foreach (var row in Model.SeatingPlan)
+            {
+            <div class="seat-row" data-row="@row.RowName">
+                <span class="row-label">@row.RowName</span>
+                @foreach (var seat in row.Seats.Where(s => s != null)) // Sadece gerçek koltukları döngüye al
                 {
-                    <div class="seat-row" data-row="@row.RowName">
-                        <span class="row-label">@row.RowName</span>
-                        @foreach (var seat in row.Seats)
-                        {
-                            if (seat == null)
-                            {
-                                <div class="seat-spacer"></div>
-                            }
-                            else
-                            {
-                                var seatClass = "seat-item seat-" + seat.Status.ToLower();
-                                var seatTypeClass = "seat-type-" + seat.Type.ToLower();
+                    // Var olan koltuk butonu kodu buraya gelir.
+                    var seatClass = "seat-item seat-" + seat.Status.ToLower();
+                    var seatTypeClass = "seat-type-" + seat.Type.ToLower();
 
-                                <button type="button"
-                                        class="@(seatClass) @(seatTypeClass)"
-                                        data-id="@seat.SeatID"
-                                        data-name="@(row.RowName + seat.SeatNumber.Last())" @* Örn: L1, H10 *@
-                                        data-status="@seat.Status"
-                                        data-price="@(Model.TicketPrice + seat.ExtraPrice)"
-                                        @(seat.Status == "Sold" ? "disabled" : "")
-                                        onclick="toggleSeatSelection(this)">
-                                    @seat.SeatNumber.Last()
-                                </button>
-                            }
-                        }
-                        <span class="row-label">@row.RowName</span>
-                    </div>
+                    <button type="button"
+                            class="@(seatClass) @(seatTypeClass)"
+                            data-id="@seat.SeatID"
+                            data-status="@seat.Status"
+                            data-price="@(Model.TicketPrice + seat.ExtraPrice)"
+                            @(seat.Status == "Sold" ? "disabled" : "")
+                            onclick="toggleSeatSelection(this)">
+                        @seat.SeatNumber.Substring(1)
+                    </button>
                 }
+                <span class="row-label">@row.RowName</span>
             </div>
-
-            <div class="seating-legend">
-                <div class="legend-item"><span class="legend-box seat-available"></span>Available</div>
-                <div class="legend-item"><span class="legend-box seat-selected"></span>Selected</div>
-                <div class="legend-item"><span class="legend-box seat-sold"></span>Sold</div>
-                <div class="legend-item"><span class="legend-box seat-recliner"></span>Recliner (VIP)</div>
-            </div>
-
+            }
         </div>
 
         <div class="checkout-summary">
