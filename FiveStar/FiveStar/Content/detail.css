@@ -91,6 +91,32 @@
     max-width: 680px;
     color: #e0e0e0;
 }
+/*  açıklama için   */
+.movie-detail-desc-card {
+    margin-top: 10px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(10px);
+    max-width: 680px;
+}
+
+.movie-detail-desc-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #bdbdbd;
+    margin-bottom: 8px;
+}
+
+.movie-detail-desc-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #e6e6e6;
+}
+
 
 /* BUTONLAR */
 /* Ortak buton stilleri (hepsi için) */
@@ -119,6 +145,21 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
 }
+
+/* BUY TICKET'ın şerit gibi uzamasını engelle */
+.movie-detail-btn-primary {
+    align-self: flex-start; /* flex-column içinde stretch'i kırar */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    padding: 0 22px;
+    min-width: 190px; /* “buton gibi” dursun diye */
+}
+
+
+
+
 /* Kırmızı ana buton (BUY TICKET) */
 .movie-detail-btn-primary {
     background: #e50914;
@@ -134,11 +175,13 @@
 
     /* Aktif primary buton hover animasyonu */
     .movie-detail-btn-primary.disabled {
-        background: #444;
-        color: #999;
-        cursor: default;
-        box-shadow: none;
+        background: rgba(255,255,255,.14) !important;
+        color: rgba(255,255,255,.65) !important;
+        box-shadow: none !important;
+        cursor: not-allowed !important;
+        border: 1px solid rgba(255,255,255,.16) !important;
     }
+
 
 /* İkincil buton */
 /* "BACK TO HOME" butonu – beyaz çerçeveli */
@@ -155,10 +198,12 @@
     transition: background 0.1s ease, color 0.1s ease;
 }
 
-    /* Secondary hover – hafif beyaz dolgu */
     .movie-detail-btn-secondary:hover {
-        background: #ffffff11;color: #000000;
+        background: rgba(255,255,255,0.12);
+        color: #ffffff;
+        border-color: rgba(255,255,255,0.7);
     }
+
 
 /* Link gibi görünen geri butonu *//* "Back to Movies" butonu – sadece yazı */
 .movie-detail-btn-ghost {
@@ -194,4 +239,14 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
 }
-
+/* BUY TICKET / TICKETS UNAVAILABLE genişlemesini kesin bitir */
+.movie-detail-info > a.movie-detail-btn-primary,
+.movie-detail-info > button.movie-detail-btn-primary {
+    align-self: flex-start !important; /* stretch'i kırar */
+    width: auto !important;
+    display: inline-flex !important;
+    justify-content: center;
+    align-items: center;
+    min-width: 190px; /* buton gibi dursun */
+    padding: 14px 22px !important;
+}
