@@ -1,85 +1,167 @@
-@model YourProjectName.Models.PaymentViewModel
+@model FiveStars.Models.PaymentViewModel
 @{
-    ViewData["Title"] = "Ödeme Sayfasý";
+    ViewBag.Title = "Payment Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    /* Temel Stil Düzeltmeleri */
+    .payment-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        color: #E0E0E0;
+        background-color: #1A1A1A;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .booking-details-box {
+        background-color: #282828;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
+
+    .summary-box {
+        background-color: #282828;
+        padding: 25px;
+        border-radius: 8px;
+        border: 1px solid #3A3A3A;
+        margin-top: 30px;
+    }
+
+    .final-total {
+        color: #4CAF50;
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    .discount-amount {
+        color: #FF5252;
+        font-weight: bold;
+    }
+
+    .btn-confirm {
+        background-color: #E50914;
+        border: none;
+        font-size: 1.2em;
+        padding: 15px 0;
+        transition: background-color 0.3s;
+    }
+
+        .btn-confirm:hover {
+            background-color: #B20710;
+            color: white;
+        }
+
+    .form-control {
+        background-color: #3A3A3A;
+        color: #E0E0E0;
+        border: 1px solid #555;
+    }
+
+        .form-control:focus {
+            background-color: #3A3A3A;
+            border-color: #E50914;
+            box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
+        }
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Ödeme Onayý</h1>
+<div class="payment-container">
+    <h1 class="mb-5" style="color: white;">Payment Confirmation</h1>
 
-    <div class="card mb-4 p-3 bg-light">
-        <h4>Rezervasyon Detaylarý</h4>
-        <p><strong>Seçilen Koltuklar:</strong> @string.Join(", ", Model.SelectedSeats)</p>
-        <p>
-            <strong>Temel Toplam (Ýndirimsiz):</strong>
-            <span id="base-total" style="font-size: 1.1em; font-weight: bold;">@Model.BaseTotal.ToString("C")</span>
-        </p>
-    </div>
-
-    @* ---------------------------------------------------- *@
-    @* Ödeme Formu: ConfirmPayment aksiyonuna POST yapacak *@
-    @* SelectedCampaignID gizli alaný, Ajax ile güncellediðimiz deðeri Controller'a taþýmalýdýr. *@
     @using (Html.BeginForm("ConfirmPayment", "Payment", FormMethod.Post, new { id = "payment-form" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    @* Controller'a göndermek için gerekli gizli alanlar *@
-    @Html.HiddenFor(m => m.OrderID)
-    @Html.HiddenFor(m => m.SelectedCampaignID)  @* AJAX sonucu güncellenen CampaignID'yi tutar * @
+        @Html.HiddenFor(m => m.OrderID)
+        @Html.HiddenFor(m => m.SelectedCampaignID)
 
-        <div class="form-group mb-4">
-            <label for="campaign-dropdown"><h5>Kullanýlabilir Kampanyalar:</h5></label>
-            @Html.DropDownListFor(m => m.SelectedCampaignID,
-                                  new SelectList(Model.AvailableCampaigns, "CampaignID", "Title", Model.SelectedCampaignID),
-                                  "Kampanya Seçiniz",
-                                  new { @class = "form-control", id = "campaign-dropdown" })
+        @* --- 1. BOOKING DETAILS --- *@
+        <div class="booking-details-box">
+            <h4>Booking Details</h4>
+
+            @if (Model.SelectedSeats != null && Model.SelectedSeats.Any())
+            {
+                <p>
+                    <strong>Selected Seats:</strong>
+                    <span style="font-size: 1.1em;">@string.Join(", ", Model.SelectedSeats)</span>
+                </p>
+            }
+            <p>
+                <strong>Base Total (Undiscounted):</strong>
+                <span id="base-total" style="font-size: 1.1em; font-weight: bold;">@Model.BaseTotal.ToString("C")</span>
+            </p>
+        </div>
+
+        @* --- 2. CAMPAIGN SELECTION --- *@
+        <div class="form-group mb-5">
+            <label for="campaign-dropdown">Available Campaigns:</label>
+            @if (Model.AvailableCampaigns != null)
+            {
+                @Html.DropDownListFor(m => m.SelectedCampaignID,
+                                         new SelectList(Model.AvailableCampaigns, "CampaignID", "Title", Model.SelectedCampaignID),
+                                         "Select a Campaign",
+                                         new { @class = "form-control", id = "campaign-dropdown" })
+            }
+            else
+            {
+                <p class="form-control-static" style="color: #FFD700;">No active campaigns available.</p>
+            }
             @Html.ValidationMessageFor(m => m.SelectedCampaignID, "", new { @class = "text-danger" })
         </div>
 
-        <hr class="my-4" />
+        <hr style="border-color: #3A3A3A;" />
 
-        <div class="card p-4 shadow-sm">
-            <h4>Ödeme Özeti</h4>
+        @* --- 3. PAYMENT SUMMARY --- *@
+        <div class="summary-box">
+            <h4>Payment Summary</h4>
             <p>
-                Ýndirim Miktarý:
-                <span id="discount-amount" class="text-danger" style="font-weight: bold;">@Model.DiscountAmount.ToString("C")</span>
+                Discount Applied:
+                <span id="discount-amount" class="discount-amount">@Model.DiscountAmount.ToString("C")</span>
             </p>
             <h3 class="mt-3">
-                Ödenecek Son Toplam:
-                <span id="final-total" class="text-success" style="font-weight: bold;">@Model.FinalTotal.ToString("C")</span>
+                Final Total Payable:
+                <span id="final-total" class="final-total">@Model.FinalTotal.ToString("C")</span>
             </h3>
         </div>
 
-        @* --- Ödeme Kart Bilgileri Alaný (Bu kýsým, projenizin ödeme entegrasyonuna göre deðiþir) --- *@
-    <div class="my-4">
-        <h5>Kart Bilgileri</h5>
-    </div>
-    @* ------------------------------------------------------------------------------------------ *@
+        @* --- 4. CREDIT CARD INFO (Simülasyon) --- *@
+        <div class="my-4 p-3 bg-dark" style="border-radius: 5px;">
+            <h5 style="color: #bbb;">Credit Card Information (Simulation)</h5>
+            <p style="font-size: 0.9em; color: #999;">
+                By clicking 'Confirm Payment', the Controller will assume the payment is successful.
+            </p>
+        </div>
 
-    <div class="mt-4">
-        <button type="submit" class="btn btn-lg btn-success w-100">Ödemeyi Onayla ve Bileti Kes</button>
-    </div>
+        @* --- 5. SUBMIT BUTTON --- *@
+        <div class="mt-4">
+            <button type="submit" class="btn btn-lg btn-confirm w-100">
+                CONFIRM PAYMENT AND ISSUE TICKET
+            </button>
+        </div>
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger mt-3" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger mt-3" })
     }
 </div>
 
 @* ========================================================================= *@
-@* 4. JAVASCRIPT / AJAX ÝÞLEVÝ *@
+@* JAVASCRIPT / AJAX FUNCTIONALITY *@
 @* ========================================================================= *@
 <script>
     $(document).ready(function () {
 
-        // Kampanya Dropdown'ý deðiþtiðinde tetiklenecek olay
+        // Event triggered when Campaign Dropdown changes
         $('#campaign-dropdown').change(function () {
             var selectedCampaignId = $(this).val();
-            // Eðer "Kampanya Seçiniz" seçilirse (value = boþ string), 0 olarak göndeririz.
+            // Send 0 if 'Select a Campaign' is chosen (empty string)
             var campaignIdToSend = selectedCampaignId || 0;
-            var orderId = $('#OrderID').val(); // Gizli alandan OrderID'yi al
+            var orderId = $('#OrderID').val();
 
-            // AJAX çaðrýsý baþlatýlýyor
-            //
+            // AJAX call to recalculate price
             $.ajax({
                 url: '@Url.Action("RecalculatePrice", "Payment")',
                 type: 'POST',
@@ -89,21 +171,33 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        // Controller'dan gelen güncel fiyatlarý DOM'a yaz
+                        // BAÞARILI DURUM: Controller'dan gelen güncel fiyatlarý DOM'a yaz
                         $('#discount-amount').text(response.discount);
                         $('#final-total').text(response.finalTotal);
 
-                        // Önemli: ConfirmPayment metoduna doðru veriyi göndermek için
-                        // formun gizli alanýndaki SelectedCampaignID deðerini güncelle.
+                        // Hidden inputu güncelle
                         $('#SelectedCampaignID').val(response.selectedCampaignId);
                     } else {
-                        // Sunucu taraflý hata oluþursa
-                        alert("Fiyat hesaplanýrken bir hata oluþtu: " + response.message);
+                        // HATA DURUMU: (Kampanya Koþullarý Saðlanmadý)
+
+                        // 1. Uyarý mesajýný göster
+                        alert("Campaign cannot be applied: " + response.message);
+
+                        // 2. Dropdown'ý 'Select a Campaign' seçeneðine geri getir
+                        $('#campaign-dropdown').val('');
+
+                        // 3. Ýndirim miktarýný sýfýrla ve Final Total'i Base Total'e geri döndür
+                        // response.finalTotal, RecalculatePrice metodunda Base Total olarak geri gönderilmiþti.
+                        $('#discount-amount').text(response.discount); // Bu 0.00 TL/USD olmalý
+                        $('#final-total').text(response.finalTotal);
+
+                        // 4. Gizli inputu temizle
+                        $('#SelectedCampaignID').val('');
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error("Ajax Error:", status, error);
-                    alert("Sunucu ile iletiþimde beklenmedik bir hata oluþtu.");
+                    alert("An unexpected server communication error occurred. Check the console for details.");
                 }
             });
         });
