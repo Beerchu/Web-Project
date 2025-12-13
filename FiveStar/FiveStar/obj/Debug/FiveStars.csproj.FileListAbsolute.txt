@@ -805,7 +805,6 @@ C:\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CoreCompileInputs.ca
 C:\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CopyComplete
 C:\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.dll
 C:\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.pdb
-C:\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.AssemblyReference.cache
 C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\bin\FiveStars.dll.config
 C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\bin\FiveStars.dll
 C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\bin\FiveStars.pdb
