@@ -70,6 +70,14 @@
                     </li>
                 }
             </ul>
+            <div class="movie-detail-desc-card">
+                <div class="movie-detail-desc-title">Synopsis</div>
+                <p class="movie-detail-desc-text">
+                    @(string.IsNullOrWhiteSpace(Model.Description)
+            ? "No description available."
+            : Model.Description)
+                </p>
+            </div>
 
             <!-- BUTONLAR -->
 
@@ -80,6 +88,12 @@
                    href="@Url.Action("Showtimes", "Tickets", new { movieId = Model.MovieID })">
                     BUY TICKET
                 </a>
+            }
+            else if (string.Equals(Model.Status?.Trim(), "Coming Soon", StringComparison.OrdinalIgnoreCase))
+            {
+                <button class="movie-detail-btn-primary disabled" disabled>
+                    COMING SOON
+                </button>
             }
             else
             {
