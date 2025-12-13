@@ -1,4 +1,4 @@
-﻿@model FiveStars.Models.MovieFilterViewModel
+﻿﻿@model FiveStars.Models.MovieFilterViewModel
 
 @{
     ViewBag.Title = "Movies";
@@ -7,53 +7,83 @@
 
 <div class="movies-page container">
 
-    <!-- ÜST BAŞLIK + FİLTRELER -->
+    <!-- ===================== ÜST BAŞLIK + FİLTRELER ===================== -->
     <div class="movies-header-row">
         <h1 class="movies-title">MOVIES</h1>
+
+        @*
+            ÖNEMLİ: Controller Index() parametreleri:
+            - searchTerm
+            - selectedGenreId
+            - selectedCinemaId
+
+            Bu yüzden <select name="..."> değerleri bu isimlerle BİREBİR aynı olmalı.
+            Aksi halde MVC binder değerleri alamaz (null gelir) -> filtre çalışmıyor gibi görünür.
+        *@
 
         <form id="movies-filter-form"
               method="get"
               action="@Url.Action("Index", "Movies")"
               class="movies-filter-form">
 
-            <!-- SEARCH -->
+            <!-- ===================== SEARCH ===================== -->
             <div class="movies-search-wrapper">
                 <i class="fas fa-search movies-search-icon"></i>
+
+                @* id ekledim ki JS ile yakalayabilelim *@
                 <input type="text"
+                       id="searchTerm"
                        name="searchTerm"
                        class="movies-search-input"
                        placeholder="Search movie..."
                        value="@Model.SearchTerm" />
             </div>
 
-            <!-- GENRE -->
+            <!-- ===================== GENRE ===================== -->
             <div class="movies-filter-group">
                 <label for="genreSelect" class="movies-filter-label">GENRE</label>
+
+                @*
+                    KRİTİK FIX:
+                    name="genreId" YANLIŞTI -> Controller selectedGenreId bekliyor.
+                    name="selectedGenreId" OLMAK ZORUNDA.
+                *@
                 <select id="genreSelect"
                         name="selectedGenreId"
                         class="movies-filter-select">
                     <option value="">All</option>
+
                     @foreach (var g in Model.Genres)
                     {
-                        <option value="@g.GenreID"
-                                @(Model.SelectedGenreId == g.GenreID ? "selected" : "")>
+                        @* nullable int karşılaştırmayı sağlam yapalım *@
+                        var isSelected = Model.SelectedGenreId.HasValue && Model.SelectedGenreId.Value == g.GenreID;
+
+                        <option value="@g.GenreID" @(isSelected ? "selected" : "")>
                             @g.Name
                         </option>
                     }
                 </select>
             </div>
 
-            <!-- CINEMA -->
+            <!-- ===================== CINEMA ===================== -->
             <div class="movies-filter-group">
                 <label for="cinemaSelect" class="movies-filter-label">CINEMA</label>
+
+                @*
+                    KRİTİK FIX:
+                    name="cinemaId" YANLIŞTI -> Controller selectedCinemaId bekliyor.
+                    name="selectedCinemaId" OLMAK ZORUNDA.
+                *@
                 <select id="cinemaSelect"
                         name="selectedCinemaId"
                         class="movies-filter-select">
                     <option value="">All</option>
+
                     @foreach (var c in Model.Cinemas)
                     {
-                        <option value="@c.CinemaID"
-                                @(Model.SelectedCinemaId == c.CinemaID ? "selected" : "")>
+                        var isSelected = Model.SelectedCinemaId.HasValue && Model.SelectedCinemaId.Value == c.CinemaID;
+
+                        <option value="@c.CinemaID" @(isSelected ? "selected" : "")>
                             @c.CinemaName
                         </option>
                     }
@@ -63,55 +93,139 @@
         </form>
     </div>
 
-    <!-- FİLM GRIDİ -->
+    <!-- ===================== FİLM GRIDİ ===================== -->
+    <div class="movies-grid">
+        @if (Model.Movies == null || !Model.Movies.Any())
+        {
+            <div class="movies-no-results">
+                No movies found for selected filters.
+            </div>
+        }
+        else
+        {
+            foreach (var movie in Model.Movies)
+            {
+                // Poster yolu
+                var posterPath = Url.Content("~/" + (string.IsNullOrEmpty(movie.PosterUrl)
+                    ? "images/default-poster.jpg"
+                    : movie.PosterUrl));
 
-    <div id="moviesContainer">
-        @Html.Partial("_MoviesGrid", Model.Movies)
+                // Şu an vizyonda mı?
+                bool isNowShowing = string.Equals(
+                    movie.Status,
+                    "Now Showing",
+                    System.StringComparison.OrdinalIgnoreCase
+                );
+
+                // Status badge sınıfı + yazısı
+                string badgeClass;
+                string statusText;
+
+                switch (movie.Status)
+                {
+                    case "Now Showing":
+                        badgeClass = "badge-now";
+                        statusText = "NOW SHOWING";
+                        break;
+                    case "Coming Soon":
+                        badgeClass = "badge-coming";
+                        statusText = "COMING SOON";
+                        break;
+                    default:
+                        badgeClass = "badge-archived";
+                        statusText = "ARCHIVED";
+                        break;
+                }
+
+                <div class="movie-card">
+                    <!-- POSTER -->
+                    <div class="movie-card-poster">
+                        <!-- Poster/title = DETAY SAYFASI -->
+                        <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
+                            <img src="@posterPath" alt="@movie.Title" />
+                        </a>
+                    </div>
+
+                    <!-- ALT SİYAH BLOK -->
+                    <div class="movie-card-body">
+                        <!-- BAŞLIK -->
+                        <div class="movie-card-title">
+                            <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
+                                @movie.Title
+                            </a>
+                        </div>
+
+                        <!-- ÇIKIŞ TARİHİ -->
+                        <div class="movie-card-meta">
+                            @if (movie.ReleaseDate.HasValue)
+                            {
+                                @:Release date @movie.ReleaseDate.Value.ToString("dd.MM.yyyy")
+                            }
+                            else
+                            {
+                                @:Release date TBA
+                            }
+                        </div>
+
+                        <!-- SÜRE -->
+                        <div class="movie-card-meta">
+                            Duration: @movie.Duration_min min
+                        </div>
+
+                        <!-- RATING + STATUS + BOOK NOW -->
+                        <div class="movie-card-rating">
+                            @if (movie.Ratings.HasValue)
+                            {
+                                <span class="movie-card-rating-score">
+                                    ⭐ @movie.Ratings.Value.ToString("0.0") / 10
+                                </span>
+                            }
+
+                            <span class="movie-status-badge @badgeClass">
+                                @statusText
+                            </span>
+
+                            @* SADE, BEYAZ YAZILI BOOK NOW – SADECE NOW SHOWING İÇİN *@
+                            @if (isNowShowing)
+                            {
+                                <a href="@Url.Action("Showtimes", "Tickets", new { movieId = movie.MovieID })"
+                                   class="movie-card-booknow">
+                                    BOOK&nbsp;NOW
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
     </div>
-
-
 </div>
 
-@section Scripts {
+@*
+    Layout'ında RenderSection("scripts") küçük harf.
+    O yüzden burada da @section scripts kullanıyoruz.
+*@
+@section scripts {
     <script>
-  (function () {
-    var $form  = $("#movies-filter-form");
-    var $search = $("input[name='searchTerm']");
-    var $genre  = $("#genreSelect");
-    var $cinema = $("#cinemaSelect");
-    var t = null;
+        // Filtreler değişince otomatik submit + search yazarken debounce
+        $(function () {
+            var $form = $("#movies-filter-form");
+            var $genre = $("#genreSelect");
+            var $cinema = $("#cinemaSelect");
+            var $search = $("#searchTerm");
 
-    function loadMovies() {
-      $.ajax({
-        url: "@Url.Action("Filter", "Movies")",
-        type: "GET",
-        data: {
-          searchTerm: $search.val(),
-          selectedGenreId: $genre.val(),
-          selectedCinemaId: $cinema.val()
-        },
-        success: function (html) {
-          $("#moviesContainer").html(html);
-        },
-        error: function (xhr) {
-          console.log("Filter error:", xhr.status, xhr.responseText);
-        }
-      });
-    }
+            // Dropdown değişince direkt filtrele (GET request)
+            $genre.on("change", function () { $form.submit(); });
+            $cinema.on("change", function () { $form.submit(); });
 
-    // form submit olursa sayfayı yenileme, AJAX yap
-    $form.on("submit", function (e) {
-      e.preventDefault();
-      loadMovies();
-    });
-
-    $genre.on("change", loadMovies);
-    $cinema.on("change", loadMovies);
-
-    $search.on("input", function () {
-      clearTimeout(t);
-      t = setTimeout(loadMovies, 300);
-    });
-  })();
+            // Search yazarken 350ms sonra submit (spam request atmasın diye)
+            var t = null;
+            $search.on("input", function () {
+                clearTimeout(t);
+                t = setTimeout(function () {
+                    $form.submit();
+                }, 350);
+            });
+        });
     </script>
 }

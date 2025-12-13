@@ -1,11 +1,9 @@
-﻿@model IEnumerable<FiveStars.Models.Movies>
+﻿﻿@model IEnumerable<FiveStars.Models.Movies>
 
 <div class="movies-grid">
     @if (Model == null || !Model.Any())
     {
-        <div class="movies-no-results">
-            No movies found for selected filters.
-        </div>
+        <div style="padding:20px;color:#fff;">No movies found.</div>
     }
     else
     {
@@ -15,80 +13,11 @@
                 ? "images/default-poster.jpg"
                 : movie.PosterUrl));
 
-            bool isNowShowing = string.Equals(
-                movie.Status,
-                "Now Showing",
-                System.StringComparison.OrdinalIgnoreCase
-            );
-
-            string badgeClass;
-            string statusText;
-
-            switch (movie.Status)
-            {
-                case "Now Showing":
-                    badgeClass = "badge-now";
-                    statusText = "NOW SHOWING";
-                    break;
-                case "Coming Soon":
-                    badgeClass = "badge-coming";
-                    statusText = "COMING SOON";
-                    break;
-                default:
-                    badgeClass = "badge-archived";
-                    statusText = "ARCHIVED";
-                    break;
-            }
             <div class="movie-card">
-                <div class="movie-card-poster">
-                    <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
-                        <img src="@posterPath" alt="@movie.Title" />
-                    </a>
-                </div>
-
-                <div class="movie-card-body">
-                    <div class="movie-card-title">
-                        <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
-                            @movie.Title
-                        </a>
-                    </div>
-
-                    <div class="movie-card-meta">
-                        @if (movie.ReleaseDate.HasValue)
-                        {
-                            @:Release date @movie.ReleaseDate.Value.ToString("dd.MM.yyyy")
-                        }
-                        else
-                        {
-                            @:Release date TBA
-                        }
-                    </div>
-
-                    <div class="movie-card-meta">
-                        Duration: @movie.Duration_min min
-                    </div>
-
-                    <div class="movie-card-rating">
-                        @if (movie.Ratings.HasValue)
-                        {
-                            <span class="movie-card-rating-score">
-                                ⭐ @movie.Ratings.Value.ToString("0.0") / 10
-                            </span>
-                        }
-
-                        <span class="movie-status-badge @badgeClass">
-                            @statusText
-                        </span>
-
-                        @if (isNowShowing)
-                        {
-                            <a href="@Url.Action("Showtimes", "Tickets", new { movieId = movie.MovieID })"
-                               class="movie-card-booknow">
-                                BOOK&nbsp;NOW
-                            </a>
-                        }
-                    </div>
-                </div>
+                <a href="@Url.Action("Details","Movies", new { id = movie.MovieID })" class="movie-card-link">
+                    <img src="@posterPath" alt="@movie.Title" class="movie-poster" />
+                    <div class="movie-title">@movie.Title</div>
+                </a>
             </div>
         }
     }
