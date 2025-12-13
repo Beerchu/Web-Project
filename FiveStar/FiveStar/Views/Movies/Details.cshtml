@@ -19,8 +19,9 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="@Url.Content("~/Content/detail.css")" />
+    <link rel="stylesheet" href="~/Content/detail.css" />
 }
+
 
 
 <div class="movie-detail-page container">
@@ -70,6 +71,18 @@
                     </li>
                 }
             </ul>
+            <!-- .Description -->
+
+            <div class="movie-detail-desc-card">
+                <div class="movie-detail-desc-title">Synopsis</div>
+                <p class="movie-detail-desc-text">
+                    @(string.IsNullOrWhiteSpace(Model.Description)
+            ? "No description available."
+            : Model.Description)
+                </p>
+            </div>
+
+
 
             <!-- BUTONLAR -->
 
