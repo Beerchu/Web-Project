@@ -7,12 +7,15 @@ using FiveStars.Models;
 
 namespace FiveStars.Controllers
 {
-    //[Authorize(Roles = "admin")]
+    // LAB 12 – AUTHORIZATION (WORKS WITH FORMS AUTH)
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // GET: Admin/Index
+        // =========================
+        // DASHBOARD
+        // =========================
         public ActionResult Index()
         {
             ViewBag.TotalMovies = _db.Movies.Count();
@@ -27,7 +30,9 @@ namespace FiveStars.Controllers
 
         public ActionResult Movies()
         {
-            var movies = _db.Movies.OrderByDescending(m => m.ReleaseDate).ToList();
+            var movies = _db.Movies
+                .OrderByDescending(m => m.ReleaseDate)
+                .ToList();
             return View(movies);
         }
 
@@ -97,6 +102,7 @@ namespace FiveStars.Controllers
                 .Include(s => s.Halls.Cinemas)
                 .OrderByDescending(s => s.ShowTime)
                 .ToList();
+
             return View(showings);
         }
 
@@ -112,12 +118,10 @@ namespace FiveStars.Controllers
                              DisplayName = c.CinemaName + " - " + h.HallType
                          }).ToList();
 
-
             ViewBag.HallID = new SelectList(halls, "HallID", "DisplayName");
 
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -138,7 +142,7 @@ namespace FiveStars.Controllers
                          select new
                          {
                              h.HallID,
-                             DisplayName = $"{c.CinemaName} - {h.HallType}"
+                             DisplayName = c.CinemaName + " - " + h.HallType
                          }).ToList();
 
             ViewBag.HallID = new SelectList(halls, "HallID", "DisplayName", showing.HallID);
@@ -166,7 +170,6 @@ namespace FiveStars.Controllers
             return View(showing);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditShowtime(Showings showing)
@@ -179,7 +182,6 @@ namespace FiveStars.Controllers
                 return RedirectToAction("Showtimes");
             }
 
-            // re-populate dropdowns if validation fails
             ViewBag.MovieID = new SelectList(_db.Movies, "MovieID", "Title", showing.MovieID);
 
             var halls = (from h in _db.Halls
@@ -194,7 +196,6 @@ namespace FiveStars.Controllers
 
             return View(showing);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -216,7 +217,9 @@ namespace FiveStars.Controllers
 
         public ActionResult Campaigns()
         {
-            var campaigns = _db.Campaigns.OrderByDescending(c => c.CampaignID).ToList();
+            var campaigns = _db.Campaigns
+                .OrderByDescending(c => c.CampaignID)
+                .ToList();
             return View(campaigns);
         }
 
@@ -238,7 +241,6 @@ namespace FiveStars.Controllers
             }
             return View(campaign);
         }
-
 
         public ActionResult EditCampaign(int id)
         {
@@ -281,7 +283,11 @@ namespace FiveStars.Controllers
 
         public ActionResult Users()
         {
-            var users = _db.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName).ToList();
+            var users = _db.Users
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .ToList();
+
             return View(users);
         }
 
@@ -291,6 +297,7 @@ namespace FiveStars.Controllers
             if (user == null) return HttpNotFound();
             return View(user);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditUser(Users user, string Password, bool? IsActive)
@@ -304,7 +311,7 @@ namespace FiveStars.Controllers
                     existingUser.LastName = user.LastName;
                     existingUser.Email = user.Email;
                     existingUser.Role = user.Role;
-                    existingUser.IsActive = IsActive ?? false;  // Handle nullable
+                    existingUser.IsActive = IsActive ?? false;
 
                     if (!string.IsNullOrEmpty(Password))
                     {
@@ -324,7 +331,8 @@ namespace FiveStars.Controllers
         public ActionResult DeleteUser(int id)
         {
             var user = _db.Users.Find(id);
-            if (user != null && user.UserID != 1) // Don't delete the main admin
+
+            if (user != null && user.UserID != 1)
             {
                 _db.Users.Remove(user);
                 _db.SaveChanges();
@@ -334,6 +342,7 @@ namespace FiveStars.Controllers
             {
                 TempData["ErrorMessage"] = "Cannot delete the main administrator!";
             }
+
             return RedirectToAction("Users");
         }
 

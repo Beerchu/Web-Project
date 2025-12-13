@@ -1,10 +1,11 @@
-﻿@{ ViewBag.Title = "Sign In"; }
+﻿@{ ViewBag.Title = "Sign In";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="login-container">
 
     <h2>Sign In</h2>
 
-    <form method="post">
+    <form method="post" action="/Account/Login">
 
         <div class="login-group">
             <label>Email</label>

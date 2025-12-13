@@ -26,7 +26,9 @@ namespace FiveStars.Controllers
         // CinemaDBEntities içinde Order ve Ticket'a erişim Entity Framework tarafından sağlanır.
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // Yardımcı Metot: Koltuk Düzenini Oluşturur (MEVCUT)
+        // =========================
+        // HELPER: DUMMY SEATING PLAN
+        // =========================
         private IEnumerable<SeatRow> GetDummySeatingPlan(string hallType)
         {
             var random = new Random();
@@ -35,7 +37,7 @@ namespace FiveStars.Controllers
             int soldCount = random.Next(5, 16);
             var allSeats = new List<Seat>();
 
-            // 1. RECLINER SIRA
+            // Recliner row
             var reclinerRow = new SeatRow { RowName = "R", Seats = new List<Seat>() };
             for (int i = 1; i <= 10; i++)
             {
@@ -51,7 +53,7 @@ namespace FiveStars.Controllers
             seatingPlan.Add(reclinerRow);
             allSeats.AddRange(reclinerRow.Seats);
 
-            // 2. STANDART SIRALAR (Ana blok: L'den H'ye)
+            // Standard rows
             for (char row = 'L'; row >= 'H'; row--)
             {
                 var standardRow = new SeatRow { RowName = row.ToString(), Seats = new List<Seat>() };
@@ -60,7 +62,7 @@ namespace FiveStars.Controllers
                     standardRow.Seats.Add(new Seat
                     {
                         SeatID = (int)row * 100 + i,
-                        SeatNumber = row.ToString() + i,
+                        SeatNumber = row + i.ToString(),
                         Status = "Available",
                         Type = "Standard",
                         ExtraPrice = 0
@@ -73,10 +75,8 @@ namespace FiveStars.Controllers
                 seatingPlan.Add(standardRow);
             }
 
-            // 3. Rastgele Koltukları Satılmış Olarak İşaretle (Sold)
-            var seatsToSell = allSeats.Where(s => s != null).OrderBy(s => random.Next()).Take(soldCount).ToList();
-
-            foreach (var seat in seatsToSell)
+            // Random sold seats
+            foreach (var seat in allSeats.OrderBy(s => random.Next()).Take(soldCount))
             {
                 seat.Status = "Sold";
             }
@@ -84,7 +84,10 @@ namespace FiveStars.Controllers
             return seatingPlan;
         }
 
-        // Mevcut Action: Film Detayından Gelinen Seans Seçim Sayfası (MEVCUT)
+        // =========================
+        // PUBLIC: SHOWTIMES
+        // =========================
+        [AllowAnonymous]
         public ActionResult Showtimes(int movieId)
         {
             var movie = _db.Movies.Find(movieId);
@@ -115,7 +118,10 @@ namespace FiveStars.Controllers
             return View(vm);
         }
 
-        // YENİ ACTION: Koltuk Seçim Sayfası (MEVCUT)
+        // =========================
+        // 🔐 PROTECTED: SEAT SELECTION
+        // =========================
+        [Authorize]
         public ActionResult SelectSeats(int showingId)
         {
             var showing = _db.Showings
@@ -125,9 +131,7 @@ namespace FiveStars.Controllers
                 .FirstOrDefault(s => s.ShowingID == showingId);
 
             if (showing == null)
-            {
                 return HttpNotFound();
-            }
 
             var viewModel = new SeatSelectionViewModel
             {
@@ -137,7 +141,6 @@ namespace FiveStars.Controllers
                 StartTime = showing.ShowTime,
                 ScreenType = showing.Halls.HallType,
                 TicketPrice = (decimal)showing.TicketPrice,
-
                 SeatingPlan = GetDummySeatingPlan(showing.Halls.HallType)
             };
 
@@ -197,9 +200,8 @@ namespace FiveStars.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }

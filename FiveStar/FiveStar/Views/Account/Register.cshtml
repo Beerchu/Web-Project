@@ -1,29 +1,31 @@
-﻿@model RegisterViewModel
-@{ ViewBag.Title = "Sign Up"; }
+﻿@{ ViewBag.Title = "Sign Up";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="login-container">
     <div class="login-box">
 
         <h2>Sign Up</h2>
 
-        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
-        {
-<label>First Name</label>
-                @Html.TextBoxFor(m => m.FirstName, new { @class = "input-box" })
-                                @Html.ValidationMessageFor(m => m.FirstName)
+        <form method="post" action="/Account/Register">
 
-                                                <label>Last Name (optional)</label>
-                                                                @Html.TextBoxFor(m => m.LastName, new { @class = "input-box" })
-                                                                                @Html.ValidationMessageFor(m => m.LastName)
+            <label>First Name</label>
+            <input type="text" name="firstName" class="input-box" required />
 
-                                                                                                <label>Email</label>
-                                                                                                                @Html.TextBoxFor(m => m.Email, new { @class = "input-box" })
-                                                                                                                                @Html.ValidationMessageFor(m => m.Email)
+            <label>Last Name (optional)</label>
+            <input type="text" name="lastName" class="input-box" />
 
-                                                                                                                                                <label>Password</label>
-                                                                                                                                                                @Html.PasswordFor(m => m.Password, new { @class = "input-box" })
+            <label>Email</label>
+            <input type="email" name="email" class="input-box" required />
 
-                                                                                                                                                                                <button type="submit" class="login-btn">CREATE ACCOUNT</button>}
+            <label>Password</label>
+            <input type="password" name="password" class="input-box" required />
+
+            <button type="submit" class="login-btn">CREATE ACCOUNT</button>
+
+            @if (ViewBag.Error != null)
+            {
+<div class="login-error">@ViewBag.Error</div>            }
+
+        </form>
     </div>
 </div>
-

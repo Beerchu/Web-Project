@@ -1,42 +1,41 @@
-﻿@using FiveStars.Models
-
+﻿@model FiveStars.Models.Users
 @{ ViewBag.Title = "My Profile";
-                var user = (User)Session["User"]; }
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
-<div class="profile-wrapper">
+<h2>My Profile</h2>
 
-    <div class="profile-card">
+<p>
+    <strong>Name:</strong>
+    @Model.FirstName @Model.LastName
+</p>
 
-        <!-- Header -->
-        <div class="profile-header">
-            <img src="@Url.Content("~/images/temppic.jpg")" class="profile-pic" />
+<p>
+    <strong>Email:</strong>
+    @Model.Email
+</p>
 
-            <div class="profile-info">
-                <h2>@user.FullName</h2>
-                <p>@user.Email</p>
-            </div>
-        </div>
+<p>
+    <strong>Role:</strong>
+    @(Model.Role ?? "customer")
+</p>
 
-        <hr />
+<p>
+    <strong>Status:</strong>
+    @((Model.IsActive.HasValue && Model.IsActive.Value) ? "Active" : "Inactive")
+</p>
 
-        <!-- Tickets -->
-        <div class="profile-section">
-            <h3>Your Tickets</h3>
-            <div class="placeholder-box">
-                <p>No tickets yet — feature coming soon.</p>
-            </div>
-        </div>
+<p>
+    <strong>Joined:</strong>
+    @(Model.CreatedAt.HasValue
+        ? Model.CreatedAt.Value.ToString("dd.MM.yyyy HH:mm")
+        : "N/A")
+</p>
 
-        <hr />
+@if (!string.IsNullOrEmpty(Model.ProfileImagePath))
+{
+<img src="@Url.Content(Model.ProfileImagePath)"
+     alt="Profile Image"
+     style="max-width:150px;" />}
 
-        <!-- Coupons -->
-        <div class="profile-section">
-            <h3>Your Coupons</h3>
-            <div class="placeholder-box">
-                <p>No coupons available — feature coming soon.</p>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+<br />
+<a href="/Account/Logout" class="login-btn">Logout</a>
