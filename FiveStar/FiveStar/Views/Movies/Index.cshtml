@@ -30,7 +30,7 @@
             <div class="movies-filter-group">
                 <label for="genreSelect" class="movies-filter-label">GENRE</label>
                 <select id="genreSelect"
-                        name="genreId"
+                        name="selectedGenreId"
                         class="movies-filter-select">
                     <option value="">All</option>
                     @foreach (var g in Model.Genres)
@@ -47,7 +47,7 @@
             <div class="movies-filter-group">
                 <label for="cinemaSelect" class="movies-filter-label">CINEMA</label>
                 <select id="cinemaSelect"
-                        name="cinemaId"
+                        name="selectedCinemaId"
                         class="movies-filter-select">
                     <option value="">All</option>
                     @foreach (var c in Model.Cinemas)
@@ -64,111 +64,54 @@
     </div>
 
     <!-- FİLM GRIDİ -->
-    <div class="movies-grid">
-        @if (Model.Movies == null || !Model.Movies.Any())
-        {
-            <div class="movies-no-results">
-                No movies found for selected filters.
-            </div>
-        }
-        else
-        {
-            foreach (var movie in Model.Movies)
-            {
-                // Poster yolu
-                var posterPath = Url.Content("~/" + (string.IsNullOrEmpty(movie.PosterUrl)
-                    ? "images/default-poster.jpg"
-                    : movie.PosterUrl));
 
-                // Şu an vizyonda mı?
-                bool isNowShowing = string.Equals(
-                    movie.Status,
-                    "Now Showing",
-                    System.StringComparison.OrdinalIgnoreCase
-                );
-
-                // Status badge sınıfı + yazısı
-                string badgeClass;
-                string statusText;
-
-                switch (movie.Status)
-                {
-                    case "Now Showing":
-                        badgeClass = "badge-now";
-                        statusText = "NOW SHOWING";
-                        break;
-                    case "Coming Soon":
-                        badgeClass = "badge-coming";
-                        statusText = "COMING SOON";
-                        break;
-                    default:
-                        badgeClass = "badge-archived";
-                        statusText = "ARCHIVED";
-                        break;
-                }
-
-                <div class="movie-card">
-                    <!-- POSTER -->
-                    <div class="movie-card-poster">
-                        <!-- Poster/title = DETAY SAYFASI -->
-                        <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
-                            <img src="@posterPath" alt="@movie.Title" />
-                        </a>
-                    </div>
-
-                    <!-- ALT SİYAH BLOK -->
-                    <div class="movie-card-body">
-                        <!-- BAŞLIK -->
-                        <div class="movie-card-title">
-                            <a href="@Url.Action("Details", "Movies", new { id = movie.MovieID })">
-                                @movie.Title
-                            </a>
-                        </div>
-
-                        <!-- ÇIKIŞ TARİHİ -->
-                        <div class="movie-card-meta">
-                            @if (movie.ReleaseDate.HasValue)
-                            {
-                                @:Release date @movie.ReleaseDate.Value.ToString("dd.MM.yyyy")
-                            }
-                            else
-                            {
-                                @:Release date TBA
-                            }
-                        </div>
-
-                        <!-- SÜRE -->
-                        <div class="movie-card-meta">
-                            Duration: @movie.Duration_min min
-                        </div>
-
-                        <!-- RATING + STATUS + BOOK NOW -->
-                        <div class="movie-card-rating">
-                            @if (movie.Ratings.HasValue)
-                            {
-                                <span class="movie-card-rating-score">
-                                    ⭐ @movie.Ratings.Value.ToString("0.0") / 10
-                                </span>
-                            }
-
-                            <span class="movie-status-badge @badgeClass">
-                                @statusText
-                            </span>
-
-                            @* SADE, BEYAZ YAZILI BOOK NOW – SADECE NOW SHOWING İÇİN *@
-
-                            @if (isNowShowing)
-                            {
-                                <a href="@Url.Action("Showtimes", "Tickets", new { movieId = movie.MovieID })"
-                                   class="movie-card-booknow">
-                                    BOOK&nbsp;NOW
-                                </a>
-                            }
-
-                        </div>
-                    </div>
-                </div>
-            }
-        }
+    <div id="moviesContainer">
+        @Html.Partial("_MoviesGrid", Model.Movies)
     </div>
+
+
 </div>
+
+@section Scripts {
+    <script>
+  (function () {
+    var $form  = $("#movies-filter-form");
+    var $search = $("input[name='searchTerm']");
+    var $genre  = $("#genreSelect");
+    var $cinema = $("#cinemaSelect");
+    var t = null;
+
+    function loadMovies() {
+      $.ajax({
+        url: "@Url.Action("Filter", "Movies")",
+        type: "GET",
+        data: {
+          searchTerm: $search.val(),
+          selectedGenreId: $genre.val(),
+          selectedCinemaId: $cinema.val()
+        },
+        success: function (html) {
+          $("#moviesContainer").html(html);
+        },
+        error: function (xhr) {
+          console.log("Filter error:", xhr.status, xhr.responseText);
+        }
+      });
+    }
+
+    // form submit olursa sayfayı yenileme, AJAX yap
+    $form.on("submit", function (e) {
+      e.preventDefault();
+      loadMovies();
+    });
+
+    $genre.on("change", loadMovies);
+    $cinema.on("change", loadMovies);
+
+    $search.on("input", function () {
+      clearTimeout(t);
+      t = setTimeout(loadMovies, 300);
+    });
+  })();
+    </script>
+}

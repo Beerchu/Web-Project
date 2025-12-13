@@ -25,14 +25,16 @@ namespace FiveStars.Controllers
             if (selectedGenreId.HasValue)
             {
                 // Assuming you have a Genres_Movies table
-                query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId));
+                query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId.Value));
+
+
             }
 
             // Apply cinema filter (if you have Showings)
             if (selectedCinemaId.HasValue)
             {
-                query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId));
-            }
+                query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId.Value));
+z            }
 
             // Order and get results
             var movies = query.OrderByDescending(m => m.ReleaseDate).ToList();
@@ -59,6 +61,33 @@ namespace FiveStars.Controllers
 
             return View(viewModel);
         }
+        //
+
+        [HttpGet]
+        public PartialViewResult Filter(string searchTerm = "", int? selectedGenreId = null, int? selectedCinemaId = null)
+        {
+            var query = _db.Movies.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(m => m.Title.Contains(searchTerm) ||
+                                         (m.Description != null && m.Description.Contains(searchTerm)));
+            }
+
+            if (selectedGenreId.HasValue)
+            {
+                query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId.Value));
+            }
+
+            if (selectedCinemaId.HasValue)
+            {
+                query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId.Value));
+            }
+
+            var movies = query.OrderByDescending(m => m.ReleaseDate).ToList();
+            return PartialView("_MoviesGrid", movies);
+        }
+
 
         // GET: Movies/Details/5
         public ActionResult Details(int id)
