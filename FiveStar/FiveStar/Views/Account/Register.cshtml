@@ -1,31 +1,44 @@
-﻿@{ ViewBag.Title = "Sign Up";
-                Layout = "~/Views/Shared/_Layout.cshtml"; }
+﻿@{
+    ViewBag.Title = "Sign Up";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<div class="login-container">
-    <div class="login-box">
-
-        <h2>Sign Up</h2>
+<div class="register-container">
+    <div class="register-box">
+        <h2>Create Account</h2>
 
         <form method="post" action="/Account/Register">
 
-            <label>First Name</label>
-            <input type="text" name="firstName" class="input-box" required />
+            <div class="register-group">
+                <label>First Name</label>
+                <input type="text" name="firstName" required />
+            </div>
 
-            <label>Last Name (optional)</label>
-            <input type="text" name="lastName" class="input-box" />
+            <div class="register-group">
+                <label>Last Name (optional)</label>
+                <input type="text" name="lastName" />
+            </div>
 
-            <label>Email</label>
-            <input type="email" name="email" class="input-box" required />
+            <div class="register-group">
+                <label>Email</label>
+                <input type="email" name="email" required />
+            </div>
 
-            <label>Password</label>
-            <input type="password" name="password" class="input-box" required />
+            <div class="register-group">
+                <label>Password</label>
+                <input type="password" name="password" required />
+            </div>
 
-            <button type="submit" class="login-btn">CREATE ACCOUNT</button>
+            <button type="submit" class="register-btn">
+                Sign Up
+            </button>
 
             @if (ViewBag.Error != null)
             {
-<div class="login-error">@ViewBag.Error</div>            }
-
+                <div class="register-error">
+                    @ViewBag.Error
+                </div>
+            }
         </form>
     </div>
 </div>
