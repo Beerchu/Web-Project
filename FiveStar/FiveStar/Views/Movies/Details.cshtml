@@ -94,6 +94,12 @@
                     BUY TICKET
                 </a>
             }
+            else if (string.Equals(Model.Status?.Trim(), "Coming Soon", StringComparison.OrdinalIgnoreCase))
+            {
+                <button class="movie-detail-btn-primary disabled" disabled>
+                    COMING SOON
+                </button>
+            }
             else
             {
                 <button class="movie-detail-btn-primary disabled" disabled>

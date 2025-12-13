@@ -1,54 +1,216 @@
-﻿﻿ /* --------------- SHOWTIME (SEANS SEÇİMİ) SAYFASI -----------------------*/
-/* Showtime sayfasının genel padding’i */
+﻿/* --------------- SHOWTIME (SEANS SEÇİMİ) SAYFASI ----------------------- */
+
 .showtime-page {
-    padding: 40px 120px 80px;
+    padding: 40px 0 80px;
     color: #fff;
 }
-/* Üstteki film bilgisi + poster alanını yan yana tutan flex */
-.showtime-header {
+
+/* 2 kolon düzen: sol (liste) + sağ (sticky poster) */
+.showtime-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
     display: flex;
-    gap: 30px;
+    gap: 40px;
     align-items: flex-start;
-    margin-bottom: 0px;
 }
 
-/* "Please select a cinema and time..." altındaki başlıklar
-   (örn. "Cumartesi, 08 Kasım 2025") */
+.showtime-main {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.showtime-aside {
+    flex: 0 0 360px;
+}
+
+/* Üst açıklama alanı (poster artık burada değil) */
+.showtime-top {
+    margin-bottom: 18px;
+}
+
+.showtime-subtitle {
+    margin: 10px 0 22px;
+    font-size: 15px;
+    opacity: .9;
+    max-width: 52ch;
+}
+
+/* Sticky poster kartı */
+.showtime-poster-card {
+    position: sticky;
+    top: 110px;
+    border-radius: 22px;
+    overflow: hidden;
+    background: rgba(0,0,0,.25);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 16px 40px rgba(0,0,0,.35);
+}
+
+    .showtime-poster-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+/* Gün blokları: okunabilirlik için kart efekti */
+.showtime-day-block {
+    margin-top: 22px;
+    padding: 18px 18px 10px;
+    border-radius: 20px;
+    background: rgba(0,0,0,.32);
+    border: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(6px);
+}
+
 .showtime-section-title {
     font-size: 22px;
-    margin-bottom: 40px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    margin: 0 0 16px;
+    text-transform: capitalize;
 }
 
-/* Sinema adı için başlık */
+/* Sinema blokları */
+.cinema-block {
+    padding: 14px 0 18px;
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+    .cinema-block:first-of-type {
+        border-top: none;
+        padding-top: 0;
+    }
+
 .cinema-name {
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    opacity: .95;
 }
 
-/* Seans butonlarını yatayda sarmalayan container */
+/* Saat “chip” alanı: grid ile hizalı */
 .showtime-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 10px;
 }
 
-/* Tek tek seans butonu (chip) – saat + fiyat */
 .showtime-chip {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
+    justify-content: center;
+    height: 38px;
+    padding: 0 12px;
     border-radius: 999px;
-    background: #111;
-    border: 1px solid #333;
+    background: rgba(17,17,17,.75);
+    border: 1px solid rgba(255,255,255,.14);
     font-size: 13px;
     text-decoration: none;
     color: #fff;
-    transition: background .2s, transform .2s, border-color .2s;
+    transition: background .18s ease, transform .18s ease, border-color .18s ease;
 }
-    /* Seans butonu hover – kırmızıya döner, hafif yukarı çıkar */
-    .showtime-chip:hover {
+
+.showtime-chip-time {
+    font-weight: 600;
+    letter-spacing: .6px;
+}
+
+.showtime-chip:hover {
+    background: #e50914;
+    border-color: #e50914;
+    transform: translateY(-1px);
+}
+
+.showtime-chip:active {
+    transform: translateY(0);
+}
+
+.showtime-chip:focus-visible {
+    outline: 2px solid rgba(229,9,20,.9);
+    outline-offset: 2px;
+}
+
+.showtime-empty {
+    opacity: .85;
+    margin-top: 12px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .showtime-layout {
+        flex-direction: column;
+        gap: 24px;
+        padding: 0 16px;
+    }
+
+    .showtime-aside {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .showtime-poster-card {
+        position: relative;
+        top: 0;
+        max-width: 340px;
+        margin: 0 auto;
+    }
+}
+/* Action buttons (Back links) */
+.showtime-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+    .showtime-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+        text-decoration: none;
+        user-select: none;
+        transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    }
+
+    /* Primary */
+    .showtime-actions .btn-primary {
         background: #e50914;
-        border-color: #e50914;
-        transform: translateY(-1px);
+        border: 1px solid #e50914;
+        color: #fff;
+    }
+
+        .showtime-actions .btn-primary:hover {
+            background: #ff1a24;
+            border-color: #ff1a24;
+            transform: translateY(-1px);
+        }
+
+    /* Ghost */
+    .showtime-actions .btn-ghost {
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.18);
+        color: #fff;
+    }
+
+        .showtime-actions .btn-ghost:hover {
+            background: rgba(255,255,255,.12);
+            border-color: rgba(255,255,255,.28);
+            transform: translateY(-1px);
+        }
+
+    .showtime-actions .btn:active {
+        transform: translateY(0);
+    }
+
+    .showtime-actions .btn:focus-visible {
+        outline: 2px solid rgba(229,9,20,.9);
+        outline-offset: 2px;
     }
