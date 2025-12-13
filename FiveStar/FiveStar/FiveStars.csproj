@@ -227,7 +227,7 @@
     <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\HtmlPage1.html" />
-    <Content Include="Content\login.css" />
+    <Content Include="Content\login_register.css" />
     <Content Include="Content\movies.css" />
     <Content Include="Content\profile.css" />
     <Content Include="Content\showtime.css" />
