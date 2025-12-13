@@ -10,7 +10,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 40px;
+    gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -125,17 +125,26 @@
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 20px;
-} 
+}
 
 /* Ana kırmızı buton */
-/* Kırmızı ana buton (BUY TICKET) */
+/* Kırmızı ana buton (BUY TICKET) - TEK KAYNAK */
 .movie-detail-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* BUTONUN UZAMASINI BİTİREN 3LÜ */
+    align-self: flex-start;
+    flex: 0 0 auto;
+    width: auto !important;
+    min-width: 190px;
+    height: 44px;
+    padding: 0 26px;
     background: #ff2020;
     color: #fff;
     border-radius: 999px;
-    padding: 10px 10px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     border: none;
     outline: none;
@@ -143,8 +152,26 @@
     text-decoration: none;
     letter-spacing: 0.08em;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
+
+    .movie-detail-btn-primary:hover:not(.disabled) {
+        background: #ff4040;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Archived / Coming Soon için disabled görünüm */
+    .movie-detail-btn-primary.disabled {
+        background: rgba(255,255,255,0.12);
+        color: rgba(255,255,255,0.55);
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+        pointer-events: none;
+    }
+
+
 
 /* BUY TICKET'ın şerit gibi uzamasını engelle */
 .movie-detail-btn-primary {
@@ -186,7 +213,15 @@
 /* İkincil buton */
 /* "BACK TO HOME" butonu – beyaz çerçeveli */
 .movie-detail-btn-secondary {
-    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex: 0 0 auto;
+    width: auto !important;
+    height: 44px;
+    padding: 0 22px;
+    background: #3a3e4a;
     border-radius: 999px;
     padding: 10px 10px;
     font-size: 13px;
@@ -198,14 +233,14 @@
     transition: background 0.1s ease, color 0.1s ease;
 }
 
-    .movie-detail-btn-secondary:hover {
-        background: rgba(255,255,255,0.12);
-        color: #ffffff;
-        border-color: rgba(255,255,255,0.7);
-    }
+.movie-detail-btn-secondary:hover {
+    background: #ffffff11;
+    color: #eb6e96;
+    border-color: rgba(255,255,255,0.7);
+ }
 
 
-/* Link gibi görünen geri butonu *//* "Back to Movies" butonu – sadece yazı */
+/* Link gibi görünen geri butonu */ /* "Back to Movies" butonu – sadece yazı */
 .movie-detail-btn-ghost {
     border: none;
     background: none;
@@ -249,4 +284,39 @@
     align-items: center;
     min-width: 190px; /* buton gibi dursun */
     padding: 14px 22px !important;
+}
+/* Global CSS butonu block/100% yapıyorsa bunu ezer */
+.movie-detail-info > a.movie-detail-btn-primary,
+.movie-detail-info > button.movie-detail-btn-primary {
+    display: inline-flex !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+    align-self: flex-start !important;
+}
+.movie-detail-info a.movie-detail-btn-primary {
+    width: auto !important;
+}
+.movie-detail-desc-card {
+    margin-top: 10px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(10px);
+    max-width: 680px;
+}
+
+.movie-detail-desc-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #bdbdbd;
+    margin-bottom: 8px;
+}
+
+.movie-detail-desc-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #e6e6e6;
 }
