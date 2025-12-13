@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;      // Include() metodu için gerekli
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using FiveStars.Models;
@@ -11,20 +11,17 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // Yardımcı Metot: Koltuk Düzenini Oluşturur
-        // Controllers/TicketsController.cs dosyasında GetDummySeatingPlan metodu yerine bu kodu kullanın.
-
+        // =========================
+        // HELPER: DUMMY SEATING PLAN
+        // =========================
         private IEnumerable<SeatRow> GetDummySeatingPlan(string hallType)
         {
-            // Rastgelelik için basit bir Random nesnesi
             var random = new Random();
             var seatingPlan = new List<SeatRow>();
-
-            // Toplam satılmış koltuk sayısını rastgele belirleyelim (Örn: 5 ile 15 arasında)
             int soldCount = random.Next(5, 16);
             var allSeats = new List<Seat>();
 
-            // 1. RECLINER SIRA
+            // Recliner row
             var reclinerRow = new SeatRow { RowName = "R", Seats = new List<Seat>() };
             for (int i = 1; i <= 10; i++)
             {
@@ -32,7 +29,7 @@ namespace FiveStars.Controllers
                 {
                     SeatID = 100 + i,
                     SeatNumber = "R" + i,
-                    Status = "Available", // Başlangıçta hepsi müsait
+                    Status = "Available",
                     Type = "Recliner",
                     ExtraPrice = 15.00m
                 });
@@ -40,7 +37,7 @@ namespace FiveStars.Controllers
             seatingPlan.Add(reclinerRow);
             allSeats.AddRange(reclinerRow.Seats);
 
-            // 2. STANDART SIRALAR (Ana blok: L'den H'ye)
+            // Standard rows
             for (char row = 'L'; row >= 'H'; row--)
             {
                 var standardRow = new SeatRow { RowName = row.ToString(), Seats = new List<Seat>() };
@@ -49,26 +46,22 @@ namespace FiveStars.Controllers
                     standardRow.Seats.Add(new Seat
                     {
                         SeatID = (int)row * 100 + i,
-                        SeatNumber = row.ToString() + i,
-                        Status = "Available", // Başlangıçta hepsi müsait
+                        SeatNumber = row + i.ToString(),
+                        Status = "Available",
                         Type = "Standard",
                         ExtraPrice = 0
                     });
                 }
-                // Orta koridor boşluğunu ekle
+
                 standardRow.Seats.Insert(10, null);
                 standardRow.Seats.Insert(11, null);
 
-                // Null olmayan koltukları ana listeye ekle
                 allSeats.AddRange(standardRow.Seats.Where(s => s != null));
                 seatingPlan.Add(standardRow);
             }
 
-            // 3. Rastgele Koltukları Satılmış Olarak İşaretle (Sold)
-            // Tüm müsait koltuklar arasından rastgele soldCount kadarını seç
-            var seatsToSell = allSeats.OrderBy(s => random.Next()).Take(soldCount).ToList();
-
-            foreach (var seat in seatsToSell)
+            // Random sold seats
+            foreach (var seat in allSeats.OrderBy(s => random.Next()).Take(soldCount))
             {
                 seat.Status = "Sold";
             }
@@ -76,7 +69,10 @@ namespace FiveStars.Controllers
             return seatingPlan;
         }
 
-        // Mevcut Action: Film Detayından Gelinen Seans Seçim Sayfası
+        // =========================
+        // PUBLIC: SHOWTIMES
+        // =========================
+        [AllowAnonymous]
         public ActionResult Showtimes(int movieId)
         {
             var movie = _db.Movies.Find(movieId);
@@ -107,8 +103,10 @@ namespace FiveStars.Controllers
             return View(vm);
         }
 
-        // YENİ ACTION: Koltuk Seçim Sayfası
-        // Showtimes.cshtml sayfasından gelen 'showingId' parametresini bekler.
+        // =========================
+        // 🔐 PROTECTED: SEAT SELECTION
+        // =========================
+        [Authorize]
         public ActionResult SelectSeats(int showingId)
         {
             var showing = _db.Showings
@@ -118,9 +116,7 @@ namespace FiveStars.Controllers
                 .FirstOrDefault(s => s.ShowingID == showingId);
 
             if (showing == null)
-            {
                 return HttpNotFound();
-            }
 
             var viewModel = new SeatSelectionViewModel
             {
@@ -130,7 +126,6 @@ namespace FiveStars.Controllers
                 StartTime = showing.ShowTime,
                 ScreenType = showing.Halls.HallType,
                 TicketPrice = (decimal)showing.TicketPrice,
-
                 SeatingPlan = GetDummySeatingPlan(showing.Halls.HallType)
             };
 
@@ -140,9 +135,8 @@ namespace FiveStars.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }
