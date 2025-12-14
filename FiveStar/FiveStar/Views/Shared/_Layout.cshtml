@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewBag.Title - Five Stars Cinema</title>
 
-
-
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -20,12 +18,123 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="@Url.Content("~/Content/login.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/profile.css")" />
-    @RenderSection("Styles", required: false) <!--  bu linklerin önünde olursa iş tırt-->
+    <link rel="stylesheet" href="@Url.Content("~/Content/admin.css")" />
+    @RenderSection("Styles", required: false)
+
     <!-- Icons -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Add some inline styles to match the navbar to footer -->
+    <style>
+        .navbar {
+            background-color: #121212 !important; /* Match footer background */
+            border-bottom: 1px solid #2a2a2a !important; /* Match footer border style */
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 20px 5% !important; /* Add some horizontal padding */
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            z-index: 10 !important;
+            position: relative !important;
+        }
+
+            /* Make sure navbar links are visible on dark background */
+            .navbar a {
+                color: #fff !important;
+                text-decoration: none !important;
+                font-weight: bold !important;
+                padding: 5px 10px !important;
+                transition: color 0.3s !important;
+            }
+
+                .navbar a:hover {
+                    color: #e50914 !important;
+                }
+
+        /* Ensure dropdown matches the dark theme */
+        .dropdown-content {
+            background-color: #121212 !important; /* Match navbar/footer */
+            border: 1px solid #2a2a2a !important;
+        }
+
+        /* Update the footer to ensure consistency */
+        .footer {
+            background: #121212;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 64px;
+            width: 100%;
+        }
+
+            .footer .footer-inner {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 24px;
+            }
+
+            .footer .footer-links a {
+                color: #cfcfcf;
+                margin-right: 24px;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+                .footer .footer-links a:last-child {
+                    margin-right: 0;
+                }
+
+                .footer .footer-links a:hover {
+                    color: #ffffff;
+                }
+
+            .footer .social-icons a {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: #1a1a1a;
+                color: #cfcfcf;
+                margin-left: 12px;
+                text-decoration: none;
+            }
+
+                .footer .social-icons a:first-child {
+                    margin-left: 0;
+                }
+
+                .footer .social-icons a:hover {
+                    background: #e50914;
+                    color: #fff;
+                }
+
+            .footer .social-icons i {
+                font-size: 16px;
+                line-height: 1;
+            }
+
+        @@media (max-width: 720px) {
+            .footer .footer-inner {
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer .footer-links a {
+                margin: 0 12px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="main-wrapper">
@@ -60,11 +169,6 @@
             <!-- RIGHT SECTION (Search + User Menu) -->
             <div class="navbar-right-section">
 
-                <!-- Search Icon -->
-                <a href="#" class="search-button" aria-label="Search">
-                    <i class="fas fa-search"></i>
-                </a>
-
                 <!-- Hamburger + Dropdown -->
                 <div class="user-menu-dropdown">
 
@@ -80,14 +184,16 @@
                                class="dropdown-action-btn sign-in">Sign In</a>
 
                             <a href="@Url.Action("Register", "Account")"
-                               class="dropdown-action-btn sign-up">Sign Up</a> }
+                               class="dropdown-action-btn sign-up">Sign Up</a>
+                        }
                         else
                         {
                             <a href="@Url.Action("UserProfile", "Account")"
                                class="dropdown-action-btn">My Profile</a>
 
                             <a href="@Url.Action("Logout", "Account")"
-                               class="dropdown-action-btn">Sign Out</a>}
+                               class="dropdown-action-btn">Sign Out</a>
+                        }
 
                         <hr />
 
@@ -109,6 +215,21 @@
 
     </div>
 
+    <!-- ====================== FOOTER ====================== -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <nav class="footer-links">
+                <a href="#">Copyright &copy; @DateTime.Now.Year Five Stars Cinema</a>
+                <a href="#">Privacy Policy</a>
+            </nav>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+    <!-- ====================== END FOOTER ====================== -->
 
     <!-- ====================== SCRIPTS ====================== -->
     @Scripts.Render("~/bundles/jquery")

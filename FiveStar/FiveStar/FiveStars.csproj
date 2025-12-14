@@ -221,6 +221,7 @@
       <DependentUpon>FiveStars.mdf</DependentUpon>
     </Content>
     <Content Include="Content\about.css" />
+    <Content Include="Content\admin.css" />
     <Content Include="Content\campaigns.css" />
     <Content Include="Content\cinemas.css" />
     <Content Include="Content\contact-style.css" />

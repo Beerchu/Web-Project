@@ -5,17 +5,70 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit Campaign</h2>
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Edit Campaign</h1>
+        <a href="@Url.Action("Campaigns", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Campaigns
+        </a>
+    </div>
 
-@using (Html.BeginForm("EditCampaign", "Admin", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+    <div class="form-container">
+        @using (Html.BeginForm("EditCampaign", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.CampaignID)
 
-    @Html.HiddenFor(m => m.CampaignID)
+            <div class="form-group">
+                <label class="form-label">Title *</label>
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter campaign title", required = "required" })
+                @Html.ValidationMessageFor(m => m.Title, "", new { style = "color: #dc3545; font-size: 12px;" })
+            </div>
 
-    @Html.EditorForModel() <!-- Tüm scalar alanlar için otomatik form -->
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter campaign description...", rows = 4 })
+                @Html.ValidationMessageFor(m => m.Description, "", new { style = "color: #dc3545; font-size: 12px;" })
+            </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    @Html.ActionLink("Back to list", "Campaigns", null, new { @class = "btn btn-secondary" })
-}
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Image URL</label>
+                    @Html.TextBoxFor(m => m.ImageUrl, new { @class = "form-control", placeholder = "images/campaigns/special-offer.jpg" })
+
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        var imagePath = Url.Content("~/" + Model.ImageUrl);
+                        <div class="image-preview">
+                            <p style="margin: 0 0 10px 0; color: #b9c3cf;">Current image:</p>
+                            <img src="@imagePath" alt="@Model.Title" />
+                        </div>
+                    }
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration Text</label>
+                    @Html.TextBoxFor(m => m.DurationText, new { @class = "form-control", placeholder = "e.g., 2 weeks" })
+                    @Html.ValidationMessageFor(m => m.DurationText, "", new { style = "color: #dc3545; font-size: 12px;" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Active Status</label>
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                        @Html.CheckBoxFor(m => m.IsActive, new { style = "width: 18px; height: 18px;" })
+                        <label style="margin: 0; font-weight: 500;">Active Campaign</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Campaign
+                </button>
+                <a href="@Url.Action("Campaigns", "Admin")" class="btn btn-secondary">Cancel</a>
+            </div>
+        }
+    </div>
+</div>

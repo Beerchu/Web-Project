@@ -1,60 +1,87 @@
 ﻿@model FiveStars.Models.Users
+
 @{
     ViewBag.Title = "Edit User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit User</h2>
-
-@using (Html.BeginForm("EditUser", "Admin", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-
-    @Html.HiddenFor(model => model.UserID)
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Edit User</h1>
+        <a href="@Url.Action("Users", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Users
+        </a>
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-    </div>
+    <div class="form-container">
+        @using (Html.BeginForm("EditUser", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.UserID)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstName, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", placeholder = "Enter first name" })
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { style = "color: #dc3545; font-size: 12px;" })
+                </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label" })
-        @Html.DropDownListFor(model => model.Role,
-            new SelectList(new[] { "customer", "admin" }),
-            "Select Role",
-            new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
-    </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LastName, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", placeholder = "Enter last name" })
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { style = "color: #dc3545; font-size: 12px;" })
+                </div>
+            </div>
 
-    <div class="form-group form-check">
-        @{
-            bool isActive = Model.IsActive.HasValue ? Model.IsActive.Value : false;
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter email address", type = "email" })
+                @Html.ValidationMessageFor(model => model.Email, "", new { style = "color: #dc3545; font-size: 12px;" })
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Role, new { @class = "form-label" })
+                    <div class="role-selector">
+                        <select name="Role" class="form-control">
+                            <option value="customer" @(Model.Role == "customer" ? "selected" : "") style="color: #3498db; font-weight: 500;">Customer</option>
+                            <option value="admin" @(Model.Role == "admin" ? "selected" : "") style="color: #e50914; font-weight: 800;">👑 Administrator</option>
+                        </select>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Role, "", new { style = "color: #e50914; font-size: 12px;" })
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Account Status</label>
+                    <div class="checkbox-container">
+                        @{
+                            bool isActive = Model.IsActive.HasValue ? Model.IsActive.Value : false;
+                        }
+                        <input type="checkbox" name="IsActive" value="true" @(isActive ? "checked" : "") id="IsActiveCheckbox" />
+                        <label for="IsActiveCheckbox" style="margin: 0; font-weight: 500; cursor: pointer;">
+                            @if (isActive)
+                            {
+                                <span style="color: #2ecc71;">Active Account</span>
+                            }
+                            else
+                            {
+                                <span style="color: #e74c3c;">Inactive Account</span>
+                            }
+                        </label>
+                        <input type="hidden" name="IsActive" value="false" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">New Password (leave empty to keep current)</label>
+                <input type="password" name="Password" class="form-control" placeholder="Leave empty to keep current password" />
+            </div>
+
+            <div class="form-actions">
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <a href="@Url.Action("Users", "Admin")" class="btn btn-secondary">Cancel</a>
+            </div>
         }
-        <input type="checkbox" name="IsActive" value="true" @(isActive ? "checked" : "") class="form-check-input" />
-        <label class="form-check-label" for="IsActive">Active</label>
-        <input type="hidden" name="IsActive" value="false" />
     </div>
-
-    <div class="form-group">
-        <label class="control-label">New Password (leave empty to keep current)</label>
-        <input type="password" name="Password" class="form-control" placeholder="Leave empty to keep current password" />
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
-        @Html.ActionLink("Cancel", "Users", null, new { @class = "btn btn-secondary" })
-    </div>
-}
+</div>

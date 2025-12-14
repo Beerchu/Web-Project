@@ -5,45 +5,60 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <h2>Create New Campaign</h2>
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Create New Campaign</h1>
+        <a href="@Url.Action("Campaigns", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Campaigns
+        </a>
+    </div>
 
-    @using (Html.BeginForm("CreateCampaign", "Admin", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-container">
+        @using (Html.BeginForm("CreateCampaign", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { style = "color: #dc3545;" })
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
+            <div class="form-group">
+                <label class="form-label">Title *</label>
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter campaign title", required = "required" })
+                @Html.ValidationMessageFor(m => m.Title, "", new { style = "color: #dc3545; font-size: 12px;" })
+            </div>
 
-                        @*
-                            We don't know the exact properties of Campaigns model here,
-                            so we let MVC auto-generate editors for all scalar fields.
-                            This avoids compile errors and still works with your EF model.
-                        *@
-                        @Html.EditorForModel()
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter campaign description...", rows = 4 })
+                @Html.ValidationMessageFor(m => m.Description, "", new { style = "color: #dc3545; font-size: 12px;" })
+            </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Image URL</label>
+                    @Html.TextBoxFor(m => m.ImageUrl, new { @class = "form-control", placeholder = "images/campaigns/special-offer.jpg" })
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration Text</label>
+                    @Html.TextBoxFor(m => m.DurationText, new { @class = "form-control", placeholder = "e.g., 2 weeks" })
+                    @Html.ValidationMessageFor(m => m.DurationText, "", new { style = "color: #dc3545; font-size: 12px;" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Active Status</label>
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                        @Html.CheckBoxFor(m => m.IsActive, new { style = "width: 18px; height: 18px;", @checked = "checked" })
+                        <label style="margin: 0; font-weight: 500;">Active Campaign</label>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Actions</h5>
-
-                        <button type="submit" class="btn btn-primary btn-block mb-2">
-                            <i class="fas fa-save"></i> Save Campaign
-                        </button>
-
-                        <a href="@Url.Action("Campaigns", "Admin")" class="btn btn-secondary btn-block">
-                            <i class="fas fa-times"></i> Cancel
-                        </a>
-                    </div>
-                </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Campaign
+                </button>
+                <a href="@Url.Action("Campaigns", "Admin")" class="btn btn-secondary">Cancel</a>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>

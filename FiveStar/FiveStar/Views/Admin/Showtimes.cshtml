@@ -5,91 +5,101 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Showtimes Management</h2>
-
-<p>
-    @Html.ActionLink("Create New Showtime", "CreateShowtime", null, new { @class = "btn btn-success" })
-</p>
-
-<a href="@Url.Action("Index", "Admin")" class="btn btn-outline-secondary btn-block mt-2">
-    <i class="fas fa-home"></i> Back to Dashboard
-</a>
-
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Showtimes Management</h1>
+        <a href="@Url.Action("Index", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
     </div>
-}
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Show Time</th>
-            <th>Movie</th>
-            <th>Hall & Cinema</th>
-            <th>Ticket Price</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var showing in Model)
-        {
-            <tr>
-                <td>@showing.ShowingID</td>
-                <td>
-                    <strong>@showing.ShowTime.ToString("dd MMM yyyy")</strong><br>
-                    <span class="text-muted">@showing.ShowTime.ToString("HH:mm")</span>
-                </td>
-                <td>
-                    @if (showing.Movies != null)
-                    {
-                        <strong>@showing.Movies.Title</strong>
-                    }
-                    else if (showing.MovieID.HasValue)
-                    {
-                        <text>Movie ID: @showing.MovieID</text>
-                    }
-                    else
-                    {
-                        <text>No movie</text>
-                    }
-                </td>
-                <td>
-                    @if (showing.Halls != null)
-                    {
-                        @:Hall: @showing.Halls.HallType
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="admin-alert success">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        </div>
+    }
 
+    <div class="action-buttons">
+        <a href="@Url.Action("CreateShowtime", "Admin")" class="btn btn-success">
+            <i class="fas fa-plus"></i> Create New Showtime
+        </a>
+    </div>
 
-
-
-                        if (showing.Halls.Cinemas != null)
-                        {
-                            <br>
-                            <span class="text-muted">@showing.Halls.Cinemas.CinemaName</span>
-                        }
-                    }
-                    else if (showing.HallID.HasValue)
-                    {
-                        <text>Hall ID: @showing.HallID</text>
-                    }
-                    else
-                    {
-                        <text>No hall</text>
-                    }
-                </td>
-                <td>@showing.TicketPrice.ToString("C")</td>
-                <td>
-                    @Html.ActionLink("Edit", "EditShowtime", new { id = showing.ShowingID }, new { @class = "btn btn-warning btn-sm" })
-                    @using (Html.BeginForm("DeleteShowtime", "Admin", new { id = showing.ShowingID }, FormMethod.Post, new { style = "display:inline;" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Delete</button>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Show Time</th>
+                    <th>Movie</th>
+                    <th>Hall & Cinema</th>
+                    <th>Ticket Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var showing in Model)
+                {
+                    <tr>
+                        <td>@showing.ShowingID</td>
+                        <td>
+                            <strong>@showing.ShowTime.ToString("dd MMM yyyy")</strong><br>
+                            <span style="color: #6c757d;">@showing.ShowTime.ToString("HH:mm")</span>
+                        </td>
+                        <td>
+                            @if (showing.Movies != null)
+                            {
+                                <strong>@showing.Movies.Title</strong>
+                            }
+                            else if (showing.MovieID.HasValue)
+                            {
+                                <span>Movie ID: @showing.MovieID</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">No movie</span>
+                            }
+                        </td>
+                        <td>
+                            @if (showing.Halls != null)
+                            {
+                                <span>Hall: @showing.Halls.HallType</span>
+                                if (showing.Halls.Cinemas != null)
+                                {
+                                    <br>
+                                    <span style="color: #6c757d;">@showing.Halls.Cinemas.CinemaName</span>
+                                }
+                            }
+                            else if (showing.HallID.HasValue)
+                            {
+                                <span>Hall ID: @showing.HallID</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">No hall</span>
+                            }
+                        </td>
+                        <td>
+                            <span style="font-weight: 600;">@showing.TicketPrice.ToString("C")</span>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 5px;">
+                                <a href="@Url.Action("EditShowtime", new { id = showing.ShowingID })" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                @using (Html.BeginForm("DeleteShowtime", "Admin", new { id = showing.ShowingID }, FormMethod.Post, new { @class = "inline-form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this showtime?')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
