@@ -186,7 +186,7 @@
     <Compile Include="Models\Payments.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PaymentViewModels.cs" />
+    <Compile Include="Models\PaymentViewModel.cs" />
     <Compile Include="Models\Reservations.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>

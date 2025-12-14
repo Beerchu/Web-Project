@@ -895,6 +895,7 @@ C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\obj\Debug\FiveStars.cs
 C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.CopyComplete
 C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\obj\Debug\FiveStars.dll
 C:\Users\STD4\OneDrive\Desktop\Projeler\FiveStar\FiveStar\obj\Debug\FiveStars.pdb
+C:\Web-Project\FiveStar\FiveStar\obj\Debug\FiveStars.csproj.AssemblyReference.cache
 C:\Users\STD4\OneDrive\Desktop\web\FiveStar\FiveStar\bin\FiveStars.dll.config
 C:\Users\STD4\OneDrive\Desktop\web\FiveStar\FiveStar\bin\FiveStars.dll
 C:\Users\STD4\OneDrive\Desktop\web\FiveStar\FiveStar\bin\FiveStars.pdb
