@@ -5,18 +5,494 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var activeCount = (Model == null) ? 0 : Model.Count();
-
-    var appliedIds = ViewBag.AppliedCampaignIds as System.Collections.Generic.List<int>
-                     ?? new System.Collections.Generic.List<int>();
+    var appliedIds = ViewBag.AppliedCampaignIds as System.Collections.Generic.List<int> ?? new System.Collections.Generic.List<int>();
 }
 
 <link rel="stylesheet" href="@Url.Content("~/Content/campaigns.css")" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* ========== ENHANCED STYLES ========== */
+
+    /* Hero Section Enhancement */
+    .campaigns-hero {
+        background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0a0a0a 100%);
+        padding: 80px 5%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .campaigns-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(229, 9, 20, 0.15) 0%, transparent 50%), radial-gradient(circle at 70% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+        }
+
+    .hero-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f, #4d96ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        background-size: 300% 300%;
+        animation: gradient 8s ease infinite;
+    }
+
+    @@keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        color: #bbb;
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .stat {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        flex: 1;
+    }
+
+        .stat:hover {
+            transform: translateY(-5px);
+            border-color: rgba(229, 9, 20, 0.5);
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.1);
+        }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #E50914;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .hero-image {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        transform: perspective(1000px) rotateY(-5deg);
+        transition: transform 0.5s ease;
+    }
+
+        .hero-image:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+    .floating-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #E50914, #ff4757);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        animation: pulse 2s infinite;
+        box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+    }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    /* Campaigns Container */
+    .campaigns-container {
+        max-width: 1400px;
+        margin: 60px auto;
+        padding: 0 5%;
+    }
+
+    /* Campaign Category Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #333;
+        overflow-x: auto;
+    }
+
+    .category-tab {
+        padding: 12px 24px;
+        background: #222;
+        border: none;
+        border-radius: 30px;
+        color: #bbb;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .category-tab:hover {
+            background: #333;
+            color: white;
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, #E50914, #ff6b6b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+        }
+
+    .category-icon {
+        font-size: 1rem;
+    }
+
+    /* Enhanced Campaign Cards */
+    .campaigns-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .campaign-card {
+        background: linear-gradient(145deg, #1e1e1e, #252525);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #333;
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+        .campaign-card:hover {
+            transform: translateY(-10px);
+            border-color: #E50914;
+            box-shadow: 0 20px 40px rgba(229, 9, 20, 0.2);
+        }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px 0;
+    }
+
+    .badge {
+        background: linear-gradient(135deg, #4d96ff, #6bcf7f);
+        color: white;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .time-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        color: #ccc;
+    }
+
+    .card-image {
+        height: 200px;
+        overflow: hidden;
+        margin: 15px 20px;
+        border-radius: 12px;
+    }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+    .campaign-card:hover .card-image img {
+        transform: scale(1.05);
+    }
+
+    .card-content {
+        padding: 0 20px 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-title {
+        color: white;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        line-height: 1.3;
+    }
+
+    .card-description {
+        color: #bbb;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .card-footer {
+        margin-top: auto;
+    }
+
+    .btn-apply {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .btn-apply:not([disabled]) {
+            background: linear-gradient(135deg, #E50914, #ff4757);
+            color: white;
+        }
+
+            .btn-apply:not([disabled]):hover {
+                background: linear-gradient(135deg, #ff4757, #E50914);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+            }
+
+        .btn-apply[disabled] {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            cursor: not-allowed;
+        }
+
+    /* Campaign Type Ribbons - Color-coded based on content */
+    .campaign-ribbon {
+        position: absolute;
+        top: 20px;
+        left: -8px;
+        padding: 8px 20px;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 0 20px 20px 0;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    .ribbon-family {
+        background: linear-gradient(135deg, #FF9800, #FFB74D);
+    }
+
+    .ribbon-couple {
+        background: linear-gradient(135deg, #E91E63, #F48FB1);
+    }
+
+    .ribbon-tuesday {
+        background: linear-gradient(135deg, #9C27B0, #CE93D8);
+    }
+
+    .ribbon-general {
+        background: linear-gradient(135deg, #E50914, #ff4757);
+    }
+
+    /* Discount Tag */
+    .discount-tag {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+        color: #000;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.2rem;
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        z-index: 1;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: linear-gradient(145deg, #1a1a1a, #222);
+        border-radius: 20px;
+        border: 2px dashed #444;
+        margin-top: 40px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .empty-title {
+        color: #ccc;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .empty-message {
+        color: #888;
+        font-size: 1.1rem;
+        max-width: 500px;
+        margin: 0 auto 30px;
+        line-height: 1.6;
+    }
+
+    .btn-refresh {
+        background: linear-gradient(135deg, #E50914, #ff4757);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+        }
+
+    /* Additional Info Styling */
+    .additional-info {
+        margin: 15px 0;
+        padding: 10px;
+        background: rgba(77, 150, 255, 0.1);
+        border-radius: 8px;
+        border-left: 4px solid #4d96ff;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 1024px) {
+        .hero-content {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .hero-text h1 {
+            font-size: 2.8rem;
+        }
+
+        .hero-image {
+            transform: none;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .campaigns-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-stats {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat {
+            padding: 15px;
+        }
+
+        .category-tabs {
+            flex-wrap: wrap;
+        }
+    }
+</style>
 
 <div class="campaigns-hero">
     <div class="hero-content">
         <div class="hero-text">
-            <h1><span class="gradient-text">🎬 Exclusive Campaigns</span></h1>
-            <p class="hero-subtitle">Current active offers from our database</p>
+            <h1>🎬 Exclusive Campaigns & Special Offers</h1>
+            <p class="hero-subtitle">
+                Discover amazing discounts and special offers tailored just for you.
+                Apply campaigns to your next booking and enjoy incredible savings on your cinema experience.
+            </p>
 
             <div class="hero-stats">
                 <div class="stat">
@@ -24,12 +500,12 @@
                     <div class="stat-label">Active Offers</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-number">—</div>
-                    <div class="stat-label">No Redemption UI</div>
+                    <div class="stat-number">@appliedIds.Count</div>
+                    <div class="stat-label">Applied By You</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-number">—</div>
-                    <div class="stat-label">Details Only</div>
+                    <div class="stat-number">🎯</div>
+                    <div class="stat-label">Personalized</div>
                 </div>
             </div>
         </div>
@@ -37,7 +513,7 @@
         <div class="hero-image">
             <img src="@Url.Content("~/images/campaigns-hero.jpg")" alt="Cinema Campaigns" />
             <div class="floating-badge">
-                <span>🔥 ACTIVE</span>
+                <i class="fas fa-fire me-2"></i> EXCLUSIVE OFFERS
             </div>
         </div>
     </div>
@@ -46,11 +522,42 @@
 <div class="campaigns-container">
     @if (Model == null || !Model.Any())
     {
-        <p style="padding:24px;">No active campaigns right now.</p>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-tag"></i>
+            </div>
+            <h2 class="empty-title">No Active Campaigns Available</h2>
+            <p class="empty-message">
+                Check back soon for exciting new offers and discounts!
+                We're constantly updating our campaigns to bring you the best cinema experience.
+            </p>
+            <button class="btn-refresh" onclick="location.reload()">
+                <i class="fas fa-sync-alt me-2"></i> Refresh Page
+            </button>
+        </div>
     }
     else
     {
-        <div class="campaigns-grid">
+        <!-- Campaign Category Tabs - Updated for your campaign types -->
+        <div class="category-tabs" id="categoryTabs">
+            <button class="category-tab active" data-category="all">
+                <i class="fas fa-layer-group category-icon"></i> All Offers
+            </button>
+
+            <!-- Categories based on your actual campaigns -->
+            <button class="category-tab" data-category="family">
+                <i class="fas fa-users category-icon"></i> Family
+            </button>
+            <button class="category-tab" data-category="couple">
+                <i class="fas fa-heart category-icon"></i> Couple
+            </button>
+            <button class="category-tab" data-category="tuesday">
+                <i class="fas fa-calendar-day category-icon"></i> Tuesday
+            </button>
+        </div>
+
+        <!-- Campaigns Grid -->
+        <div class="campaigns-grid" id="campaignsGrid">
             @foreach (var c in Model)
             {
                 var imgSrc = string.IsNullOrWhiteSpace(c.ImageUrl)
@@ -58,14 +565,33 @@
                     : Url.Content("~/" + c.ImageUrl.TrimStart('~', '/'));
 
                 var isApplied = appliedIds.Contains(c.CampaignID);
+                var discountPercentage = GetDiscountPercentage(c);
+                var campaignCategory = GetCampaignCategory(c);
+                var ribbonClass = GetRibbonClass(c);
+                var ribbonText = GetRibbonText(c);
 
-                <div class="campaign-card">
+                <div class="campaign-card" data-category="@campaignCategory">
+                    <!-- Campaign Ribbon -->
+                    <div class="campaign-ribbon @ribbonClass">
+                        @ribbonText
+                    </div>
+
+                    <!-- Discount Tag -->
+                    @if (discountPercentage > 0)
+                    {
+                        <div class="discount-tag">
+                            -@discountPercentage%
+                        </div>
+                    }
+
                     <div class="card-header">
-                        <div class="badge">🎁 Offer</div>
+                        <div class="badge">
+                            <i class="fas fa-gift me-2"></i> CAMPAIGN
+                        </div>
 
                         <div class="time-badge">
                             <i class="fas fa-clock"></i>
-                            <span>@c.DurationText</span>
+                            <span>@(c.DurationText ?? "Limited Time")</span>
                         </div>
                     </div>
 
@@ -75,14 +601,32 @@
 
                     <div class="card-content">
                         <h3 class="card-title">@c.Title</h3>
-                        <p class="card-description">@c.Description</p>
+                        <p class="card-description">
+                            @if (!string.IsNullOrEmpty(c.Description) && c.Description.Length > 120)
+                            {
+                                @c.Description.Substring(0, 120)<text>...</text>
+                            }
+                            else
+                            {
+                                @c.Description
+                            }
+                        </p>
+
+                        @* Additional info if available *@
+                        @if (HasAdditionalInfo(c))
+                        {
+                            <div class="additional-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <span style="color: #aaa; font-size: 0.9rem;">@GetAdditionalInfoText(c)</span>
+                            </div>
+                        }
 
                         <div class="card-footer">
                             @if (isApplied)
                             {
                                 <button class="btn-apply" disabled="disabled">
-                                    <i class="fas fa-check"></i>
-                                    <span>APPLIED</span>
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>ALREADY APPLIED</span>
                                 </button>
                             }
                             else
@@ -91,8 +635,8 @@
                                 {
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn-apply">
-                                        <i class="fas fa-ticket-alt"></i>
-                                        <span>APPLY</span>
+                                        <i class="fas fa-gift"></i>
+                                        <span>APPLY THIS OFFER</span>
                                     </button>
                                 }
                             }
@@ -103,3 +647,171 @@
         </div>
     }
 </div>
+
+@functions {
+    // Helper function to extract discount percentage
+    public int GetDiscountPercentage(FiveStars.Models.Campaigns campaign)
+    {
+        // Try to extract percentage from description or title
+        if (campaign.Description != null)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(campaign.Description, @"(\d{1,3})%");
+            if (match.Success && int.TryParse(match.Groups[1].Value, out int percent))
+                return percent;
+        }
+
+        if (campaign.Title != null)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(campaign.Title, @"(\d{1,3})%");
+            if (match.Success && int.TryParse(match.Groups[1].Value, out int percent))
+                return percent;
+        }
+
+        return 0;
+    }
+
+    // Helper function to determine campaign category based on content
+    public string GetCampaignCategory(FiveStars.Models.Campaigns campaign)
+    {
+        var description = campaign.Description ?? "";
+        var title = campaign.Title ?? "";
+        var text = (description + " " + title).ToLower();
+
+        // Check for specific campaign types based on your actual campaigns
+        if (text.Contains("family") || text.Contains("4 pay for 3"))
+            return "family";
+        else if (text.Contains("couple") || text.Contains("valentine"))
+            return "couple";
+        else if (text.Contains("tuesday") || text.Contains("weekday"))
+            return "tuesday";
+        else
+            return "general";
+    }
+
+    // Helper function to get ribbon class
+    public string GetRibbonClass(FiveStars.Models.Campaigns campaign)
+    {
+        var category = GetCampaignCategory(campaign);
+
+        switch (category)
+        {
+            case "family": return "ribbon-family";
+            case "couple": return "ribbon-couple";
+            case "tuesday": return "ribbon-tuesday";
+            default: return "ribbon-general";
+        }
+    }
+
+    // Helper function to get ribbon text
+    public string GetRibbonText(FiveStars.Models.Campaigns campaign)
+    {
+        var category = GetCampaignCategory(campaign);
+
+        switch (category)
+        {
+            case "family": return "FAMILY OFFER";
+            case "couple": return "COUPLE SPECIAL";
+            case "tuesday": return "TUESDAY DEAL";
+            default: return "SPECIAL OFFER";
+        }
+    }
+
+    // Check if campaign has additional info
+    public bool HasAdditionalInfo(FiveStars.Models.Campaigns campaign)
+    {
+        // Check if description is long enough to show additional info
+        return !string.IsNullOrEmpty(campaign.Description) && campaign.Description.Length > 120;
+    }
+
+    // Get additional info text
+    public string GetAdditionalInfoText(FiveStars.Models.Campaigns campaign)
+    {
+        if (!string.IsNullOrEmpty(campaign.Description) && campaign.Description.Length > 120)
+        {
+            return "More details available in full description";
+        }
+        return "";
+    }
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Category filtering - SIMPLIFIED VERSION
+        const tabs = document.querySelectorAll('.category-tab');
+        const campaignCards = document.querySelectorAll('.campaign-card');
+
+        console.log('Total campaign cards:', campaignCards.length);
+
+        // Debug: Log all card categories
+        campaignCards.forEach((card, index) => {
+            const category = card.getAttribute('data-category');
+            const title = card.querySelector('.card-title')?.textContent || 'No title';
+            console.log(`Card ${index + 1}: Category = "${category}", Title = "${title}"`);
+        });
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                const selectedCategory = this.getAttribute('data-category');
+                console.log('Selected category:', selectedCategory);
+
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show/hide cards based on category
+                campaignCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+
+                    if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                        // Show card with animation
+                        card.style.display = 'flex';
+                        // Force reflow to enable transition
+                        card.offsetHeight;
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    } else {
+                        // Hide card with animation
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        // Hide after animation completes
+                        setTimeout(() => {
+                            if (card.style.opacity === '0') {
+                                card.style.display = 'none';
+                            }
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Add hover effect for cards
+        campaignCards.forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                if (this.style.display !== 'none') {
+                    this.style.transform = 'translateY(-10px)';
+                }
+            });
+
+            card.addEventListener('mouseleave', function () {
+                if (this.style.display !== 'none') {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Add click animation for apply buttons
+        document.querySelectorAll('.btn-apply:not([disabled])').forEach(button => {
+            button.addEventListener('click', function (e) {
+                const originalHTML = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>APPLYING...</span>';
+
+                // Revert after 2 seconds if form doesn't submit
+                setTimeout(() => {
+                    if (this.innerHTML.includes('fa-spinner')) {
+                        this.innerHTML = originalHTML;
+                    }
+                }, 2000);
+            });
+        });
+    });
+</script>
