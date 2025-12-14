@@ -16,8 +16,9 @@ namespace FiveStars.Controllers
 
         public ActionResult Campaigns()
         {
-            return View();
+            return RedirectToAction("Index", "Campaigns");
         }
+
 
         public ActionResult About()
         {

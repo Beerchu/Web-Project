@@ -137,10 +137,36 @@ namespace FiveStars.Controllers
             return (Math.Round(discountAmount, 2), Math.Round(Math.Max(0m, finalTotal), 2));
         }
 
+        private void ReleaseExpiredHolds()
+        {
+            var cutoff = DateTime.Now.AddMinutes(-10);
+
+            var expiredOrders = _db.Orders
+                .Where(o => o.Status == "Pending" && o.CreatedAt < cutoff)
+                .ToList();
+
+            if (!expiredOrders.Any()) return;
+
+            var expiredIds = expiredOrders.Select(o => o.OrderID).ToList();
+
+            var expiredTickets = _db.Tickets
+                .Where(t => t.OrderID.HasValue
+                         && expiredIds.Contains(t.OrderID.Value)
+                         && t.Status == "booked")
+                .ToList();
+
+
+            _db.Tickets.RemoveRange(expiredTickets);
+            _db.Orders.RemoveRange(expiredOrders);
+
+            _db.SaveChanges();
+        }
 
         // ** B. GET Method: Load Payment Page (Shows BaseTotal and Campaigns) **
+        [Authorize]
         public ActionResult Payment(int orderId)
         {
+            ReleaseExpiredHolds();
             var order = _db.Orders
                            .Include(o => o.Tickets)
                            .FirstOrDefault(o => o.OrderID == orderId);
@@ -150,11 +176,20 @@ namespace FiveStars.Controllers
             // Calculate initial prices (Undiscounted Base Total)
             var (discount, finalTotal) = CalculateOrderPrice(orderId, null);
 
-            // Fetch active campaigns (Student ve Popcorn hariç)
-            var availableCampaigns = _db.Campaigns
-                                         .Where(c => c.IsActive && c.CampaignID != 1 && c.CampaignID != 4) // Student(1) ve Popcorn(4) kaldırıldı
-                                         .Select(c => new CampaignModel { CampaignID = c.CampaignID, Title = c.Title })
-                                         .ToList();
+            int userId = GetCurrentUserId();
+
+            var availableCampaigns = (from uc in _db.User_Campaigns
+                                      join c in _db.Campaigns on uc.CampaignID equals c.CampaignID
+                                      where uc.UserID == userId
+                                            && c.IsActive
+                                            && c.CampaignID != 1 && c.CampaignID != 4
+                                      orderby c.CampaignID descending
+                                      select new CampaignModel
+                                      {
+                                          CampaignID = c.CampaignID,
+                                          Title = c.Title
+                                      }).ToList();
+
 
             var viewModel = new PaymentViewModel
             {
@@ -169,23 +204,42 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
-        // ** C. Ajax Endpoint: Recalculate Price (Triggered by dropdown change) **
+        [Authorize]
         [HttpPost]
         public JsonResult RecalculatePrice(int orderId, int campaignId)
         {
             int? selectedCampaignId = campaignId > 0 ? campaignId : (int?)null;
 
-            // YENİ EK: Koşul kontrolü (AJAX'a geri bildirim sağlamak için)
+            // Ownership check
+            if (selectedCampaignId.HasValue)
+            {
+                int userId = GetCurrentUserId();
+
+                bool owns = _db.User_Campaigns.Any(uc =>
+                    uc.UserID == userId && uc.CampaignID == selectedCampaignId.Value);
+
+                if (!owns)
+                {
+                    var baseTotal = _db.Orders.FirstOrDefault(o => o.OrderID == orderId)?.TotalAmount ?? 0m;
+
+                    return Json(new
+                    {
+                        success = false,
+                        message = "You can only use campaigns saved in your account.",
+                        discount = 0m.ToString("C"),
+                        finalTotal = baseTotal.ToString("C"),
+                        selectedCampaignId = (int?)null
+                    });
+                }
+            }
+
+            // Existing eligibility check
             string validationMessage = "";
             if (campaignId > 0)
-            {
                 validationMessage = CheckCampaignEligibility(orderId, campaignId);
-            }
 
             if (!string.IsNullOrEmpty(validationMessage))
             {
-                // Eğer koşul sağlanmıyorsa, indirimi sıfırla ve uyarı mesajı gönder
-                // Base Total'i geri gönder
                 decimal baseTotal = _db.Orders.FirstOrDefault(o => o.OrderID == orderId)?.TotalAmount ?? 0m;
 
                 return Json(new
@@ -198,10 +252,8 @@ namespace FiveStars.Controllers
                 });
             }
 
-            // Koşul sağlandıysa normal hesaplamaya devam et
             var (discount, finalTotal) = CalculateOrderPrice(orderId, selectedCampaignId);
 
-            // Return results as JSON
             return Json(new
             {
                 success = true,
@@ -211,7 +263,9 @@ namespace FiveStars.Controllers
             });
         }
 
+
         // ** D. POST Method: Confirm Payment and Update DB **
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmPayment(PaymentViewModel model)
@@ -225,16 +279,27 @@ namespace FiveStars.Controllers
                                .Include(o => o.Tickets)
                                .FirstOrDefault(o => o.OrderID == model.OrderID);
 
+
+
                 if (order != null && order.Status != "Paid")
                 {
-                    // Recalculate prices one last time for security (CheckCampaignEligibility burada da çalışır)
-                    var (discount, finalTotal) = CalculateOrderPrice(model.OrderID, model.SelectedCampaignID);
+                    int? chosen = model.SelectedCampaignID;
 
-                    // 2. Update Order record
+                    if (chosen.HasValue)
+                    {
+                        int userId = GetCurrentUserId();
+                        bool owns = _db.User_Campaigns.Any(uc => uc.UserID == userId && uc.CampaignID == chosen.Value);
+                        if (!owns) chosen = null;
+                    }
+
+                    var (discount, finalTotal) = CalculateOrderPrice(model.OrderID, chosen);
+
+                    // Update Order record (use chosen, not model.SelectedCampaignID)
                     order.Status = "Paid";
-                    order.CampaignID = model.SelectedCampaignID;
+                    order.CampaignID = chosen;
                     order.DiscountAmount = discount;
                     order.TotalAmount = finalTotal;
+
 
                     // 3. Mark Tickets as "Paid"
                     foreach (var ticket in order.Tickets)
@@ -252,6 +317,23 @@ namespace FiveStars.Controllers
             ModelState.AddModelError("", "Payment failed or Order could not be updated.");
             return RedirectToAction("Payment", new { orderId = model.OrderID });
         }
+
+        private int GetCurrentUserId()
+        {
+            var name = (User.Identity?.Name ?? "").Trim();
+
+            // If your auth stores numeric id in Name:
+            if (int.TryParse(name, out int parsedId))
+                return parsedId;
+
+            // Otherwise assume it's email:
+            var user = _db.Users.FirstOrDefault(u => u.Email == name);
+            if (user == null)
+                throw new InvalidOperationException("Logged-in user not found. Check what User.Identity.Name contains.");
+
+            return user.UserID;
+        }
+
 
         // Dispose Method
         protected override void Dispose(bool disposing)

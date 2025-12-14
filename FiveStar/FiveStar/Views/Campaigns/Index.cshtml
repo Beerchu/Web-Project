@@ -1,0 +1,105 @@
+﻿@model IEnumerable<FiveStars.Models.Campaigns>
+
+@{
+    ViewBag.Title = "Campaigns & Special Offers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var activeCount = (Model == null) ? 0 : Model.Count();
+
+    var appliedIds = ViewBag.AppliedCampaignIds as System.Collections.Generic.List<int>
+                     ?? new System.Collections.Generic.List<int>();
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Content/campaigns.css")" />
+
+<div class="campaigns-hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1><span class="gradient-text">🎬 Exclusive Campaigns</span></h1>
+            <p class="hero-subtitle">Current active offers from our database</p>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">@activeCount</div>
+                    <div class="stat-label">Active Offers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">No Redemption UI</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Details Only</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="@Url.Content("~/images/campaigns-hero.jpg")" alt="Cinema Campaigns" />
+            <div class="floating-badge">
+                <span>🔥 ACTIVE</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="campaigns-container">
+    @if (Model == null || !Model.Any())
+    {
+        <p style="padding:24px;">No active campaigns right now.</p>
+    }
+    else
+    {
+        <div class="campaigns-grid">
+            @foreach (var c in Model)
+            {
+                var imgSrc = string.IsNullOrWhiteSpace(c.ImageUrl)
+                    ? Url.Content("~/images/default-campaign.jpg")
+                    : Url.Content("~/" + c.ImageUrl.TrimStart('~', '/'));
+
+                var isApplied = appliedIds.Contains(c.CampaignID);
+
+                <div class="campaign-card">
+                    <div class="card-header">
+                        <div class="badge">🎁 Offer</div>
+
+                        <div class="time-badge">
+                            <i class="fas fa-clock"></i>
+                            <span>@c.DurationText</span>
+                        </div>
+                    </div>
+
+                    <div class="card-image">
+                        <img src="@imgSrc" alt="@c.Title" />
+                    </div>
+
+                    <div class="card-content">
+                        <h3 class="card-title">@c.Title</h3>
+                        <p class="card-description">@c.Description</p>
+
+                        <div class="card-footer">
+                            @if (isApplied)
+                            {
+                                <button class="btn-apply" disabled="disabled">
+                                    <i class="fas fa-check"></i>
+                                    <span>APPLIED</span>
+                                </button>
+                            }
+                            else
+                            {
+                                using (Html.BeginForm("Apply", "Campaigns", new { id = c.CampaignID }, FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-apply">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <span>APPLY</span>
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
