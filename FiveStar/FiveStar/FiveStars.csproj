@@ -395,6 +395,7 @@
     <Content Include="Views\Admin\EditShowtime.cshtml" />
     <Content Include="Views\Admin\CreateCampaign.cshtml" />
     <Content Include="Views\Payment\Payment.cshtml" />
+    <Content Include="Views\Movies\MoviesGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
