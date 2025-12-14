@@ -1,11 +1,11 @@
-@model FiveStars.Models.PaymentViewModel
+ï»¿@model FiveStars.Models.PaymentViewModel
 @{
     ViewBag.Title = "Payment Confirmation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
-    /* Temel Stil Düzeltmeleri */
+    /* Temel Stil DÃ¼zeltmeleri */
     .payment-container {
         max-width: 1200px;
         margin: 50px auto;
@@ -67,80 +67,239 @@
             box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
         }
 
-    /* Campaign Picker UI */
-    .campaign-picker {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
+    /* ========== SIMPLIFIED CAMPAIGN SECTION ========== */
+    .campaign-section {
+        background: linear-gradient(145deg, #1e1e1e, #252525);
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        border: 1px solid #333;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
-    .campaign-option {
+    .section-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 14px 16px;
-        border-radius: 10px;
-        background: #282828;
-        border: 1px solid #3A3A3A;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #E50914;
     }
 
-        .campaign-option:hover {
+    .section-icon {
+        color: #E50914;
+        font-size: 24px;
+    }
+
+    .section-title {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .section-subtitle {
+        color: #aaa;
+        font-size: 14px;
+        margin-top: 5px;
+        margin-bottom: 25px;
+    }
+
+    /* Campaign Cards Grid */
+    .campaign-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    /* Campaign Card */
+    .campaign-card {
+        background: linear-gradient(145deg, #2a2a2a, #222);
+        border-radius: 12px;
+        padding: 20px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .campaign-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(229, 9, 20, 0.15);
+        }
+
+        .campaign-card.selected {
             border-color: #E50914;
-            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
-            transform: translateY(-1px);
+            background: linear-gradient(145deg, #2a2a2a, rgba(229, 9, 20, 0.1));
+            box-shadow: 0 8px 24px rgba(229, 9, 20, 0.2);
         }
 
-        .campaign-option input[type="radio"] {
-            accent-color: #E50914;
-            transform: scale(1.15);
+        .campaign-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #E50914, #ff4757);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-    .campaign-option-body {
+        .campaign-card.selected::before {
+            opacity: 1;
+        }
+
+    /* Card Header */
+    .campaign-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+
+    .campaign-card-title {
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin: 0;
         flex: 1;
     }
 
-    .campaign-option-title {
-        color: #fff;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 1.2;
-    }
-
-    .campaign-option-sub {
-        color: #b5b5b5;
-        font-size: 13px;
-        margin-top: 4px;
-    }
-
-    .campaign-option-badge {
+    .campaign-card-badge {
+        background: linear-gradient(135deg, #E50914, #ff6b6b);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
         font-size: 12px;
-        font-weight: 800;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(229, 9, 20, 0.15);
-        border: 1px solid rgba(229, 9, 20, 0.35);
-        color: #ffb3b6;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         white-space: nowrap;
+        margin-left: 10px;
     }
 
-    /* Selected State */
-    .campaign-option.selected {
-        border-color: #E50914;
-        background: linear-gradient(180deg, rgba(229, 9, 20, 0.12), rgba(40, 40, 40, 1));
+    .campaign-card.selected .campaign-card-badge {
+        background: linear-gradient(135deg, #4CAF50, #66BB6A);
     }
 
-    /* Empty campaigns message */
-    .empty-campaign-box {
-        background: #282828;
-        border: 1px dashed #555;
-        color: #FFD700;
-        padding: 14px 16px;
+    /* Card Body */
+    .campaign-card-body {
+        margin-bottom: 15px;
+    }
+
+    .campaign-card-description {
+        color: #bbb;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+        min-height: 40px;
+    }
+
+    /* Card Footer */
+    .campaign-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #333;
+    }
+
+    .campaign-card-type {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ddd;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .campaign-card-radio {
+        accent-color: #E50914;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    /* No Campaigns State */
+    .no-campaigns-state {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(145deg, #2a2a2a, #222);
+        border-radius: 12px;
+        border: 2px dashed #444;
+    }
+
+    .no-campaigns-icon {
+        font-size: 48px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .no-campaigns-title {
+        color: #ccc;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .no-campaigns-message {
+        color: #888;
+        font-size: 14px;
+        max-width: 400px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* Campaign Stats */
+    .campaign-stats {
+        display: flex;
+        gap: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
         border-radius: 10px;
+        margin-top: 20px;
     }
 
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+    }
+
+    .stat-value {
+        color: #E50914;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: #aaa;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .campaign-cards-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .campaign-card-header {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .campaign-card-badge {
+            align-self: flex-start;
+        }
+    }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -172,47 +331,89 @@
             </p>
         </div>
 
-        @* --- 2. CAMPAIGN SELECTION --- *@
-        <div class="form-group mb-5">
-            <h4 style="color:white; margin-bottom: 12px;">My Campaigns</h4>
-            <p style="color:#aaa; margin-top:-6px; margin-bottom: 16px;">
-                Select one campaign to apply (or continue without a campaign).
-            </p>
+        @* --- 2. ULTRA-SIMPLIFIED CAMPAIGN SELECTION --- *@
+        <div class="campaign-section">
+            <div class="section-header">
+                <i class="fas fa-tags section-icon"></i>
+                <div>
+                    <h2 class="section-title">Your Campaigns</h2>
+                    <p class="section-subtitle">
+                        Select one of your available campaigns to apply discount to your order
+                    </p>
+                </div>
+            </div>
 
             @if (Model.AvailableCampaigns != null && Model.AvailableCampaigns.Any())
             {
-                <div class="campaign-picker">
-
-                    <!-- No campaign option -->
-                    <label class="campaign-option selected" data-cid="0">
-                        <input type="radio" name="campaign-choice" value="0" checked />
-                        <div class="campaign-option-body">
-                            <div class="campaign-option-title">No campaign</div>
-                            <div class="campaign-option-sub">Pay the normal price</div>
+                <div class="campaign-cards-grid">
+                    <!-- No Campaign Card -->
+                    <div class="campaign-card selected" data-cid="0">
+                        <div class="campaign-card-header">
+                            <h3 class="campaign-card-title">No Campaign</h3>
+                            <span class="campaign-card-badge">DEFAULT</span>
                         </div>
-                    </label>
+                        <div class="campaign-card-body">
+                            <p class="campaign-card-description">
+                                Continue with standard pricing. Your order will be processed without any discounts applied.
+                            </p>
+                        </div>
+                        <div class="campaign-card-footer">
+                            <span class="campaign-card-type">Standard Price</span>
+                            <input type="radio" name="campaign-choice" value="0" class="campaign-card-radio" checked />
+                        </div>
+                    </div>
 
                     @foreach (var c in Model.AvailableCampaigns)
                     {
-                        <label class="campaign-option" data-cid="@c.CampaignID">
-                            <input type="radio" name="campaign-choice" value="@c.CampaignID" />
-                            <div class="campaign-option-body">
-                                <div class="campaign-option-title">@c.Title</div>
-                                <div class="campaign-option-sub">Use this campaign for your order</div>
+                        // Get discount info and campaign type from title
+                        var discountInfo = GetDiscountInfoFromTitle(c.Title);
+                        var campaignType = GetCampaignTypeFromTitle(c.Title);
+                        var campaignIcon = GetCampaignIcon(campaignType);
+
+                        <div class="campaign-card" data-cid="@c.CampaignID">
+                            <div class="campaign-card-header">
+                                <h3 class="campaign-card-title">@c.Title</h3>
+                                <span class="campaign-card-badge">@discountInfo</span>
                             </div>
-                            <div class="campaign-option-badge">APPLY</div>
-                        </label>
+                            <div class="campaign-card-body">
+                                <p class="campaign-card-description">
+                                    @GetCampaignDescription(c.CampaignID, c.Title)
+                                </p>
+                            </div>
+                            <div class="campaign-card-footer">
+                                <span class="campaign-card-type">
+                                    <i class="fas @campaignIcon"></i> @campaignType
+                                </span>
+                                <input type="radio" name="campaign-choice" value="@c.CampaignID" class="campaign-card-radio" />
+                            </div>
+                        </div>
                     }
+                </div>
+
+                <!-- Campaign Stats -->
+                <div class="campaign-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">@Model.AvailableCampaigns.Count</span>
+                        <span class="stat-label">Available</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="campaigns-used">0</span>
+                        <span class="stat-label">Will Be Used</span>
+                    </div>
                 </div>
             }
             else
             {
-                <div class="empty-campaign-box">
-                    You don't have any active campaigns saved.
+                <div class="no-campaigns-state">
+                    <i class="fas fa-tag no-campaigns-icon"></i>
+                    <h3 class="no-campaigns-title">No Campaigns Available</h3>
+                    <p class="no-campaigns-message">
+                        You don't have any active campaigns in your profile.
+                        Check your email or profile page for new campaign offers.
+                    </p>
                 </div>
             }
         </div>
-
 
         <hr style="border-color: #3A3A3A;" />
 
@@ -229,7 +430,7 @@
             </h3>
         </div>
 
-        @* --- 4. CREDIT CARD INFO (Simülasyon) --- *@
+        @* --- 4. CREDIT CARD INFO (SimÃ¼lasyon) --- *@
         <div class="my-4 p-3 bg-dark" style="border-radius: 5px;">
             <h5 style="color: #bbb;">Credit Card Information (Simulation)</h5>
             <p style="font-size: 0.9em; color: #999;">
@@ -240,7 +441,7 @@
         @* --- 5. SUBMIT BUTTON --- *@
         <div class="mt-4">
             <button type="submit" class="btn btn-lg btn-confirm w-100">
-                CONFIRM PAYMENT AND ISSUE TICKET
+                <i class="fas fa-lock me-2"></i> CONFIRM PAYMENT AND ISSUE TICKET
             </button>
         </div>
 
@@ -248,25 +449,131 @@
     }
 </div>
 
+@functions {
+    // Helper function to get discount info from title
+    public string GetDiscountInfoFromTitle(string title)
+    {
+        if (string.IsNullOrEmpty(title))
+            return "OFFER";
+
+        // Look for percentage in title (case-insensitive)
+        var match = System.Text.RegularExpressions.Regex.Match(title, @"(\d{1,3})%", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (match.Success)
+            return "-" + match.Groups[1].Value + "%";
+
+        // Simple string contains check
+        if (title.ToLower().Contains("20%"))
+            return "-20%";
+        else if (title.ToLower().Contains("discount"))
+            return "DISCOUNT";
+
+        return "OFFER";
+    }
+
+    // Helper function to get campaign type from title
+    public string GetCampaignTypeFromTitle(string title)
+    {
+        if (string.IsNullOrEmpty(title))
+            return "Special";
+
+        string titleLower = title.ToLower();
+
+        if (titleLower.Contains("family"))
+            return "Family";
+        else if (titleLower.Contains("couple") || titleLower.Contains("valentine"))
+            return "Couple";
+        else if (titleLower.Contains("tuesday") || titleLower.Contains("weekday"))
+            return "Tuesday";
+        else if (titleLower.Contains("student"))
+            return "Student";
+        else if (titleLower.Contains("popcorn"))
+            return "Popcorn";
+        else if (titleLower.Contains("seasonal"))
+            return "Seasonal";
+        else
+            return "Special";
+    }
+
+    // Helper function to get icon for campaign type
+    public string GetCampaignIcon(string type)
+    {
+        switch (type.ToLower())
+        {
+            case "student":
+                return "fa-graduation-cap";
+            case "family":
+                return "fa-users";
+            case "tuesday":
+            case "weekday":
+                return "fa-calendar-day";
+            case "popcorn":
+                return "fa-popcorn";
+            case "couple":
+            case "valentine":
+                return "fa-heart";
+            case "seasonal":
+                return "fa-snowflake";
+            default:
+                return "fa-tag";
+        }
+    }
+
+    // Helper function to get campaign description based on ID and title
+    public string GetCampaignDescription(int campaignId, string title)
+    {
+        // Based on your controller logic
+        switch (campaignId)
+        {
+            case 2: // Family Package
+                return "Buy 4 tickets, pay for 3. Perfect for family outings.";
+            case 3: // Tuesday Cinema
+                return "Special discount valid only on Tuesdays. Save on your weekday movie.";
+            case 5: // Couple Ticket
+                return "Special offer for couples. Book exactly 2 tickets.";
+            default:
+                // Generic description based on title
+                if (!string.IsNullOrEmpty(title) && title.ToLower().Contains("discount"))
+                    return "Apply this discount to your order.";
+                else
+                    return "Apply this special offer to your order.";
+        }
+    }
+}
+
 @* ========================================================================= *@
 @* JAVASCRIPT / AJAX FUNCTIONALITY *@
 @* ========================================================================= *@
 <script>
-
 $(document).ready(function () {
 
     function setSelectedCampaignCard(campaignId) {
-        $('.campaign-option').removeClass('selected');
-        $('.campaign-option[data-cid="' + campaignId + '"]').addClass('selected');
+        $('.campaign-card').removeClass('selected');
+        $('.campaign-card[data-cid="' + campaignId + '"]').addClass('selected');
+
+        // Update stats - SIMPLIFIED: Just show if a campaign is selected
+        if (campaignId !== "0") {
+            $('#campaigns-used').text('1');
+        } else {
+            $('#campaigns-used').text('0');
+        }
     }
+
+    // Click handler for campaign cards
+    $(document).on('click', '.campaign-card', function () {
+        var campaignId = $(this).data('cid');
+        var radio = $(this).find('input[type="radio"]');
+        radio.prop('checked', true).trigger('change');
+    });
 
     $(document).on('change', 'input[name="campaign-choice"]', function () {
         var selectedCampaignId = $(this).val();
         var campaignIdToSend = selectedCampaignId || 0;
         var orderId = $('#OrderID').val();
 
+        // First update the visual selection
         setSelectedCampaignCard(campaignIdToSend);
 
+        // Then make AJAX call for price calculation
         $.ajax({
             url: '@Url.Action("RecalculatePrice", "Payment")',
             type: 'POST',
@@ -275,12 +582,21 @@ $(document).ready(function () {
                 campaignId: campaignIdToSend
             },
             success: function (response) {
+                console.log('AJAX Response:', response);
                 if (response.success) {
                     $('#discount-amount').text(response.discount);
                     $('#final-total').text(response.finalTotal);
                     $('#SelectedCampaignID').val(response.selectedCampaignId);
+
+                    // Add visual feedback
+                    var finalTotalElement = $('#final-total');
+                    finalTotalElement.addClass('pulse-animation');
+                    setTimeout(function() {
+                        finalTotalElement.removeClass('pulse-animation');
+                    }, 500);
+
                 } else {
-                    alert("Campaign cannot be applied: " + response.message);
+                    alert('Campaign Not Applicable: ' + response.message);
 
                     // Reset UI to "No campaign"
                     $('input[name="campaign-choice"][value="0"]').prop('checked', true);
@@ -293,14 +609,15 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 console.error("Ajax Error:", status, error);
-                alert("An unexpected server communication error occurred. Check the console for details.");
+                alert('Server Error: An unexpected error occurred. Please try again.');
             }
         });
     });
 
+    // Add pulse animation CSS
+    $('<style>.pulse-animation { animation: pulse 0.5s ease-in-out; }@@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }</style>').appendTo('head');
+
     // Ensure initial selected state looks correct
     setSelectedCampaignCard("0");
 });
-
-
 </script>
