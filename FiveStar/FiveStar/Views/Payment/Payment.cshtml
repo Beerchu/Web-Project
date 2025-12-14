@@ -66,6 +66,81 @@
             border-color: #E50914;
             box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
         }
+
+    /* Campaign Picker UI */
+    .campaign-picker {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .campaign-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: #282828;
+        border: 1px solid #3A3A3A;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .campaign-option:hover {
+            border-color: #E50914;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .campaign-option input[type="radio"] {
+            accent-color: #E50914;
+            transform: scale(1.15);
+        }
+
+    .campaign-option-body {
+        flex: 1;
+    }
+
+    .campaign-option-title {
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1.2;
+    }
+
+    .campaign-option-sub {
+        color: #b5b5b5;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    .campaign-option-badge {
+        font-size: 12px;
+        font-weight: 800;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(229, 9, 20, 0.15);
+        border: 1px solid rgba(229, 9, 20, 0.35);
+        color: #ffb3b6;
+        white-space: nowrap;
+    }
+
+    /* Selected State */
+    .campaign-option.selected {
+        border-color: #E50914;
+        background: linear-gradient(180deg, rgba(229, 9, 20, 0.12), rgba(40, 40, 40, 1));
+    }
+
+    /* Empty campaigns message */
+    .empty-campaign-box {
+        background: #282828;
+        border: 1px dashed #555;
+        color: #FFD700;
+        padding: 14px 16px;
+        border-radius: 10px;
+    }
+
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -99,20 +174,45 @@
 
         @* --- 2. CAMPAIGN SELECTION --- *@
         <div class="form-group mb-5">
-            <label for="campaign-dropdown">Available Campaigns:</label>
-            @if (Model.AvailableCampaigns != null)
+            <h4 style="color:white; margin-bottom: 12px;">My Campaigns</h4>
+            <p style="color:#aaa; margin-top:-6px; margin-bottom: 16px;">
+                Select one campaign to apply (or continue without a campaign).
+            </p>
+
+            @if (Model.AvailableCampaigns != null && Model.AvailableCampaigns.Any())
             {
-                @Html.DropDownListFor(m => m.SelectedCampaignID,
-                                         new SelectList(Model.AvailableCampaigns, "CampaignID", "Title", Model.SelectedCampaignID),
-                                         "Select a Campaign",
-                                         new { @class = "form-control", id = "campaign-dropdown" })
+                <div class="campaign-picker">
+
+                    <!-- No campaign option -->
+                    <label class="campaign-option selected" data-cid="0">
+                        <input type="radio" name="campaign-choice" value="0" checked />
+                        <div class="campaign-option-body">
+                            <div class="campaign-option-title">No campaign</div>
+                            <div class="campaign-option-sub">Pay the normal price</div>
+                        </div>
+                    </label>
+
+                    @foreach (var c in Model.AvailableCampaigns)
+                    {
+                        <label class="campaign-option" data-cid="@c.CampaignID">
+                            <input type="radio" name="campaign-choice" value="@c.CampaignID" />
+                            <div class="campaign-option-body">
+                                <div class="campaign-option-title">@c.Title</div>
+                                <div class="campaign-option-sub">Use this campaign for your order</div>
+                            </div>
+                            <div class="campaign-option-badge">APPLY</div>
+                        </label>
+                    }
+                </div>
             }
             else
             {
-                <p class="form-control-static" style="color: #FFD700;">No active campaigns available.</p>
+                <div class="empty-campaign-box">
+                    You don't have any active campaigns saved.
+                </div>
             }
-            @Html.ValidationMessageFor(m => m.SelectedCampaignID, "", new { @class = "text-danger" })
         </div>
+
 
         <hr style="border-color: #3A3A3A;" />
 
@@ -152,54 +252,55 @@
 @* JAVASCRIPT / AJAX FUNCTIONALITY *@
 @* ========================================================================= *@
 <script>
-    $(document).ready(function () {
 
-        // Event triggered when Campaign Dropdown changes
-        $('#campaign-dropdown').change(function () {
-            var selectedCampaignId = $(this).val();
-            // Send 0 if 'Select a Campaign' is chosen (empty string)
-            var campaignIdToSend = selectedCampaignId || 0;
-            var orderId = $('#OrderID').val();
+$(document).ready(function () {
 
-            // AJAX call to recalculate price
-            $.ajax({
-                url: '@Url.Action("RecalculatePrice", "Payment")',
-                type: 'POST',
-                data: {
-                    orderId: orderId,
-                    campaignId: campaignIdToSend
-                },
-                success: function (response) {
-                    if (response.success) {
-                        // BAÞARILI DURUM: Controller'dan gelen güncel fiyatlarý DOM'a yaz
-                        $('#discount-amount').text(response.discount);
-                        $('#final-total').text(response.finalTotal);
+    function setSelectedCampaignCard(campaignId) {
+        $('.campaign-option').removeClass('selected');
+        $('.campaign-option[data-cid="' + campaignId + '"]').addClass('selected');
+    }
 
-                        // Hidden inputu güncelle
-                        $('#SelectedCampaignID').val(response.selectedCampaignId);
-                    } else {
-                        // HATA DURUMU: (Kampanya Koþullarý Saðlanmadý)
+    $(document).on('change', 'input[name="campaign-choice"]', function () {
+        var selectedCampaignId = $(this).val();
+        var campaignIdToSend = selectedCampaignId || 0;
+        var orderId = $('#OrderID').val();
 
-                        // 1. Uyarý mesajýný göster
-                        alert("Campaign cannot be applied: " + response.message);
+        setSelectedCampaignCard(campaignIdToSend);
 
-                        // 2. Dropdown'ý 'Select a Campaign' seçeneðine geri getir
-                        $('#campaign-dropdown').val('');
+        $.ajax({
+            url: '@Url.Action("RecalculatePrice", "Payment")',
+            type: 'POST',
+            data: {
+                orderId: orderId,
+                campaignId: campaignIdToSend
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#discount-amount').text(response.discount);
+                    $('#final-total').text(response.finalTotal);
+                    $('#SelectedCampaignID').val(response.selectedCampaignId);
+                } else {
+                    alert("Campaign cannot be applied: " + response.message);
 
-                        // 3. Ýndirim miktarýný sýfýrla ve Final Total'i Base Total'e geri döndür
-                        // response.finalTotal, RecalculatePrice metodunda Base Total olarak geri gönderilmiþti.
-                        $('#discount-amount').text(response.discount); // Bu 0.00 TL/USD olmalý
-                        $('#final-total').text(response.finalTotal);
+                    // Reset UI to "No campaign"
+                    $('input[name="campaign-choice"][value="0"]').prop('checked', true);
+                    setSelectedCampaignCard("0");
 
-                        // 4. Gizli inputu temizle
-                        $('#SelectedCampaignID').val('');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Ajax Error:", status, error);
-                    alert("An unexpected server communication error occurred. Check the console for details.");
+                    $('#discount-amount').text(response.discount);
+                    $('#final-total').text(response.finalTotal);
+                    $('#SelectedCampaignID').val('');
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error("Ajax Error:", status, error);
+                alert("An unexpected server communication error occurred. Check the console for details.");
+            }
         });
     });
+
+    // Ensure initial selected state looks correct
+    setSelectedCampaignCard("0");
+});
+
+
 </script>

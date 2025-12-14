@@ -241,7 +241,7 @@
     <section class="section-campaigns">
         <div class="section-header">
             <h2>CAMPAIGNS</h2>
-            <a href="@Url.Action("Campaigns", "Home")" class="see-all-btn">
+            <a href="@Url.Action("Index", "Campaigns")" class="see-all-btn">
                 SEE ALL <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -252,33 +252,31 @@
             </button>
 
             <div class="movie-carousel" id="campaigns-carousel">
-                <!-- Student Discount -->
-                <div class="campaign-item">
+
+                <a class="campaign-item campaign-link" href="@Url.Action("Index", "Campaigns")">
                     <img src="@Url.Content("~/images/campaign_pic1.jpg")" alt="Student Discount" />
                     <div class="campaign-duration">30 DAYS</div>
                     <p>Student Discount 20%</p>
-                </div>
+                </a>
 
-                <!-- Family Package -->
-                <div class="campaign-item">
+                <a class="campaign-item campaign-link" href="@Url.Action("Index", "Campaigns")">
                     <img src="@Url.Content("~/images/campaign_pic2.jpg")" alt="Family Package" />
                     <div class="campaign-duration">LIMITED</div>
                     <p>Family Package: Buy 4 Pay for 3</p>
-                </div>
+                </a>
 
-                <!-- Tuesday Cinema -->
-                <div class="campaign-item">
+                <a class="campaign-item campaign-link" href="@Url.Action("Index", "Campaigns")">
                     <img src="@Url.Content("~/images/campaign_pic3.jpg")" alt="Tuesday Cinema" />
                     <div class="campaign-duration">WEEKLY</div>
                     <p>Tuesday Cinema: 60 TL</p>
-                </div>
+                </a>
 
-                <!-- Popcorn Special -->
-                <div class="campaign-item">
+                <a class="campaign-item campaign-link" href="@Url.Action("Index", "Campaigns")">
                     <img src="@Url.Content("~/images/campaign_pic4.jpg")" alt="Popcorn Special" />
                     <div class="campaign-duration">15 DAYS</div>
                     <p>Popcorn Special</p>
-                </div>
+                </a>
+
             </div>
 
             <button class="scroll-btn right" onclick="scrollCarousel('campaigns-carousel', 240)">

@@ -45,11 +45,20 @@ namespace FiveStars.Controllers
             if (!hallSeats.Any())
                 return Enumerable.Empty<SeatRow>();
 
-            // 2. Bu seans için satılmış/rezerve edilmiş koltukların SeatID'lerini al
-            var soldSeatIds = _db.Tickets
-                .Where(t => t.ShowingID == showingId && (t.Status == "Paid" || t.Status == "booked"))
-                .Select(t => t.SeatID)
+            var cutoff = DateTime.Now.AddMinutes(-10);
+
+            var soldSeatIds =
+                (from t in _db.Tickets
+                 where t.OrderID.HasValue && t.ShowingID == showingId
+                 join o in _db.Orders on t.OrderID.Value equals o.OrderID
+                 where
+                    t.Status == "Paid"
+                    || (t.Status == "booked" && o.Status == "Pending" && o.CreatedAt >= cutoff)
+                 select t.SeatID)
                 .ToList();
+
+
+
 
             // 3. Koltukları RowLabel'a (Sıra Harfine) göre grupla
             var groupedSeats = hallSeats.GroupBy(s => s.RowLabel);
@@ -127,6 +136,8 @@ namespace FiveStars.Controllers
         [AllowAnonymous]
         public ActionResult SelectSeats(int showingId)
         {
+            ReleaseExpiredHolds();
+
             var showing = _db.Showings
                 .Include(s => s.Movies)
                 .Include(s => s.Halls)
@@ -151,26 +162,56 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
-        // *** KRİTİK ACTION: ORDER OLUŞTURMA VE PAYMENT'A YÖNLENDİRME ***
+        private int GetCurrentUserId()
+        {
+            var name = (User.Identity?.Name ?? "").Trim();
+
+            if (int.TryParse(name, out int parsedId))
+                return parsedId;
+
+            var user = _db.Users.FirstOrDefault(u => u.Email == name);
+            if (user == null)
+                throw new InvalidOperationException("Logged-in user not found. Check what User.Identity.Name contains.");
+
+            return user.UserID;
+        }
+
+
         [HttpPost]
+        [Authorize] // forces login
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrderAndRedirectToPayment(SeatSelectionPostModel model)
         {
-            // Session kontrolünü geçici olarak atlayıp sabit ID kullanıyoruz.
-            // Bu, sürekli Sign-In'e dönme sorununu şimdilik aşar.
-            int currentUserId = 1;
+            int currentUserId = GetCurrentUserId();
 
-            // NOT: Normalde burada Session["UserID"] kontrolü olmalıdır.
-            /* if (Session["UserID"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            int currentUserId = (int)Session["UserID"];
-            */
 
 
             if (model == null || model.SelectedSeatIDs == null || !model.SelectedSeatIDs.Any())
             {
+                return RedirectToAction("SelectSeats", new { showingId = model.ShowingID });
+            }
+
+            var showing = _db.Showings.FirstOrDefault(s => s.ShowingID == model.ShowingID);
+            if (showing == null) return HttpNotFound();
+
+            decimal ticketPrice = (decimal)showing.TicketPrice;
+            decimal serverTotal = model.SelectedSeatIDs.Count * ticketPrice;
+
+            var cutoff = DateTime.Now.AddMinutes(-10);
+
+            var blockedSeatIds =
+                (from t in _db.Tickets
+                 where t.OrderID.HasValue && t.ShowingID == model.ShowingID
+                 join o in _db.Orders on t.OrderID.Value equals o.OrderID
+                 where
+                    t.Status == "Paid"
+                    || (t.Status == "booked" && o.Status == "Pending" && o.CreatedAt >= cutoff)
+                 select t.SeatID)
+                .ToList();
+
+            if (model.SelectedSeatIDs.Any(id => blockedSeatIds.Contains(id)))
+            {
+                TempData["ErrorMessage"] = "Some seats were just taken. Please select again.";
                 return RedirectToAction("SelectSeats", new { showingId = model.ShowingID });
             }
 
@@ -179,9 +220,10 @@ namespace FiveStars.Controllers
             {
                 UserID = currentUserId,
                 CreatedAt = DateTime.Now,
-                TotalAmount = model.BaseTotal,
-                Status = "Pending",
+                TotalAmount = serverTotal,
+                Status = "Pending"
             };
+
             _db.Orders.Add(newOrder);
             _db.SaveChanges();
 
@@ -204,6 +246,33 @@ namespace FiveStars.Controllers
             // 3. Kullanıcıyı Payment sayfasına yönlendir
             return RedirectToAction("Payment", "Payment", new { orderId = newOrder.OrderID });
         }
+
+        private void ReleaseExpiredHolds()
+        {
+            var cutoff = DateTime.Now.AddMinutes(-10);
+
+            var expiredOrders = _db.Orders
+                .Where(o => o.Status == "Pending" && o.CreatedAt < cutoff)
+                .ToList();
+
+            if (!expiredOrders.Any()) return;
+
+            var expiredIds = expiredOrders.Select(o => o.OrderID).ToList();
+
+            var expiredTickets = _db.Tickets
+                .Where(t => t.OrderID.HasValue
+                         && expiredIds.Contains(t.OrderID.Value)
+                         && t.Status == "booked")
+                .ToList();
+
+
+            _db.Tickets.RemoveRange(expiredTickets);
+            _db.Orders.RemoveRange(expiredOrders);
+
+            _db.SaveChanges();
+        }
+
+
 
         // Dispoz metodu
         protected override void Dispose(bool disposing)
