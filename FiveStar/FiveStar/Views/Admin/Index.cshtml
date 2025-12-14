@@ -3,52 +3,69 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <h2>Admin Dashboard</h2>
+<div class="admin-container">
+    <h1 class="admin-title">Admin Dashboard</h1>
 
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">Movies</div>
-                <div class="card-body">
-                    <h4 class="card-title">@ViewBag.TotalMovies</h4>
-                    <p class="card-text">Total movies</p>
-                    <a href="@Url.Action("Movies", "Admin")" class="btn btn-light">Manage</a>
-                </div>
-            </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="admin-alert success">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
         </div>
+    }
 
-        <div class="col-md-3">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-header">Showtimes</div>
-                <div class="card-body">
-                    <h4 class="card-title">@ViewBag.ActiveShowings</h4>
-                    <p class="card-text">Active showtimes</p>
-                    <a href="@Url.Action("Showtimes", "Admin")" class="btn btn-light">Manage</a>
-                </div>
-            </div>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="admin-alert error">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
         </div>
+    }
 
-        <div class="col-md-3">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-header">Campaigns</div>
-                <div class="card-body">
-                    <h4 class="card-title">@ViewBag.ActiveCampaigns</h4>
-                    <p class="card-text">Active campaigns</p>
-                    <a href="@Url.Action("Campaigns", "Admin")" class="btn btn-light">Manage</a>
-                </div>
+    <div class="dashboard-grid">
+        <a href="@Url.Action("Movies", "Admin")" class="dashboard-card movies">
+            <div class="card-icon movies">
+                <i class="fas fa-film"></i>
             </div>
-        </div>
+            <h3 class="card-count">@ViewBag.TotalMovies</h3>
+            <p class="card-label">Total Movies</p>
+        </a>
 
-        <div class="col-md-3">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-header">Users</div>
-                <div class="card-body">
-                    <h4 class="card-title">@ViewBag.TotalUsers</h4>
-                    <p class="card-text">Registered users</p>
-                    <a href="@Url.Action("Users", "Admin")" class="btn btn-light">Manage</a>
-                </div>
+        <a href="@Url.Action("Showtimes", "Admin")" class="dashboard-card showtimes">
+            <div class="card-icon showtimes">
+                <i class="fas fa-clock"></i>
             </div>
+            <h3 class="card-count">@ViewBag.ActiveShowings</h3>
+            <p class="card-label">Active Showtimes</p>
+        </a>
+
+        <a href="@Url.Action("Campaigns", "Admin")" class="dashboard-card campaigns">
+            <div class="card-icon campaigns">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <h3 class="card-count">@ViewBag.ActiveCampaigns</h3>
+            <p class="card-label">Active Campaigns</p>
+        </a>
+
+        <a href="@Url.Action("Users", "Admin")" class="dashboard-card users">
+            <div class="card-icon users">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="card-count">@ViewBag.TotalUsers</h3>
+            <p class="card-label">Registered Users</p>
+        </a>
+    </div>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <a href="@Url.Action("CreateMovie", "Admin")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Movie
+            </a>
+            <a href="@Url.Action("CreateShowtime", "Admin")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Showtime
+            </a>
+            <a href="@Url.Action("CreateCampaign", "Admin")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Create Campaign
+            </a>
         </div>
     </div>
 </div>

@@ -7,7 +7,6 @@ using FiveStars.Models;
 
 namespace FiveStars.Controllers
 {
-    // LAB 12 – AUTHORIZATION (WORKS WITH FORMS AUTH)
     [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {

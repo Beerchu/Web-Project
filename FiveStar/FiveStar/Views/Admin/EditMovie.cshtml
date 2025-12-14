@@ -1,106 +1,80 @@
 ﻿@model FiveStars.Models.Movies
 
-
 @{
     ViewBag.Title = "Edit Movie";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <h2>Edit Movie: @Model.Title</h2>
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Edit Movie: @Model.Title</h1>
+        <a href="@Url.Action("Movies", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Movies
+        </a>
+    </div>
 
-    @using (Html.BeginForm("EditMovie", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.MovieID)
+    <div class="form-container">
+        @using (Html.BeginForm("EditMovie", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.MovieID)
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Title)
-                            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.Duration_min)
-                                    @Html.TextBoxFor(m => m.Duration_min, new { @class = "form-control", type = "number" })
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.Ratings)
-                                    @Html.TextBoxFor(m => m.Ratings, new { @class = "form-control", type = "number", step = "0.1" })
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.Status)
-                                    @Html.DropDownListFor(m => m.Status, new SelectList(new[] { "Now Showing", "Coming Soon", "Archived" }), new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.ReleaseDate)
-                                    @Html.TextBoxFor(m => m.ReleaseDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.PosterUrl, "Poster URL")
-                            @Html.TextBoxFor(m => m.PosterUrl, new { @class = "form-control" })
-
-                            @if (!string.IsNullOrEmpty(Model.PosterUrl))
-                            {
-                                <small class="form-text text-muted">Current poster preview:</small>
-                                <div class="mt-2">
-                                    <img src="@Url.Content(Model.PosterUrl)"
-                                         class="img-thumbnail"
-                                         style="max-width: 200px;" />
-                                </div>
-                            }
-                        </div>
-
-
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Description)
-                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 5 })
-                        </div>
-                    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Movie Title *</label>
+                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter movie title", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Title, "", new { style = "color: #dc3545; font-size: 12px;" })
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Actions</h5>
-                        <button type="submit" class="btn btn-primary btn-block mb-2">
-                            <i class="fas fa-save"></i> Update Movie
-                        </button>
-                        <a href="@Url.Action("Movies", "Admin")" class="btn btn-secondary btn-block">
-                            <i class="fas fa-times"></i> Cancel
-                        </a>
-                    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Duration (minutes)</label>
+                    @Html.TextBoxFor(m => m.Duration_min, new { @class = "form-control", type = "number", placeholder = "120" })
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rating</label>
+                    @Html.TextBoxFor(m => m.Ratings, new { @class = "form-control", type = "number", step = "0.1", placeholder = "8.5" })
                 </div>
             </div>
-        </div>
-    }
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Status *</label>
+                    @Html.DropDownListFor(m => m.Status, new SelectList(new[] { "Now Showing", "Coming Soon", "Archived" }), "Select Status", new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Status, "", new { style = "color: #dc3545; font-size: 12px;" })
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Release Date</label>
+                    @Html.TextBoxFor(m => m.ReleaseDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Poster URL</label>
+                @Html.TextBoxFor(m => m.PosterUrl, new { @class = "form-control", placeholder = "images/movies/avatar.jpg" })
+
+                @if (!string.IsNullOrEmpty(Model.PosterUrl))
+                {
+                    var posterPath = Url.Content("~/" + Model.PosterUrl);
+                    <div class="image-preview">
+                        <p style="margin: 0 0 10px 0; color: #b9c3cf;">Current poster:</p>
+                        <img src="@posterPath" alt="@Model.Title" />
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter movie description...", rows = 5 })
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update Movie
+                </button>
+                <a href="@Url.Action("Movies", "Admin")" class="btn btn-secondary">Cancel</a>
+            </div>
+        }
+    </div>
 </div>
-
-@section Scripts {
-    <script>
-        $('.custom-file-input').on('change', function () {
-            var fileName = $(this).val().split('\\').pop();
-            $(this).next('.custom-file-label').html(fileName);
-        });
-    </script>
-}

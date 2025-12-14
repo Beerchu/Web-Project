@@ -1,67 +1,83 @@
 ﻿@model IEnumerable<FiveStars.Models.Users>
 
-
 @{
     ViewBag.Title = "User Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>User Management</h2>
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">User Management</h1>
+        <a href="@Url.Action("Index", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-
-<a href="@Url.Action("Index", "Admin")" class="btn btn-outline-secondary btn-block mt-2">
-    <i class="fas fa-home"></i> Back to Dashboard
-</a>
-
-
-<table class="table">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Active</th>
-        <th>Created</th>
-        <th>Actions</th>
-    </tr>
-
-    @foreach (var user in Model)
+    @if (TempData["SuccessMessage"] != null)
     {
-        <tr>
-            <td>@user.UserID</td>
-            <td>@user.FirstName @user.LastName</td>
-            <td>@user.Email</td>
-            <td>
-                @if (user.Role == "admin")
-                {
-                    <span class="badge bg-danger">Admin</span>
-                }
-                else
-                {
-                    <span class="badge bg-primary">Customer</span>
-                }
-            </td>
-            <td>
-                @{
-                    bool isActive = user.IsActive.HasValue && user.IsActive.Value;
-                }
-                @if (isActive)
-                {
-                    <span class="badge bg-success">Yes</span>
-                }
-                else
-                {
-                    <span class="badge bg-secondary">No</span>
-                }
-            </td>
-            <td>@(user.CreatedAt?.ToString("dd.MM.yyyy") ?? "-")</td>
-            <td>
-                @Html.ActionLink("Edit", "EditUser", new { id = user.UserID }, new { @class = "btn btn-sm btn-warning" })
-            </td>
-        </tr>
+        <div class="admin-alert success">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        </div>
     }
-</table>
+
+    <div class="table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Active</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.UserID</td>
+                        <td>
+                            <strong>@user.FirstName @user.LastName</strong>
+                        </td>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.Role == "admin")
+                            {
+                                <span class="role-badge admin" title="Administrator">
+                                    Admin
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="role-badge customer" title="Customer">
+                                    Customer
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                bool isActive = user.IsActive.HasValue && user.IsActive.Value;
+                            }
+                            @if (isActive)
+                            {
+                                <span class="badge badge-success">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">No</span>
+                            }
+                        </td>
+                        <td>@(user.CreatedAt?.ToString("dd.MM.yyyy") ?? "-")</td>
+                        <td>
+                            <a href="@Url.Action("EditUser", new { id = user.UserID })" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
