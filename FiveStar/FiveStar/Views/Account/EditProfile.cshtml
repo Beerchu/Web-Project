@@ -1,0 +1,168 @@
+﻿@model FiveStars.Models.EditProfileViewModel
+
+@{
+    ViewBag.Title = "Edit Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string avatarPath = string.IsNullOrEmpty(Model.ProfileImagePath)
+        ? ""
+        : Url.Content(Model.ProfileImagePath);
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Content/userProfile.css")" />
+
+<div class="user-profile-container">
+    <div class="user-profile-hero">
+
+        <!-- Header (same vibe as profile) -->
+        <div class="user-profile-header">
+            <div class="user-profile-title">
+                <h1>Edit Profile</h1>
+                <p class="user-profile-subtitle">
+                    Update your personal info — clean and simple.
+                </p>
+                <span class="user-profile-role-badge">
+                    <i class="fas fa-user-cog"></i> Profile Settings
+                </span>
+            </div>
+        </div>
+
+        <!-- Preview card -->
+        <div class="edit-profile-preview-card">
+            <div class="edit-profile-preview-left">
+                <div class="edit-profile-preview-avatar">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImagePath))
+                    {
+                        <img src="@avatarPath" alt="Profile preview" />
+                    }
+                    else
+                    {
+                        <div class="edit-profile-preview-empty">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="edit-profile-preview-right">
+                <div class="edit-profile-preview-title">@Model.FirstName @Model.LastName</div>
+                <div class="edit-profile-preview-sub">This is your live preview.</div>
+
+                <div class="edit-profile-preview-pills">
+                    <span class="edit-profile-pill">
+                        <i class="fas fa-envelope"></i> @Model.Email
+                    </span>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ProfileImagePath))
+                    {
+                        <span class="edit-profile-pill">
+                            <i class="fas fa-image"></i> Image set
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="edit-profile-pill edit-profile-pill-muted">
+                            <i class="fas fa-image"></i> No image
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "edit-profile-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.UserID)
+
+            <div class="edit-profile-grid">
+
+                <!-- Personal -->
+                <div class="user-profile-info-card">
+                    <div class="user-profile-info-card-header">
+                        <i class="fas fa-user-circle user-profile-info-card-icon"></i>
+                        <h3 class="user-profile-info-card-title">Personal</h3>
+                    </div>
+
+                    <div class="edit-profile-group">
+                        <label class="edit-profile-label">
+                            <i class="fas fa-user"></i> First Name
+                        </label>
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "edit-profile-input", placeholder = "First name", autocomplete = "given-name" })
+                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "edit-profile-validation" })
+                    </div>
+
+                    <div class="edit-profile-group">
+                        <label class="edit-profile-label">
+                            <i class="fas fa-user"></i> Last Name
+                        </label>
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "edit-profile-input", placeholder = "Last name", autocomplete = "family-name" })
+                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "edit-profile-validation" })
+                    </div>
+
+                    <div class="edit-profile-tip">
+                        Tip: Use your real name so staff can help you faster at the cinema.
+                    </div>
+                </div>
+
+                <!-- Account -->
+                <div class="user-profile-info-card">
+                    <div class="user-profile-info-card-header">
+                        <i class="fas fa-cog user-profile-info-card-icon"></i>
+                        <h3 class="user-profile-info-card-title">Account</h3>
+                    </div>
+
+                    <div class="edit-profile-group">
+                        <label class="edit-profile-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "edit-profile-input", placeholder = "Email address", autocomplete = "email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "edit-profile-validation" })
+                    </div>
+
+                    <div class="edit-profile-group">
+                        <label class="edit-profile-label">
+                            <i class="fas fa-image"></i> Profile Image Path
+                        </label>
+                        @Html.TextBoxFor(m => m.ProfileImagePath, new { @class = "edit-profile-input", placeholder = "Example: /images/users/me.jpg" })
+                        <div class="edit-profile-help">
+                            This is a path to an existing image inside your project. (Upload can be added later.)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="user-profile-actions">
+                <button type="submit" class="edit-profile-btn-save">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+
+                <a href="@Url.Action("UserProfile", "Account")" class="edit-profile-btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Profile
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Tiny polish: live preview updates without reloading
+    document.addEventListener('DOMContentLoaded', function () {
+        const first = document.querySelector('input[name="FirstName"]');
+        const last = document.querySelector('input[name="LastName"]');
+        const email = document.querySelector('input[name="Email"]');
+
+        const title = document.querySelector('.edit-profile-preview-title');
+        const emailPill = document.querySelector('.edit-profile-preview-pills .edit-profile-pill');
+
+        function update() {
+            if (title) title.textContent = (first?.value || '') + ' ' + (last?.value || '');
+            if (emailPill && email) emailPill.innerHTML = '<i class="fas fa-envelope"></i> ' + (email.value || '');
+        }
+
+        [first, last, email].forEach(el => {
+            if (!el) return;
+            el.addEventListener('input', update);
+        });
+    });
+</script>

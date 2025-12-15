@@ -1,41 +1,227 @@
-﻿@model FiveStars.Models.Users
-@{ ViewBag.Title = "My Profile";
-                Layout = "~/Views/Shared/_Layout.cshtml"; }
+﻿@model FiveStars.Models.UserProfileViewModel
+@using System.Linq;
 
-<h2>My Profile</h2>
+@{
+    ViewBag.Title = "My Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<p>
-    <strong>Name:</strong>
-    @Model.FirstName @Model.LastName
-</p>
+<link rel="stylesheet" href="@Url.Content("~/Content/userProfile.css")" />
 
-<p>
-    <strong>Email:</strong>
-    @Model.Email
-</p>
+<div class="user-profile-container">
+    <div class="user-profile-hero">
+        <div class="user-profile-header">
+            <div class="user-profile-avatar">
+                @if (!string.IsNullOrEmpty(Model.User.ProfileImagePath))
+                {
+                    <img src="@Url.Content(Model.User.ProfileImagePath)" alt="@(Model.User.FirstName)'s profile picture" />
+                }
+                else
+                {
+                    <div class="user-profile-empty-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                }
+            </div>
 
-<p>
-    <strong>Role:</strong>
-    @(Model.Role ?? "customer")
-</p>
+            <div class="user-profile-title">
+                <h1>@Model.User.FirstName @Model.User.LastName</h1>
+                <p class="user-profile-subtitle">Welcome to your personal profile dashboard</p>
+                <span class="user-profile-role-badge">
+                    <i class="fas fa-user-tag"></i> @(Model.User.Role ?? "customer")
+                </span>
+            </div>
+        </div>
 
-<p>
-    <strong>Status:</strong>
-    @((Model.IsActive.HasValue && Model.IsActive.Value) ? "Active" : "Inactive")
-</p>
+        <div class="user-profile-stats">
+            <div class="user-profile-stat-card">
+                <div class="user-profile-stat-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="user-profile-stat-number">@Model.ActiveBookingsCount</div>
+                <div class="user-profile-stat-label">Active Bookings</div>
+            </div>
 
-<p>
-    <strong>Joined:</strong>
-    @(Model.CreatedAt.HasValue
-        ? Model.CreatedAt.Value.ToString("dd.MM.yyyy HH:mm")
-        : "N/A")
-</p>
+            <div class="user-profile-stat-card">
+                <div class="user-profile-stat-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="user-profile-stat-number">@Model.RedeemedCampaignsCount</div>
+                <div class="user-profile-stat-label">Redeemed (Not Used Yet)</div>
+            </div>
+        </div>
 
-@if (!string.IsNullOrEmpty(Model.ProfileImagePath))
-{
-<img src="@Url.Content(Model.ProfileImagePath)"
-     alt="Profile Image"
-     style="max-width:150px;" />}
+        <div class="user-profile-info-grid">
+            <div class="user-profile-info-card">
+                <div class="user-profile-info-card-header">
+                    <i class="fas fa-user-circle user-profile-info-card-icon"></i>
+                    <h3 class="user-profile-info-card-title">Personal Information</h3>
+                </div>
 
-<br />
-<a href="/Account/Logout" class="login-btn">Logout</a>
+                <div class="user-profile-info-item">
+                    <div class="user-profile-info-label">
+                        <i class="fas fa-user"></i> Full Name
+                    </div>
+                    <div class="user-profile-info-value">@Model.User.FirstName @Model.User.LastName</div>
+                </div>
+
+                <div class="user-profile-info-item">
+                    <div class="user-profile-info-label">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </div>
+                    <div class="user-profile-info-value">@Model.User.Email</div>
+                </div>
+
+                <div class="user-profile-info-item">
+                    <div class="user-profile-info-label">
+                        <i class="fas fa-id-card"></i> User ID
+                    </div>
+                    <div class="user-profile-info-value">#@Model.User.UserID</div>
+                </div>
+            </div>
+
+            <div class="user-profile-info-card">
+                <div class="user-profile-info-card-header">
+                    <i class="fas fa-cog user-profile-info-card-icon"></i>
+                    <h3 class="user-profile-info-card-title">Account Information</h3>
+                </div>
+
+                <div class="user-profile-info-item">
+                    <div class="user-profile-info-label">
+                        <i class="fas fa-shield-alt"></i> Account Status
+                    </div>
+                    <div class="user-profile-info-value">
+                        @if (Model.User.IsActive.HasValue && Model.User.IsActive.Value)
+                        {
+                            <span class="user-profile-status-active">
+                                <span class="user-profile-status-dot"></span> Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="user-profile-status-inactive">
+                                <span class="user-profile-status-dot"></span> Inactive
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <div class="user-profile-info-item">
+                    <div class="user-profile-info-label">
+                        <i class="fas fa-calendar-alt"></i> Member Since
+                    </div>
+                    <div class="user-profile-info-value">
+                        @if (Model.User.CreatedAt.HasValue)
+                        {
+                            @Model.User.CreatedAt.Value.ToString("MMMM dd, yyyy")
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Redeemed campaigns list -->
+        <div class="user-profile-info-card" style="margin-top:20px;">
+            <div class="user-profile-info-card-header">
+                <i class="fas fa-tags user-profile-info-card-icon"></i>
+                <h3 class="user-profile-info-card-title">Redeemed Campaigns (Not Used Yet)</h3>
+            </div>
+
+            @if (Model.RedeemedCampaigns != null && Model.RedeemedCampaigns.Any())
+            {
+                <div class="user-profile-campaign-grid">
+                    @foreach (var c in Model.RedeemedCampaigns)
+                    {
+                        <div class="user-profile-campaign-card">
+                            <div class="user-profile-campaign-thumb">
+                                @if (!string.IsNullOrWhiteSpace(c.ImageUrl))
+                                {
+                                    <img src="@Url.Content("~/" + c.ImageUrl.TrimStart('/'))" alt="@c.Title" />
+                                }
+                                else
+                                {
+                                    <div class="user-profile-campaign-thumb-empty">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="user-profile-campaign-body">
+                                <div class="user-profile-campaign-title">@c.Title</div>
+
+                                @if (!string.IsNullOrWhiteSpace(c.Description))
+                                {
+                                    <div class="user-profile-campaign-desc">@c.Description</div>
+                                }
+
+                                <div class="user-profile-campaign-meta">
+                                    @if (!string.IsNullOrWhiteSpace(c.DurationText))
+                                    {
+                                        <span>@c.DurationText</span>
+                                    }
+
+                                    @if (c.RedeemedDate.HasValue)
+                                    {
+                                        <span> • Redeemed @c.RedeemedDate.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                                    }
+                                </div>
+
+                                <div class="user-profile-campaign-status">
+                                    @if (c.IsActive.HasValue && c.IsActive.Value)
+                                    {
+                                        <span class="user-profile-status-active">
+                                            <span class="user-profile-status-dot"></span> Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="user-profile-status-inactive">
+                                            <span class="user-profile-status-dot"></span> Inactive
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div style="color:#aaa;">No redeemed campaigns available.</div>
+            }
+        </div>
+
+        @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+
+        <div class="user-profile-actions">
+            <a href="@Url.Action("EditProfile", "Account")" class="user-profile-btn-edit">
+                <i class="fas fa-edit"></i> Edit Profile
+            </a>
+
+            <a href="javascript:void(0);" class="user-profile-btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    document.getElementById('logoutForm').submit();
+                }
+            });
+        }
+    });
+</script>
