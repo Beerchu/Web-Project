@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using FiveStars.Models; // CampaignModel ve PaymentViewModel artık buradan çekiliyor
-
-// NECESSARY USING FOR ENTITY FRAMEWORK CLASSES (Order/Ticket)
-using FiveStars;
-
+using FiveStars.Models; // CampaignModel ve PaymentViewModel buradan geliyor
+using FiveStars; // Order, Ticket ve CinemaDBEntities buradan geliyor
 
 namespace FiveStars.Controllers
 {
-    // *** ViewModel Definitions (Bu kısım TAŞINDIĞI için BOŞ) ***
-
     public class PaymentController : Controller
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // ** A.1. Helper Method: Check Campaign Eligibility **
-        // Kampanyanın geçerli olup olmadığını kontrol eder. Geçersizse hata mesajı döner.
+        // =========================================================
+        // A. HELPER METOTLAR (Kampanya/Fiyat/Cleanup)
+        // =========================================================
+
+        // A.1. Kampanya Uygunluk Kontrolü
         private string CheckCampaignEligibility(int orderId, int campaignId)
         {
             var orderTickets = _db.Tickets
@@ -30,113 +28,81 @@ namespace FiveStars.Controllers
                 return "Order details could not be found.";
 
             int numTickets = orderTickets.Count;
+            // Ticket entity'sinde Showings referansının null olmadığı varsayılmıştır.
             DateTime showingDate = orderTickets.First().Showings.ShowTime;
 
-            // Koşul kontrolü
             switch (campaignId)
             {
                 case 2: // Family Package: Buy 4 Pay for 3
                     if (numTickets < 4)
-                    {
                         return "Family Package requires a minimum of 4 tickets to be selected.";
-                    }
                     break;
-
                 case 3: // Tuesday Cinema
-                    // Gün kontrolü
                     if (showingDate.DayOfWeek != DayOfWeek.Tuesday)
-                    {
                         return "Tuesday Cinema Discount is only valid for shows on Tuesdays.";
-                    }
                     break;
-
-                case 5: // Couple Ticket (ID'nin 5 olduğunu varsayıyoruz)
+                case 5: // Couple Ticket
                     if (numTickets != 2)
-                    {
                         return "Couple Ticket requires exactly 2 tickets to be selected.";
-                    }
                     break;
-
-                // Diğer kampanyalar (Örn: Popcorn, Student) artık Controller tarafından işlenmeyecek.
-
                 default:
-                    // Eğer 1 (Student) veya diğer kaldırılan kampanyalar seçilirse, geçersiz kabul et.
                     if (campaignId != 1 && campaignId != 4)
-                    {
-                        // Sadece aktif ve tanımlanmış kampanyalara izin veriyoruz.
                         return "Invalid campaign selection or conditions not met.";
-                    }
                     break;
             }
-
-            // Koşullar sağlanıyorsa veya kampanya bilinmiyorsa (ancak AJAX'tan geldiği için) boş string dön
             return "";
         }
 
-
-        // ** A. Helper Method: Price Calculation Logic **
+        // A.2. Fiyat Hesaplama Mantığı
         private (decimal Discount, decimal FinalTotal) CalculateOrderPrice(int orderId, int? campaignId)
         {
             var orderTickets = _db.Tickets
-                                     .Include(t => t.Showings)
-                                     .Where(t => t.OrderID == orderId)
-                                     .ToList();
+                                 .Include(t => t.Showings)
+                                 .Where(t => t.OrderID == orderId)
+                                 .ToList();
 
             if (!orderTickets.Any()) return (0m, 0m);
 
-            // CS1061 hatasını çözmek için düzeltme yapıldı: GetValueOrDefault kaldırıldı
-            decimal ticketPrice = (decimal)orderTickets.First().Showings.TicketPrice;
+            // TicketPrice'ın nullable olması durumuna karşı güvenlik önlemi
+            decimal ticketPrice = (decimal?)orderTickets.First().Showings.TicketPrice ?? 0m;
             decimal baseTotal = orderTickets.Count * ticketPrice;
             decimal discountAmount = 0m;
             int numTickets = orderTickets.Count;
 
-            // ** YENİ EK: Koşulları sağlama kontrolü (Güvenlik için) **
+            // Uygunluk kontrolü (AJAX'tan sonra güvenlik için tekrar kontrol)
             if (campaignId.HasValue && campaignId.Value > 0)
             {
                 string eligibilityCheck = CheckCampaignEligibility(orderId, campaignId.Value);
                 if (!string.IsNullOrEmpty(eligibilityCheck))
                 {
-                    // Koşullar sağlanmıyorsa indirimi sıfırla
-                    campaignId = null;
+                    campaignId = null; // Uygun değilse kampanyayı sıfırla
                 }
             }
 
-
-            // Apply Campaign Discount
+            // İndirimi Uygula
             if (campaignId.HasValue && campaignId.Value > 0)
             {
                 switch (campaignId.Value)
                 {
-                    case 1: // Student Discount 20% (Kaldırılması istendi, ancak DB'den gelirse %20 indirim uyguluyoruz)
-                        discountAmount = baseTotal * 0.20m;
+                    case 1: discountAmount = baseTotal * 0.20m; break; // Student Discount
+                    case 2: // Family Package
+                        if (numTickets >= 4) discountAmount = (numTickets / 4) * ticketPrice;
                         break;
-                    case 2: // Family Package: Buy 4 Pay for 3
-                        if (numTickets >= 4) // Koşul kontrolü CheckCampaignEligibility'de yapıldı, burada sadece hesaplama var
-                        {
-                            discountAmount = (numTickets / 4) * ticketPrice;
-                        }
-                        break;
-                    case 3: // Tuesday Cinema: Fixed Discount (60 TL)
-                        // Koşul kontrolü CheckCampaignEligibility'de yapıldı
+                    case 3: // Tuesday Cinema
                         discountAmount = 60.00m;
                         break;
                     case 5: // Couple Ticket
-                        if (numTickets == 2) // Koşul kontrolü CheckCampaignEligibility'de yapıldı
-                        {
-                            // Varsayalım ki Couple Ticket 1 bilet fiyatı kadar indirim yapıyor.
-                            discountAmount = ticketPrice;
-                        }
+                        if (numTickets == 2) discountAmount = ticketPrice;
                         break;
-                        // Case 4 (Popcorn) kaldırıldı
                 }
             }
 
             decimal finalTotal = baseTotal - discountAmount;
 
-            // Round results and ensure total is not negative
             return (Math.Round(discountAmount, 2), Math.Round(Math.Max(0m, finalTotal), 2));
         }
 
+        // A.3. Süresi Dolan Siparişleri Serbest Bırakma
         private void ReleaseExpiredHolds()
         {
             var cutoff = DateTime.Now.AddMinutes(-10);
@@ -162,7 +128,25 @@ namespace FiveStars.Controllers
             _db.SaveChanges();
         }
 
-        // ** B. GET Method: Load Payment Page (Shows BaseTotal and Campaigns) **
+        // A.4. Mevcut Kullanıcı ID'sini Alma
+        private int GetCurrentUserId()
+        {
+            var name = (User.Identity?.Name ?? "").Trim();
+
+            if (int.TryParse(name, out int parsedId))
+                return parsedId;
+
+            var user = _db.Users.FirstOrDefault(u => u.Email == name);
+            if (user == null)
+                throw new InvalidOperationException("Logged-in user not found. Check what User.Identity.Name contains.");
+
+            return user.UserID;
+        }
+
+        // =========================================================
+        // B. GET ACTION: ÖDEME SAYFASINI YÜKLE
+        // =========================================================
+
         [Authorize]
         public ActionResult Payment(int orderId)
         {
@@ -173,11 +157,12 @@ namespace FiveStars.Controllers
 
             if (order == null || order.Status == "Paid") return RedirectToAction("Index", "Home");
 
-            // Calculate initial prices (Undiscounted Base Total)
+            // Başlangıç fiyatlarını hesapla (Kampanyasız, sadece temel toplamı görmek için)
             var (discount, finalTotal) = CalculateOrderPrice(orderId, null);
 
             int userId = GetCurrentUserId();
 
+            // Kullanıcıya ait mevcut kampanyaları getir (Kampanya ID 1 ve 4 hariç)
             var availableCampaigns = (from uc in _db.User_Campaigns
                                       join c in _db.Campaigns on uc.CampaignID equals c.CampaignID
                                       where uc.UserID == userId
@@ -204,24 +189,25 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
+        // =========================================================
+        // C. POST ACTION: AJAX FİYAT YENİDEN HESAPLAMA
+        // =========================================================
+
         [Authorize]
         [HttpPost]
         public JsonResult RecalculatePrice(int orderId, int campaignId)
         {
             int? selectedCampaignId = campaignId > 0 ? campaignId : (int?)null;
 
-            // Ownership check
+            // 1. Sahip olma kontrolü
             if (selectedCampaignId.HasValue)
             {
                 int userId = GetCurrentUserId();
-
-                bool owns = _db.User_Campaigns.Any(uc =>
-                    uc.UserID == userId && uc.CampaignID == selectedCampaignId.Value);
+                bool owns = _db.User_Campaigns.Any(uc => uc.UserID == userId && uc.CampaignID == selectedCampaignId.Value);
 
                 if (!owns)
                 {
-                    var baseTotal = _db.Orders.FirstOrDefault(o => o.OrderID == orderId)?.TotalAmount ?? 0m;
-
+                    decimal baseTotal = _db.Orders.FirstOrDefault(o => o.OrderID == orderId)?.TotalAmount ?? 0m;
                     return Json(new
                     {
                         success = false,
@@ -233,7 +219,7 @@ namespace FiveStars.Controllers
                 }
             }
 
-            // Existing eligibility check
+            // 2. Uygunluk kontrolü
             string validationMessage = "";
             if (campaignId > 0)
                 validationMessage = CheckCampaignEligibility(orderId, campaignId);
@@ -252,6 +238,7 @@ namespace FiveStars.Controllers
                 });
             }
 
+            // 3. Fiyatı hesapla
             var (discount, finalTotal) = CalculateOrderPrice(orderId, selectedCampaignId);
 
             return Json(new
@@ -264,13 +251,31 @@ namespace FiveStars.Controllers
         }
 
 
-        // ** D. POST Method: Confirm Payment and Update DB **
+        // =========================================================
+        // D. POST ACTION: ÖDEME ONAYI VE DB GÜNCELLEMESİ
+        // =========================================================
+
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmPayment(PaymentViewModel model)
         {
-            // Payment Gateway Integration Simulation...
+            // 1. Model Doğrulama (Kart Bilgileri için)
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Error = "Lütfen kart bilgilerinizi eksiksiz ve doğru formatta girin.";
+
+                // Kampanyaları tekrar yükle (UI'ın bozulmaması için)
+                int userId = GetCurrentUserId();
+                model.AvailableCampaigns = (from uc in _db.User_Campaigns
+                                            join c in _db.Campaigns on uc.CampaignID equals c.CampaignID
+                                            where uc.UserID == userId && c.IsActive && c.CampaignID != 1 && c.CampaignID != 4
+                                            select new CampaignModel { CampaignID = c.CampaignID, Title = c.Title }).ToList();
+
+                return View("Payment", model);
+            }
+
+            // 2. Ödeme Ağ Geçidi Simülasyonu
             bool paymentSuccess = true;
 
             if (paymentSuccess)
@@ -279,29 +284,32 @@ namespace FiveStars.Controllers
                                .Include(o => o.Tickets)
                                .FirstOrDefault(o => o.OrderID == model.OrderID);
 
-
-
                 if (order != null && order.Status != "Paid")
                 {
                     int? chosen = model.SelectedCampaignID;
 
+                    // Nihai güvenlik ve hesaplama (sahip olma ve uygunluk kontrolü)
                     if (chosen.HasValue)
                     {
                         int userId = GetCurrentUserId();
                         bool owns = _db.User_Campaigns.Any(uc => uc.UserID == userId && uc.CampaignID == chosen.Value);
                         if (!owns) chosen = null;
+
+                        if (chosen.HasValue && !string.IsNullOrEmpty(CheckCampaignEligibility(model.OrderID, chosen.Value)))
+                        {
+                            chosen = null;
+                        }
                     }
 
                     var (discount, finalTotal) = CalculateOrderPrice(model.OrderID, chosen);
 
-                    // Update Order record (use chosen, not model.SelectedCampaignID)
+                    // 3. Veritabanı Güncelleme (Sipariş ve Bilet Statüsü)
                     order.Status = "Paid";
                     order.CampaignID = chosen;
                     order.DiscountAmount = discount;
+                    // Order.TotalAmount'u sunucuda hesaplanan finalTotal ile güncelle
                     order.TotalAmount = finalTotal;
 
-
-                    // 3. Mark Tickets as "Paid"
                     foreach (var ticket in order.Tickets)
                     {
                         ticket.Status = "Paid";
@@ -309,33 +317,49 @@ namespace FiveStars.Controllers
 
                     _db.SaveChanges();
 
-                    // 4. Redirect to Success page
+                    // 4. Başarı sayfasına yönlendirme
                     return RedirectToAction("PaymentSuccess", new { orderId = model.OrderID });
                 }
             }
 
+            // Ödeme Başarısız olursa
             ModelState.AddModelError("", "Payment failed or Order could not be updated.");
             return RedirectToAction("Payment", new { orderId = model.OrderID });
         }
 
-        private int GetCurrentUserId()
+        // =========================================================
+        // E. GET ACTION: ÖDEME BAŞARI SAYFASI
+        // =========================================================
+
+        [Authorize]
+        public ActionResult PaymentSuccess(int orderId)
         {
-            var name = (User.Identity?.Name ?? "").Trim();
+            var order = _db.Orders
+                           .FirstOrDefault(o => o.OrderID == orderId && o.Status == "Paid");
 
-            // If your auth stores numeric id in Name:
-            if (int.TryParse(name, out int parsedId))
-                return parsedId;
+            if (order == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
-            // Otherwise assume it's email:
-            var user = _db.Users.FirstOrDefault(u => u.Email == name);
-            if (user == null)
-                throw new InvalidOperationException("Logged-in user not found. Check what User.Identity.Name contains.");
+            var successModel = new PaymentViewModel
+            {
+                OrderID = orderId,
+                // Hata çözümü: TotalAmount'ın decimal olduğunu varsayıyoruz.
+                FinalTotal = order.TotalAmount,
+            };
 
-            return user.UserID;
+            // Onay mesajı (Home Controller'da gösterilmek üzere)
+            TempData["PaymentConfirmed"] = "Ödeme işleminiz başarıyla onaylanmıştır! Biletleriniz e-posta adresinize gönderilmiştir.";
+
+            // Bu, sizin oluşturduğunuz PaymentSuccess.cshtml görünümünü yükler.
+            return View(successModel);
         }
 
+        // =========================================================
+        // F. Dispose Method
+        // =========================================================
 
-        // Dispose Method
         protected override void Dispose(bool disposing)
         {
             if (disposing)
