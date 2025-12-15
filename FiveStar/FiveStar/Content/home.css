@@ -1096,3 +1096,25 @@ body::before {
         display: block;
     }
 
+.campaign-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .campaign-link * {
+        pointer-events: none; /* tıklama her zaman <a>’ya gitsin */
+    }
+
+
+.section-campaigns h2,
+.section-yakinda h2 {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+    .section-campaigns h2::after,
+    .section-yakinda h2::after {
+        content: none !important;
+        display: none !important;
+    }

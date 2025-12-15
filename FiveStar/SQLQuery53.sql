@@ -1,9 +1,9 @@
 USE [CinemaDB_Extended]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_RegisterUser]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  StoredProcedure [dbo].[sp_RegisterUser]    Script Date: 13.12.2025 19:13:56 ******/
 DROP PROCEDURE [dbo].[sp_RegisterUser]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_LoginUser]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  StoredProcedure [dbo].[sp_LoginUser]    Script Date: 13.12.2025 19:13:56 ******/
 DROP PROCEDURE [dbo].[sp_LoginUser]
 GO
 ALTER TABLE [dbo].[Reservations] DROP CONSTRAINT [CK_Reservations_Status]
@@ -86,107 +86,110 @@ ALTER TABLE [dbo].[Cart] DROP CONSTRAINT [DF__Cart__AddedAt__534D60F1]
 GO
 ALTER TABLE [dbo].[Campaigns] DROP CONSTRAINT [DF_Campaigns_IsActive]
 GO
-/****** Object:  Index [UQ_Users_Email]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [UQ_Users_Email]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Users] DROP CONSTRAINT [UQ_Users_Email]
 GO
-/****** Object:  Index [UQ_User_Campaign]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [UQ_User_Campaign]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[User_Campaigns] DROP CONSTRAINT [UQ_User_Campaign]
 GO
-/****** Object:  Index [UQ_Tickets_Showing_Seat]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [UQ_Tickets_Showing_Seat]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Tickets] DROP CONSTRAINT [UQ_Tickets_Showing_Seat]
 GO
-/****** Object:  Index [UQ_Showings_Hall_ShowTime]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [UQ_Showings_Hall_ShowTime]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Showings] DROP CONSTRAINT [UQ_Showings_Hall_ShowTime]
 GO
-/****** Object:  Index [UQ_Seats_Hall_Row_Seat]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [UQ_Seats_Hall_Row_Seat]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Seats] DROP CONSTRAINT [UQ_Seats_Hall_Row_Seat]
 GO
-/****** Object:  Index [UQ_Genres_Movies]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [IX_Reservations_User_Status_Date]    Script Date: 13.12.2025 19:13:56 ******/
+DROP INDEX [IX_Reservations_User_Status_Date] ON [dbo].[Reservations]
+GO
+/****** Object:  Index [UQ_Genres_Movies]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Genres_Movies] DROP CONSTRAINT [UQ_Genres_Movies]
 GO
-/****** Object:  Index [UQ_Genres_Name]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Index [UQ_Genres_Name]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Genres] DROP CONSTRAINT [UQ_Genres_Name]
 GO
-/****** Object:  Table [dbo].[Top10Movies]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Table [dbo].[Top10Movies]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Top10Movies]') AND type in (N'U'))
 DROP TABLE [dbo].[Top10Movies]
 GO
-/****** Object:  Table [dbo].[Reservations]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Table [dbo].[Reservations]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Reservations]') AND type in (N'U'))
 DROP TABLE [dbo].[Reservations]
 GO
-/****** Object:  Table [dbo].[Genres_Movies]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Table [dbo].[Genres_Movies]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Genres_Movies]') AND type in (N'U'))
 DROP TABLE [dbo].[Genres_Movies]
 GO
-/****** Object:  Table [dbo].[Genres]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Table [dbo].[Genres]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Genres]') AND type in (N'U'))
 DROP TABLE [dbo].[Genres]
 GO
-/****** Object:  View [dbo].[vw_UserCartDetails]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  View [dbo].[vw_UserCartDetails]    Script Date: 13.12.2025 19:13:56 ******/
 DROP VIEW [dbo].[vw_UserCartDetails]
 GO
-/****** Object:  View [dbo].[vw_ShowingSeatStatus]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  View [dbo].[vw_ShowingSeatStatus]    Script Date: 13.12.2025 19:13:56 ******/
 DROP VIEW [dbo].[vw_ShowingSeatStatus]
 GO
-/****** Object:  Table [dbo].[Seats]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Table [dbo].[Seats]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Seats]') AND type in (N'U'))
 DROP TABLE [dbo].[Seats]
 GO
-/****** Object:  Table [dbo].[Cart]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  Table [dbo].[Cart]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cart]') AND type in (N'U'))
 DROP TABLE [dbo].[Cart]
 GO
-/****** Object:  View [dbo].[vw_CinemasByDistrict]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  View [dbo].[vw_CinemasByDistrict]    Script Date: 13.12.2025 19:13:56 ******/
 DROP VIEW [dbo].[vw_CinemasByDistrict]
 GO
-/****** Object:  View [dbo].[vw_UserCampaigns]    Script Date: 13.12.2025 03:47:40 ******/
+/****** Object:  View [dbo].[vw_UserCampaigns]    Script Date: 13.12.2025 19:13:56 ******/
 DROP VIEW [dbo].[vw_UserCampaigns]
 GO
-/****** Object:  Table [dbo].[User_Campaigns]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[User_Campaigns]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User_Campaigns]') AND type in (N'U'))
 DROP TABLE [dbo].[User_Campaigns]
 GO
-/****** Object:  View [dbo].[vw_UserTickets]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  View [dbo].[vw_UserTickets]    Script Date: 13.12.2025 19:13:56 ******/
 DROP VIEW [dbo].[vw_UserTickets]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Orders]') AND type in (N'U'))
 DROP TABLE [dbo].[Orders]
 GO
-/****** Object:  Table [dbo].[Tickets]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Tickets]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Tickets]') AND type in (N'U'))
 DROP TABLE [dbo].[Tickets]
 GO
-/****** Object:  Table [dbo].[Payments]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Payments]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Payments]') AND type in (N'U'))
 DROP TABLE [dbo].[Payments]
 GO
-/****** Object:  Table [dbo].[Halls]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Halls]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Halls]') AND type in (N'U'))
 DROP TABLE [dbo].[Halls]
 GO
-/****** Object:  Table [dbo].[Cinemas]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Cinemas]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cinemas]') AND type in (N'U'))
 DROP TABLE [dbo].[Cinemas]
 GO
-/****** Object:  Table [dbo].[Campaigns]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Campaigns]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Campaigns]') AND type in (N'U'))
 DROP TABLE [dbo].[Campaigns]
 GO
-/****** Object:  Table [dbo].[Showings]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Showings]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Showings]') AND type in (N'U'))
 DROP TABLE [dbo].[Showings]
 GO
-/****** Object:  Table [dbo].[Movies]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Movies]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Movies]') AND type in (N'U'))
 DROP TABLE [dbo].[Movies]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 13.12.2025 19:13:56 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
 DROP TABLE [dbo].[Users]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -201,13 +204,13 @@ CREATE TABLE [dbo].[Users](
 	[CreatedAt] [datetime2](7) NULL,
 	[IsActive] [bit] NULL,
 	[ProfileImagePath] [nvarchar](255) NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Users__1788CCAC8423D46B] PRIMARY KEY CLUSTERED 
 (
 	[UserID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Movies]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Movies]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -221,13 +224,13 @@ CREATE TABLE [dbo].[Movies](
 	[Status] [nvarchar](50) NOT NULL,
 	[ReleaseDate] [date] NULL,
 	[Description] [nvarchar](max) NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Movies__4BD2943A8F5AC507] PRIMARY KEY CLUSTERED 
 (
 	[MovieID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Showings]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Showings]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -238,13 +241,13 @@ CREATE TABLE [dbo].[Showings](
 	[TicketPrice] [money] NOT NULL,
 	[MovieID] [int] NULL,
 	[HallID] [int] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Showings__995FC05780F896BC] PRIMARY KEY CLUSTERED 
 (
 	[ShowingID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Campaigns]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Campaigns]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -256,13 +259,13 @@ CREATE TABLE [dbo].[Campaigns](
 	[ImageUrl] [nvarchar](255) NULL,
 	[DurationText] [nvarchar](100) NULL,
 	[IsActive] [bit] NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Campaign__3F5E8D797E6979E2] PRIMARY KEY CLUSTERED 
 (
 	[CampaignID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Cinemas]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Cinemas]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -274,13 +277,13 @@ CREATE TABLE [dbo].[Cinemas](
 	[City] [nvarchar](100) NULL,
 	[District] [nvarchar](100) NULL,
 	[PhoneNumber] [nvarchar](20) NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Cinemas__59C9262667AF154A] PRIMARY KEY CLUSTERED 
 (
 	[CinemaID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Halls]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Halls]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -290,13 +293,13 @@ CREATE TABLE [dbo].[Halls](
 	[HallType] [nvarchar](50) NULL,
 	[Capacity] [int] NULL,
 	[CinemaID] [int] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Halls__7E60E27486F5AA30] PRIMARY KEY CLUSTERED 
 (
 	[HallID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Payments]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Payments]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -308,13 +311,13 @@ CREATE TABLE [dbo].[Payments](
 	[TicketID] [int] NULL,
 	[PaymentTimestamp] [datetime2](2) NULL,
 	[OrderID] [int] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Payments__9B556A58E7106134] PRIMARY KEY CLUSTERED 
 (
 	[PaymentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Tickets]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Tickets]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -329,13 +332,13 @@ CREATE TABLE [dbo].[Tickets](
 	[SeatID] [int] NULL,
 	[ReservationID] [int] NULL,
 	[PurchaseDate] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Tickets__712CC627C7E70440] PRIMARY KEY CLUSTERED 
 (
 	[TicketID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -354,7 +357,7 @@ CREATE TABLE [dbo].[Orders](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[vw_UserTickets]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  View [dbo].[vw_UserTickets]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -409,7 +412,7 @@ LEFT JOIN dbo.Orders    AS o    ON t.OrderID     = o.OrderID
 LEFT JOIN dbo.Campaigns AS camp ON o.CampaignID  = camp.CampaignID
 LEFT JOIN dbo.Payments  AS p    ON o.OrderID     = p.OrderID;
 GO
-/****** Object:  Table [dbo].[User_Campaigns]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[User_Campaigns]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -419,13 +422,13 @@ CREATE TABLE [dbo].[User_Campaigns](
 	[UserID] [int] NOT NULL,
 	[CampaignID] [int] NOT NULL,
 	[RedeemedDate] [datetime2](7) NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__User_Cam__7FFB18EACA9EC05A] PRIMARY KEY CLUSTERED 
 (
 	[UserCampaignID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[vw_UserCampaigns]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  View [dbo].[vw_UserCampaigns]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -447,7 +450,7 @@ FROM dbo.User_Campaigns AS uc
 JOIN dbo.Users          AS u ON uc.UserID     = u.UserID
 JOIN dbo.Campaigns      AS c ON uc.CampaignID = c.CampaignID;
 GO
-/****** Object:  View [dbo].[vw_CinemasByDistrict]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  View [dbo].[vw_CinemasByDistrict]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -473,7 +476,7 @@ GROUP BY
     c.District,
     c.PhoneNumber;
 GO
-/****** Object:  Table [dbo].[Cart]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Cart]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -485,13 +488,13 @@ CREATE TABLE [dbo].[Cart](
 	[SeatNumber] [nvarchar](10) NULL,
 	[AddedAt] [datetime2](7) NULL,
 	[SeatID] [int] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Cart__51BCD7971766FDA5] PRIMARY KEY CLUSTERED 
 (
 	[CartID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Seats]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Seats]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -509,7 +512,7 @@ CREATE TABLE [dbo].[Seats](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[vw_ShowingSeatStatus]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  View [dbo].[vw_ShowingSeatStatus]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -548,7 +551,7 @@ LEFT JOIN dbo.Cart AS c
     ON c.ShowingID = sh.ShowingID
    AND c.SeatID    = se.SeatID;
 GO
-/****** Object:  View [dbo].[vw_UserCartDetails]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  View [dbo].[vw_UserCartDetails]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -567,7 +570,7 @@ JOIN dbo.Users    u ON c.UserID    = u.UserID
 JOIN dbo.Showings s ON c.ShowingID = s.ShowingID
 JOIN dbo.Movies   m ON s.MovieID   = m.MovieID;
 GO
-/****** Object:  Table [dbo].[Genres]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Genres]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -575,13 +578,13 @@ GO
 CREATE TABLE [dbo].[Genres](
 	[GenreID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](100) NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Genres__0385055EBCADA57A] PRIMARY KEY CLUSTERED 
 (
 	[GenreID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Genres_Movies]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Genres_Movies]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -590,13 +593,13 @@ CREATE TABLE [dbo].[Genres_Movies](
 	[GenreMovieID] [int] IDENTITY(1,1) NOT NULL,
 	[GenreID] [int] NULL,
 	[MovieID] [int] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Genres_M__98BAF4BACD789E1F] PRIMARY KEY CLUSTERED 
 (
 	[GenreMovieID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Reservations]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Reservations]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -622,7 +625,7 @@ CREATE TABLE [dbo].[Reservations](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Top10Movies]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Table [dbo].[Top10Movies]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -632,7 +635,7 @@ CREATE TABLE [dbo].[Top10Movies](
 	[MovieID] [int] NOT NULL,
 	[RankOrder] [int] NOT NULL,
 	[WeekOf] [date] NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Top10Mov__0C5A6264933EC40C] PRIMARY KEY CLUSTERED 
 (
 	[TopMovieID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -726,13 +729,27 @@ INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (40, 
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (44, 1, 18)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (109, 1, 19)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (108, 1, 31)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (133, 1, 38)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (132, 1, 41)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (107, 1, 72)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (3, 2, 1)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (4, 2, 2)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (110, 2, 3)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (10, 2, 4)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (12, 2, 5)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (111, 2, 6)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (19, 2, 8)
 GO
@@ -746,13 +763,139 @@ INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (41, 
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (43, 2, 18)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (52, 2, 22)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (53, 2, 23)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (54, 2, 24)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (55, 2, 25)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (56, 2, 26)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (57, 2, 27)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (58, 2, 28)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (59, 2, 29)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (60, 2, 30)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (61, 2, 31)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (62, 2, 32)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (63, 2, 33)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (64, 2, 34)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (65, 2, 35)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (66, 2, 36)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (67, 2, 37)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (68, 2, 38)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (69, 2, 39)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (70, 2, 40)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (71, 2, 41)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (72, 2, 42)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (73, 2, 43)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (74, 2, 44)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (75, 2, 45)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (76, 2, 46)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (77, 2, 47)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (78, 2, 48)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (79, 2, 49)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (80, 2, 50)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (81, 2, 51)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (82, 2, 52)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (83, 2, 53)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (84, 2, 54)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (85, 2, 55)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (86, 2, 56)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (87, 2, 57)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (88, 2, 58)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (89, 2, 59)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (90, 2, 60)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (91, 2, 61)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (92, 2, 62)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (93, 2, 63)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (94, 2, 64)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (95, 2, 65)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (96, 2, 66)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (97, 2, 67)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (98, 2, 68)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (99, 2, 69)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (100, 2, 70)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (101, 2, 71)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (102, 2, 72)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (103, 2, 73)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (104, 2, 74)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (105, 2, 75)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (106, 2, 76)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (5, 3, 2)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (33, 3, 13)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (136, 3, 45)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (134, 3, 50)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (135, 3, 57)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (112, 3, 67)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (6, 4, 3)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (114, 4, 13)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (49, 4, 21)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (113, 4, 32)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (138, 4, 58)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (137, 4, 71)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (7, 5, 3)
 GO
@@ -762,6 +905,10 @@ INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (16, 
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (17, 5, 7)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (140, 5, 11)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (115, 5, 12)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (32, 5, 13)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (37, 5, 15)
@@ -770,9 +917,27 @@ INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (42, 
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (50, 5, 21)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (139, 5, 54)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (8, 6, 3)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (141, 6, 14)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (142, 6, 32)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (144, 6, 34)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (116, 6, 35)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (117, 6, 59)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (143, 6, 73)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (9, 7, 4)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (145, 7, 5)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (146, 7, 7)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (23, 7, 10)
 GO
@@ -784,9 +949,27 @@ INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (36, 
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (45, 7, 19)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (118, 7, 53)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (119, 7, 65)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (13, 8, 5)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (120, 8, 36)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (18, 9, 7)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (148, 9, 21)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (122, 9, 27)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (121, 9, 30)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (149, 9, 60)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (147, 9, 67)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (150, 9, 70)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (21, 10, 9)
 GO
@@ -796,19 +979,49 @@ INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (46, 
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (47, 10, 20)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (124, 10, 43)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (123, 10, 69)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (152, 11, 2)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (22, 11, 9)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (25, 11, 10)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (27, 11, 11)
 GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (125, 11, 15)
+GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (48, 11, 20)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (151, 11, 74)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (126, 11, 76)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (127, 12, 1)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (156, 12, 6)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (31, 12, 13)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (35, 12, 14)
 GO
 INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (51, 12, 21)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (154, 12, 33)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (153, 12, 39)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (155, 12, 43)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (130, 12, 44)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (128, 12, 55)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (131, 12, 64)
+GO
+INSERT [dbo].[Genres_Movies] ([GenreMovieID], [GenreID], [MovieID]) VALUES (129, 12, 71)
 GO
 SET IDENTITY_INSERT [dbo].[Genres_Movies] OFF
 GO
@@ -2894,13 +3107,13 @@ SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Genres_Name]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [UQ_Genres_Name]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Genres] ADD  CONSTRAINT [UQ_Genres_Name] UNIQUE NONCLUSTERED 
 (
 	[Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [UQ_Genres_Movies]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [UQ_Genres_Movies]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Genres_Movies] ADD  CONSTRAINT [UQ_Genres_Movies] UNIQUE NONCLUSTERED 
 (
 	[GenreID] ASC,
@@ -2909,7 +3122,17 @@ ALTER TABLE [dbo].[Genres_Movies] ADD  CONSTRAINT [UQ_Genres_Movies] UNIQUE NONC
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Seats_Hall_Row_Seat]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [IX_Reservations_User_Status_Date]    Script Date: 13.12.2025 19:13:56 ******/
+CREATE NONCLUSTERED INDEX [IX_Reservations_User_Status_Date] ON [dbo].[Reservations]
+(
+	[UserID] ASC,
+	[Status] ASC,
+	[CreatedAt] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ_Seats_Hall_Row_Seat]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Seats] ADD  CONSTRAINT [UQ_Seats_Hall_Row_Seat] UNIQUE NONCLUSTERED 
 (
 	[HallID] ASC,
@@ -2917,21 +3140,21 @@ ALTER TABLE [dbo].[Seats] ADD  CONSTRAINT [UQ_Seats_Hall_Row_Seat] UNIQUE NONCLU
 	[SeatNumber] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [UQ_Showings_Hall_ShowTime]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [UQ_Showings_Hall_ShowTime]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Showings] ADD  CONSTRAINT [UQ_Showings_Hall_ShowTime] UNIQUE NONCLUSTERED 
 (
 	[HallID] ASC,
 	[ShowTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [UQ_Tickets_Showing_Seat]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [UQ_Tickets_Showing_Seat]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Tickets] ADD  CONSTRAINT [UQ_Tickets_Showing_Seat] UNIQUE NONCLUSTERED 
 (
 	[ShowingID] ASC,
 	[SeatID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [UQ_User_Campaign]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [UQ_User_Campaign]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[User_Campaigns] ADD  CONSTRAINT [UQ_User_Campaign] UNIQUE NONCLUSTERED 
 (
 	[UserID] ASC,
@@ -2940,7 +3163,7 @@ ALTER TABLE [dbo].[User_Campaigns] ADD  CONSTRAINT [UQ_User_Campaign] UNIQUE NON
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Users_Email]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  Index [UQ_Users_Email]    Script Date: 13.12.2025 19:13:56 ******/
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [UQ_Users_Email] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -2948,29 +3171,29 @@ ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [UQ_Users_Email] UNIQUE NONCLUSTERED
 GO
 ALTER TABLE [dbo].[Campaigns] ADD  CONSTRAINT [DF_Campaigns_IsActive]  DEFAULT ((1)) FOR [IsActive]
 GO
-ALTER TABLE [dbo].[Cart] ADD  DEFAULT (sysdatetime()) FOR [AddedAt]
+ALTER TABLE [dbo].[Cart] ADD  CONSTRAINT [DF__Cart__AddedAt__534D60F1]  DEFAULT (sysdatetime()) FOR [AddedAt]
 GO
-ALTER TABLE [dbo].[Movies] ADD  DEFAULT (N'Coming Soon') FOR [Status]
+ALTER TABLE [dbo].[Movies] ADD  CONSTRAINT [DF__Movies__Status__5441852A]  DEFAULT (N'Coming Soon') FOR [Status]
 GO
-ALTER TABLE [dbo].[Payments] ADD  DEFAULT (getdate()) FOR [PaymentTimestamp]
+ALTER TABLE [dbo].[Payments] ADD  CONSTRAINT [DF__Payments__Paymen__5535A963]  DEFAULT (getdate()) FOR [PaymentTimestamp]
 GO
-ALTER TABLE [dbo].[Reservations] ADD  DEFAULT ((0)) FOR [DiscountAmount]
+ALTER TABLE [dbo].[Reservations] ADD  CONSTRAINT [DF__Reservati__Disco__160F4887]  DEFAULT ((0)) FOR [DiscountAmount]
 GO
-ALTER TABLE [dbo].[Reservations] ADD  DEFAULT ('Pending') FOR [Status]
+ALTER TABLE [dbo].[Reservations] ADD  CONSTRAINT [DF__Reservati__Statu__17036CC0]  DEFAULT ('Pending') FOR [Status]
 GO
-ALTER TABLE [dbo].[Reservations] ADD  DEFAULT (sysdatetime()) FOR [CreatedAt]
+ALTER TABLE [dbo].[Reservations] ADD  CONSTRAINT [DF__Reservati__Creat__17F790F9]  DEFAULT (sysdatetime()) FOR [CreatedAt]
 GO
-ALTER TABLE [dbo].[Seats] ADD  DEFAULT ((1)) FOR [IsActive]
+ALTER TABLE [dbo].[Seats] ADD  CONSTRAINT [DF__Seats__IsActive__6C190EBB]  DEFAULT ((1)) FOR [IsActive]
 GO
-ALTER TABLE [dbo].[Tickets] ADD  DEFAULT (N'booked') FOR [Status]
+ALTER TABLE [dbo].[Tickets] ADD  CONSTRAINT [DF__Tickets__Status__5629CD9C]  DEFAULT (N'booked') FOR [Status]
 GO
-ALTER TABLE [dbo].[User_Campaigns] ADD  DEFAULT (getdate()) FOR [RedeemedDate]
+ALTER TABLE [dbo].[User_Campaigns] ADD  CONSTRAINT [DF__User_Camp__Redee__571DF1D5]  DEFAULT (getdate()) FOR [RedeemedDate]
 GO
-ALTER TABLE [dbo].[Users] ADD  DEFAULT (N'customer') FOR [Role]
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF__Users__Role__5812160E]  DEFAULT (N'customer') FOR [Role]
 GO
-ALTER TABLE [dbo].[Users] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF__Users__CreatedAt__59063A47]  DEFAULT (getdate()) FOR [CreatedAt]
 GO
-ALTER TABLE [dbo].[Users] ADD  DEFAULT ((1)) FOR [IsActive]
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF__Users__IsActive__59FA5E80]  DEFAULT ((1)) FOR [IsActive]
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD  CONSTRAINT [FK_Cart_Seats] FOREIGN KEY([SeatID])
 REFERENCES [dbo].[Seats] ([SeatID])
@@ -2987,16 +3210,20 @@ REFERENCES [dbo].[Users] ([UserID])
 GO
 ALTER TABLE [dbo].[Cart] CHECK CONSTRAINT [FK_Cart_Users]
 GO
-ALTER TABLE [dbo].[Genres_Movies]  WITH CHECK ADD FOREIGN KEY([GenreID])
+ALTER TABLE [dbo].[Genres_Movies]  WITH CHECK ADD  CONSTRAINT [FK__Genres_Mo__Genre__5CD6CB2B] FOREIGN KEY([GenreID])
 REFERENCES [dbo].[Genres] ([GenreID])
+GO
+ALTER TABLE [dbo].[Genres_Movies] CHECK CONSTRAINT [FK__Genres_Mo__Genre__5CD6CB2B]
 GO
 ALTER TABLE [dbo].[Genres_Movies]  WITH CHECK ADD  CONSTRAINT [FK_Genres_Movies_Movies] FOREIGN KEY([MovieID])
 REFERENCES [dbo].[Movies] ([MovieID])
 GO
 ALTER TABLE [dbo].[Genres_Movies] CHECK CONSTRAINT [FK_Genres_Movies_Movies]
 GO
-ALTER TABLE [dbo].[Halls]  WITH CHECK ADD FOREIGN KEY([CinemaID])
+ALTER TABLE [dbo].[Halls]  WITH CHECK ADD  CONSTRAINT [FK__Halls__CinemaID__5DCAEF64] FOREIGN KEY([CinemaID])
 REFERENCES [dbo].[Cinemas] ([CinemaID])
+GO
+ALTER TABLE [dbo].[Halls] CHECK CONSTRAINT [FK__Halls__CinemaID__5DCAEF64]
 GO
 ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Campaigns] FOREIGN KEY([CampaignID])
 REFERENCES [dbo].[Campaigns] ([CampaignID])
@@ -3008,8 +3235,10 @@ REFERENCES [dbo].[Users] ([UserID])
 GO
 ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK_Orders_Users]
 GO
-ALTER TABLE [dbo].[Payments]  WITH CHECK ADD FOREIGN KEY([TicketID])
+ALTER TABLE [dbo].[Payments]  WITH CHECK ADD  CONSTRAINT [FK__Payments__Ticket__5EBF139D] FOREIGN KEY([TicketID])
 REFERENCES [dbo].[Tickets] ([TicketID])
+GO
+ALTER TABLE [dbo].[Payments] CHECK CONSTRAINT [FK__Payments__Ticket__5EBF139D]
 GO
 ALTER TABLE [dbo].[Payments]  WITH CHECK ADD  CONSTRAINT [FK_Payments_Orders] FOREIGN KEY([OrderID])
 REFERENCES [dbo].[Orders] ([OrderID])
@@ -3041,17 +3270,25 @@ REFERENCES [dbo].[Halls] ([HallID])
 GO
 ALTER TABLE [dbo].[Seats] CHECK CONSTRAINT [FK_Seats_Halls]
 GO
-ALTER TABLE [dbo].[Showings]  WITH CHECK ADD FOREIGN KEY([HallID])
+ALTER TABLE [dbo].[Showings]  WITH CHECK ADD  CONSTRAINT [FK__Showings__HallID__5FB337D6] FOREIGN KEY([HallID])
 REFERENCES [dbo].[Halls] ([HallID])
 GO
-ALTER TABLE [dbo].[Showings]  WITH CHECK ADD FOREIGN KEY([MovieID])
+ALTER TABLE [dbo].[Showings] CHECK CONSTRAINT [FK__Showings__HallID__5FB337D6]
+GO
+ALTER TABLE [dbo].[Showings]  WITH CHECK ADD  CONSTRAINT [FK__Showings__MovieI__60A75C0F] FOREIGN KEY([MovieID])
 REFERENCES [dbo].[Movies] ([MovieID])
 GO
-ALTER TABLE [dbo].[Tickets]  WITH CHECK ADD FOREIGN KEY([ShowingID])
+ALTER TABLE [dbo].[Showings] CHECK CONSTRAINT [FK__Showings__MovieI__60A75C0F]
+GO
+ALTER TABLE [dbo].[Tickets]  WITH CHECK ADD  CONSTRAINT [FK__Tickets__Showing__619B8048] FOREIGN KEY([ShowingID])
 REFERENCES [dbo].[Showings] ([ShowingID])
 GO
-ALTER TABLE [dbo].[Tickets]  WITH CHECK ADD FOREIGN KEY([UserID])
+ALTER TABLE [dbo].[Tickets] CHECK CONSTRAINT [FK__Tickets__Showing__619B8048]
+GO
+ALTER TABLE [dbo].[Tickets]  WITH CHECK ADD  CONSTRAINT [FK__Tickets__UserID__628FA481] FOREIGN KEY([UserID])
 REFERENCES [dbo].[Users] ([UserID])
+GO
+ALTER TABLE [dbo].[Tickets] CHECK CONSTRAINT [FK__Tickets__UserID__628FA481]
 GO
 ALTER TABLE [dbo].[Tickets]  WITH CHECK ADD  CONSTRAINT [FK_Tickets_Orders] FOREIGN KEY([OrderID])
 REFERENCES [dbo].[Orders] ([OrderID])
@@ -3068,8 +3305,10 @@ REFERENCES [dbo].[Seats] ([SeatID])
 GO
 ALTER TABLE [dbo].[Tickets] CHECK CONSTRAINT [FK_Tickets_Seats]
 GO
-ALTER TABLE [dbo].[Top10Movies]  WITH CHECK ADD FOREIGN KEY([MovieID])
+ALTER TABLE [dbo].[Top10Movies]  WITH CHECK ADD  CONSTRAINT [FK__Top10Movi__Movie__6383C8BA] FOREIGN KEY([MovieID])
 REFERENCES [dbo].[Movies] ([MovieID])
+GO
+ALTER TABLE [dbo].[Top10Movies] CHECK CONSTRAINT [FK__Top10Movi__Movie__6383C8BA]
 GO
 ALTER TABLE [dbo].[User_Campaigns]  WITH CHECK ADD  CONSTRAINT [FK_User_Campaigns_Campaigns] FOREIGN KEY([CampaignID])
 REFERENCES [dbo].[Campaigns] ([CampaignID])
@@ -3089,7 +3328,7 @@ ALTER TABLE [dbo].[Reservations]  WITH CHECK ADD  CONSTRAINT [CK_Reservations_St
 GO
 ALTER TABLE [dbo].[Reservations] CHECK CONSTRAINT [CK_Reservations_Status]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_LoginUser]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  StoredProcedure [dbo].[sp_LoginUser]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3105,7 +3344,7 @@ BEGIN
     WHERE Email = @Email AND PasswordHash = @PasswordHash AND IsActive = 1;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[sp_RegisterUser]    Script Date: 13.12.2025 03:47:41 ******/
+/****** Object:  StoredProcedure [dbo].[sp_RegisterUser]    Script Date: 13.12.2025 19:13:56 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3125,3 +3364,314 @@ BEGIN
     VALUES (@FirstName, @LastName, @Email, @PasswordHash);
 END;
 GO
+-- İstersen aç:
+-- USE [CinemaDB_Extended];
+-- GO
+
+-- SQL Server 2016 compatible
+BEGIN TRY
+    BEGIN TRAN;
+
+    -- 1) MovieID + GenreName map (max 3 genres per movie)
+    DECLARE @Map TABLE (
+        MovieID   INT           NOT NULL,
+        GenreName NVARCHAR(50)  NOT NULL
+    );
+
+    INSERT INTO @Map (MovieID, GenreName) VALUES
+    (1, N'Sci-Fi'),
+    (1, N'Action'),
+    (1, N'Fantasy'),
+    (2, N'Action'),
+    (2, N'Thriller'),
+    (2, N'Crime'),
+    (3, N'Biography'),
+    (3, N'Drama'),
+    (3, N'History'),
+    (4, N'Animation'),
+    (4, N'Action'),
+    (4, N'Fantasy'),
+    (5, N'Action'),
+    (5, N'Crime'),
+    (5, N'Thriller'),
+    (6, N'Sci-Fi'),
+    (6, N'Drama'),
+    (7, N'Sport'),
+    (7, N'Drama'),
+    (8, N'Action'),
+    (8, N'Sci-Fi'),
+    (8, N'Fantasy'),
+    (9, N'Comedy'),
+    (9, N'Fantasy'),
+    (9, N'Drama'),
+    (10, N'Animation'),
+    (10, N'Action'),
+    (10, N'Fantasy'),
+    (11, N'Animation'),
+    (11, N'Fantasy'),
+    (11, N'Comedy'),
+    (12, N'Action'),
+    (12, N'Comedy'),
+    (12, N'Sci-Fi'),
+    (13, N'Crime'),
+    (13, N'Drama'),
+    (13, N'Musical'),
+    (14, N'Animation'),
+    (14, N'Fantasy'),
+    (14, N'Musical'),
+    (15, N'Animation'),
+    (15, N'Drama'),
+    (15, N'Musical'),
+    (16, N'Sci-Fi'),
+    (16, N'Action'),
+    (16, N'Fantasy'),
+    (17, N'Sci-Fi'),
+    (17, N'Action'),
+    (17, N'Drama'),
+    (18, N'Action'),
+    (18, N'Sci-Fi'),
+    (18, N'Thriller'),
+    (19, N'Animation'),
+    (19, N'Comedy'),
+    (19, N'Action'),
+    (20, N'Comedy'),
+    (20, N'Fantasy'),
+    (20, N'Sci-Fi'),
+    (21, N'Biography'),
+    (21, N'Drama'),
+    (21, N'Musical'),
+    (22, N'Sci-Fi'),
+    (22, N'Action'),
+    (22, N'Thriller'),
+    (23, N'Fantasy'),
+    (23, N'Comedy'),
+    (24, N'Action'),
+    (24, N'Thriller'),
+    (24, N'Crime'),
+    (25, N'Musical'),
+    (25, N'Drama'),
+    (25, N'Biography'),
+    (26, N'Animation'),
+    (26, N'Comedy'),
+    (26, N'Fantasy'),
+    (27, N'Action'),
+    (27, N'Sci-Fi'),
+    (27, N'Comedy'),
+    (28, N'Animation'),
+    (28, N'Fantasy'),
+    (28, N'Musical'),
+    (29, N'Sci-Fi'),
+    (29, N'Thriller'),
+    (29, N'Action'),
+    (30, N'Sci-Fi'),
+    (30, N'Thriller'),
+    (30, N'Action'),
+    (31, N'Animation'),
+    (31, N'Comedy'),
+    (31, N'Crime'),
+    (32, N'Musical'),
+    (32, N'Fantasy'),
+    (32, N'Drama'),
+    (33, N'Animation'),
+    (33, N'Musical'),
+    (33, N'Fantasy'),
+    (34, N'Crime'),
+    (34, N'Thriller'),
+    (34, N'Comedy'),
+    (35, N'Animation'),
+    (35, N'Action'),
+    (35, N'Fantasy'),
+    (36, N'Action'),
+    (36, N'Thriller'),
+    (36, N'Crime'),
+    (37, N'Action'),
+    (37, N'Thriller'),
+    (37, N'Crime'),
+    (38, N'Sport'),
+    (38, N'Comedy'),
+    (38, N'Drama'),
+    (39, N'Action'),
+    (39, N'Thriller'),
+    (39, N'Crime'),
+    (40, N'Action'),
+    (40, N'Fantasy'),
+    (40, N'Thriller'),
+    (41, N'Sci-Fi'),
+    (41, N'Thriller'),
+    (42, N'Musical'),
+    (42, N'Fantasy'),
+    (43, N'Thriller'),
+    (43, N'Fantasy'),
+    (44, N'Action'),
+    (44, N'Sci-Fi'),
+    (44, N'Fantasy'),
+    (45, N'Comedy'),
+    (45, N'Thriller'),
+    (45, N'Fantasy'),
+    (46, N'Action'),
+    (46, N'Crime'),
+    (46, N'Thriller'),
+    (47, N'Action'),
+    (47, N'Fantasy'),
+    (47, N'History'),
+    (48, N'Thriller'),
+    (48, N'Drama'),
+    (48, N'Fantasy'),
+    (49, N'Comedy'),
+    (49, N'Fantasy'),
+    (50, N'Drama'),
+    (50, N'History'),
+    (51, N'Drama'),
+    (52, N'Comedy'),
+    (52, N'Crime'),
+    (52, N'Action'),
+    (53, N'Drama'),
+    (54, N'Animation'),
+    (54, N'Action'),
+    (54, N'Fantasy'),
+    (55, N'Animation'),
+    (55, N'Action'),
+    (55, N'Fantasy'),
+    (56, N'Thriller'),
+    (56, N'Fantasy'),
+    (57, N'Action'),
+    (57, N'Fantasy'),
+    (57, N'Thriller'),
+    (58, N'Action'),
+    (58, N'Comedy'),
+    (59, N'Action'),
+    (59, N'Thriller'),
+    (59, N'Crime'),
+    (60, N'Action'),
+    (60, N'Sci-Fi'),
+    (60, N'Thriller'),
+    (61, N'Thriller'),
+    (61, N'Drama'),
+    (61, N'Comedy'),
+    (62, N'Musical'),
+    (62, N'Drama'),
+    (63, N'Animation'),
+    (63, N'Comedy'),
+    (63, N'Crime'),
+    (64, N'Sci-Fi'),
+    (64, N'Comedy'),
+    (64, N'Fantasy'),
+    (65, N'Comedy'),
+    (66, N'Action'),
+    (66, N'Thriller'),
+    (66, N'Fantasy'),
+    (67, N'Action'),
+    (67, N'Comedy'),
+    (67, N'Sci-Fi'),
+    (68, N'Fantasy'),
+    (68, N'Comedy'),
+    (68, N'Sci-Fi'),
+    (69, N'Action'),
+    (69, N'Drama'),
+    (70, N'Biography'),
+    (70, N'Drama'),
+    (70, N'Musical'),
+    (71, N'Animation'),
+    (71, N'Fantasy'),
+    (71, N'Comedy'),
+    (72, N'Action'),
+    (72, N'Fantasy'),
+    (72, N'Comedy'),
+    (73, N'Fantasy'),
+    (73, N'Musical'),
+    (73, N'Drama'),
+    (74, N'Action'),
+    (74, N'Thriller'),
+    (74, N'Sci-Fi'),
+    (75, N'Action'),
+    (75, N'Sci-Fi'),
+    (75, N'Thriller'),
+    (76, N'Animation'),
+    (76, N'Fantasy'),
+    (76, N'Musical');
+
+    -- 2) Guard rails (fail fast if something is off)
+    IF EXISTS (
+        SELECT 1
+        FROM @Map m
+        LEFT JOIN dbo.Genres g
+            ON LTRIM(RTRIM(g.[Name])) = m.GenreName
+        WHERE g.GenreID IS NULL
+    )
+    BEGIN
+        SELECT DISTINCT m.GenreName AS MissingGenreName
+        FROM @Map m
+        LEFT JOIN dbo.Genres g
+            ON LTRIM(RTRIM(g.[Name])) = m.GenreName
+        WHERE g.GenreID IS NULL;
+
+        RAISERROR('Some GenreName values are missing in dbo.Genres.', 16, 1);
+    END;
+
+    IF EXISTS (
+        SELECT 1
+        FROM @Map m
+        LEFT JOIN dbo.Movies mv
+            ON mv.MovieID = m.MovieID
+        WHERE mv.MovieID IS NULL
+    )
+    BEGIN
+        SELECT DISTINCT m.MovieID AS MissingMovieID
+        FROM @Map m
+        LEFT JOIN dbo.Movies mv
+            ON mv.MovieID = m.MovieID
+        WHERE mv.MovieID IS NULL;
+
+        RAISERROR('Some MovieID values are missing in dbo.Movies.', 16, 1);
+    END;
+
+    -- 3) Replace all existing genre links for these movies
+    DELETE gm
+    FROM dbo.Genres_Movies gm
+    JOIN (SELECT DISTINCT MovieID FROM @Map) x
+        ON x.MovieID = gm.MovieID;
+
+    -- 4) Insert the new links
+    INSERT INTO dbo.Genres_Movies (GenreID, MovieID)
+    SELECT DISTINCT g.GenreID, m.MovieID
+    FROM @Map m
+    JOIN dbo.Genres g
+        ON LTRIM(RTRIM(g.[Name])) = m.GenreName;
+
+    -- 5) Quick sanity checks
+    -- 5a) Any movie in the map that ended up with 0 genre rows OR >3?
+    SELECT
+        mv.MovieID,
+        mv.Title,
+        COUNT(gm.GenreMovieID) AS GenreCount
+    FROM dbo.Movies mv
+    LEFT JOIN dbo.Genres_Movies gm
+        ON gm.MovieID = mv.MovieID
+    WHERE mv.MovieID IN (SELECT DISTINCT MovieID FROM @Map)
+    GROUP BY mv.MovieID, mv.Title
+    HAVING COUNT(gm.GenreMovieID) = 0
+        OR COUNT(gm.GenreMovieID) > 3;
+
+    -- 5b) View result as comma-separated list (SQL 2016: XML PATH trick)
+    SELECT
+        mv.MovieID,
+        mv.Title,
+        STUFF((
+            SELECT ', ' + g2.[Name]
+            FROM dbo.Genres_Movies gm2
+            JOIN dbo.Genres g2 ON g2.GenreID = gm2.GenreID
+            WHERE gm2.MovieID = mv.MovieID
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS Genres
+    FROM dbo.Movies mv
+    WHERE mv.MovieID IN (SELECT DISTINCT MovieID FROM @Map)
+    ORDER BY mv.MovieID;
+
+    COMMIT TRAN;
+END TRY
+BEGIN CATCH
+    IF @@TRANCOUNT > 0 ROLLBACK TRAN;
+
+    DECLARE @Err NVARCHAR(4000) = ERROR_MESSAGE();
+    RAISERROR(@Err, 16, 1);
+END CATCH;

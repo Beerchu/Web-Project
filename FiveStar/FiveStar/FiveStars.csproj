@@ -129,6 +129,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CampaignsController.cs" />
     <Compile Include="Controllers\CinemasController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Models\Halls.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\MovieFilterViewModel.cs" />
     <Compile Include="Models\Movies.cs">
@@ -364,6 +366,7 @@
     <Content Include="Views\Movies\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\HomeIndexViewModel\" />
     <Folder Include="Views\TicketViewModels\" />
   </ItemGroup>
   <ItemGroup>
