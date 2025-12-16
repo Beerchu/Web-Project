@@ -1,6 +1,5 @@
-﻿/* ================================== */
+﻿
 /* === CINEMAS LIST STYLES === */
-/* ================================== */
 
 .cinemas-page {
     padding-top: 30px;
@@ -48,7 +47,7 @@
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 15px;
-    color: #f5c518; /* Sarımsı/Altın vurgu */
+    color: #800000; 
     padding-left: 5px;
     border-left: 5px solid #d00000; /* Kırmızı çizgi */
     text-transform: uppercase;
@@ -89,7 +88,7 @@
     }
 
         .cinema-name a:hover {
-            color: #f5c518 !important; /* Vurgu Rengi */
+            color: darkred !important;
             text-decoration: underline;
         }
 
