@@ -8,15 +8,15 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // GET: Movies
-        public ActionResult Index(string searchTerm = "", int? selectedGenreId = null, int? selectedCinemaId = null)
+        // GET: Movies
+        public ActionResult Index(string searchTerm = "", int? selectedGenreId = null, int? selectedCinemaId = null)
         {
             var viewModel = BuildFilterViewModel(searchTerm, selectedGenreId, selectedCinemaId);
             return View(viewModel);
         }
 
-        // AJAX: only returns the grid
-        [HttpGet]
+        // AJAX: only returns the grid
+        [HttpGet]
         public PartialViewResult Filter(string searchTerm = "", int? selectedGenreId = null, int? selectedCinemaId = null)
         {
             var vm = BuildFilterViewModel(searchTerm, selectedGenreId, selectedCinemaId);
@@ -30,19 +30,19 @@ namespace FiveStars.Controllers
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(m => m.Title.Contains(searchTerm) ||
-                                         (m.Description != null && m.Description.Contains(searchTerm)));
+                            (m.Description != null && m.Description.Contains(searchTerm)));
             }
 
             if (selectedGenreId.HasValue)
             {
-                // FIX: Value kullan
-                query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId.Value));
+                // FIX: Value kullan
+                query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId.Value));
             }
 
             if (selectedCinemaId.HasValue)
             {
-                // FIX: Value kullan
-                query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId.Value));
+                // FIX: Value kullan
+                query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId.Value));
             }
 
             var movies = query.OrderByDescending(m => m.ReleaseDate).ToList();
@@ -61,8 +61,8 @@ namespace FiveStars.Controllers
             };
         }
 
-        // GET: Movies/Details/5
-        public ActionResult Details(int id)
+        // GET: Movies/Details/5
+        public ActionResult Details(int id)
         {
             var movie = _db.Movies.Find(id);
             if (movie == null) return HttpNotFound();
