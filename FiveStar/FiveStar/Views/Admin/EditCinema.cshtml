@@ -1,0 +1,72 @@
+﻿@model FiveStars.Models.Cinemas
+
+@{ ViewBag.Title = "Edit Cinema";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Edit Cinema</h1>
+        <a href="@Url.Action("Cinemas", "Admin")" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Cinemas
+        </a>
+    </div>
+
+    <div class="form-container">
+        @using (Html.BeginForm("EditCinema", "Admin", FormMethod.Post))
+        {
+@Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                                @Html.HiddenFor(m => m.CinemaID)
+
+                                                <div class="form-group">
+                                                    <label class="form-label">Cinema Name *</label>
+                                                    @Html.TextBoxFor(m => m.CinemaName,
+                                                             new { @class = "form-control", placeholder = "Enter cinema name", required = "required" })
+                                                    @Html.ValidationMessageFor(m => m.CinemaName, "",
+                                                             new { style = "color: #dc3545; font-size: 12px;" })
+                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Address</label>
+                                                                    @Html.TextAreaFor(m => m.Address,
+                                                                             new { @class = "form-control", placeholder = "Enter cinema address...", rows = 3 })
+                                                                    @Html.ValidationMessageFor(m => m.Address, "",
+                                                                             new { style = "color: #dc3545; font-size: 12px;" })
+                                                                </div>
+
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group">
+                                                                                        <label class="form-label">City</label>
+                                                                                        @Html.TextBoxFor(m => m.City,
+                                                                                                 new { @class = "form-control", placeholder = "City" })
+                                                                                        @Html.ValidationMessageFor(m => m.City, "",
+                                                                                                 new { style = "color: #dc3545; font-size: 12px;" })
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label class="form-label">District</label>
+                                                                                        @Html.TextBoxFor(m => m.District,
+                                                                                                 new { @class = "form-control", placeholder = "District" })
+                                                                                        @Html.ValidationMessageFor(m => m.District, "",
+                                                                                                 new { style = "color: #dc3545; font-size: 12px;" })
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                                <div class="form-group">
+                                                                                                    <label class="form-label">Phone Number</label>
+                                                                                                    @Html.TextBoxFor(m => m.PhoneNumber,
+                                                                                                             new { @class = "form-control", placeholder = "+90 555 123 45 67" })
+                                                                                                    @Html.ValidationMessageFor(m => m.PhoneNumber, "",
+                                                                                                             new { style = "color: #dc3545; font-size: 12px;" })
+                                                                                                </div>
+
+                                                                                                                <div class="form-actions">
+                                                                                                                    <button type="submit" class="btn btn-primary">
+                                                                                                                        <i class="fas fa-save"></i> Save Cinema
+                                                                                                                    </button>
+                                                                                                                    <a href="@Url.Action("Cinemas", "Admin")" class="btn btn-secondary">
+                                                                                                                        Cancel
+                                                                                                                    </a>
+                                                                                                                </div>}
+    </div>
+</div>

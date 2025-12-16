@@ -20,39 +20,47 @@
         </div>
     }
 
-    <div class="dashboard-grid">
-        <a href="@Url.Action("Movies", "Admin")" class="dashboard-card movies">
-            <div class="card-icon movies">
-                <i class="fas fa-film"></i>
-            </div>
-            <h3 class="card-count">@ViewBag.TotalMovies</h3>
-            <p class="card-label">Total Movies</p>
-        </a>
+<div class="dashboard-grid">
+    <a href="@Url.Action("Movies", "Admin")" class="dashboard-card movies">
+        <div class="card-icon movies">
+            <i class="fas fa-film"></i>
+        </div>
+        <h3 class="card-count">@ViewBag.TotalMovies</h3>
+        <p class="card-label">Total Movies</p>
+    </a>
 
-        <a href="@Url.Action("Showtimes", "Admin")" class="dashboard-card showtimes">
-            <div class="card-icon showtimes">
-                <i class="fas fa-clock"></i>
-            </div>
-            <h3 class="card-count">@ViewBag.ActiveShowings</h3>
-            <p class="card-label">Active Showtimes</p>
-        </a>
+    <a href="@Url.Action("Showtimes", "Admin")" class="dashboard-card showtimes">
+        <div class="card-icon showtimes">
+            <i class="fas fa-clock"></i>
+        </div>
+        <h3 class="card-count">@ViewBag.ActiveShowings</h3>
+        <p class="card-label">Active Showtimes</p>
+    </a>
 
-        <a href="@Url.Action("Campaigns", "Admin")" class="dashboard-card campaigns">
-            <div class="card-icon campaigns">
-                <i class="fas fa-bullhorn"></i>
-            </div>
-            <h3 class="card-count">@ViewBag.ActiveCampaigns</h3>
-            <p class="card-label">Active Campaigns</p>
-        </a>
+    <a href="@Url.Action("Campaigns", "Admin")" class="dashboard-card campaigns">
+        <div class="card-icon campaigns">
+            <i class="fas fa-bullhorn"></i>
+        </div>
+        <h3 class="card-count">@ViewBag.ActiveCampaigns</h3>
+        <p class="card-label">Active Campaigns</p>
+    </a>
 
-        <a href="@Url.Action("Users", "Admin")" class="dashboard-card users">
-            <div class="card-icon users">
-                <i class="fas fa-users"></i>
-            </div>
-            <h3 class="card-count">@ViewBag.TotalUsers</h3>
-            <p class="card-label">Registered Users</p>
-        </a>
-    </div>
+    <a href="@Url.Action("Users", "Admin")" class="dashboard-card users">
+        <div class="card-icon users">
+            <i class="fas fa-users"></i>
+        </div>
+        <h3 class="card-count">@ViewBag.TotalUsers</h3>
+        <p class="card-label">Registered Users</p>
+    </a>
+    <a href="@Url.Action("Cinemas", "Admin")" class="dashboard-card cinemas">
+        <div class="card-icon cinemas">
+            <i class="fas fa-building"></i>
+        </div>
+        <h3 class="card-count">@ViewBag.TotalCinemas</h3>
+        <p class="card-label">Total Cinemas</p>
+    </a>
+
+</div>
 
     <div class="quick-actions">
         <h3>Quick Actions</h3>
@@ -66,6 +74,10 @@
             <a href="@Url.Action("CreateCampaign", "Admin")" class="btn btn-success">
                 <i class="fas fa-plus"></i> Create Campaign
             </a>
+            <a href="@Url.Action("CreateCinema", "Admin")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Cinema
+            </a>
+
         </div>
     </div>
 </div>

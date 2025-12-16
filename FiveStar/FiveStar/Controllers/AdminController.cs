@@ -34,6 +34,7 @@ namespace FiveStars.Controllers
             ViewBag.ActiveShowings = _db.Showings.Count(s => s.ShowTime > DateTime.Now);
             ViewBag.TotalUsers = _db.Users.Count();
             ViewBag.ActiveCampaigns = _db.Campaigns.Count(c => c.IsActive);
+            ViewBag.TotalCinemas = _db.Cinemas.Count();
 
             return View();
         }
@@ -196,6 +197,86 @@ namespace FiveStars.Controllers
                 }
             }
             return RedirectToAction("Movies");
+        }
+
+        #endregion
+        #region Cinema Management
+
+        public ActionResult Cinemas()
+        {
+            var cinemas = _db.Cinemas
+                .OrderBy(c => c.CinemaName)
+                .ToList();
+
+            return View(cinemas);
+        }
+
+        public ActionResult CreateCinema()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCinema(Cinemas cinema)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Cinemas.Add(cinema);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Cinema created successfully!";
+                return RedirectToAction("Cinemas");
+            }
+
+            return View(cinema);
+        }
+
+        public ActionResult EditCinema(int id)
+        {
+            var cinema = _db.Cinemas.Find(id);
+            if (cinema == null) return HttpNotFound();
+
+            return View(cinema);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCinema(Cinemas cinema)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Entry(cinema).State = EntityState.Modified;
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Cinema updated successfully!";
+                return RedirectToAction("Cinemas");
+            }
+
+            return View(cinema);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteCinema(int id)
+        {
+            var cinema = _db.Cinemas.Find(id);
+
+            if (cinema != null)
+            {
+                try
+                {
+                    // If cinema has halls, showings, etc., this may throw FK exception
+                    _db.Cinemas.Remove(cinema);
+                    _db.SaveChanges();
+
+                    TempData["SuccessMessage"] = "Cinema deleted successfully!";
+                }
+                catch
+                {
+                    TempData["ErrorMessage"] =
+                        "Cannot delete this cinema because it has related records (halls / showtimes). Delete those first.";
+                }
+            }
+
+            return RedirectToAction("Cinemas");
         }
 
         #endregion

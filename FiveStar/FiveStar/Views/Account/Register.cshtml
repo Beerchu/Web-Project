@@ -1,13 +1,15 @@
-﻿@{
-    ViewBag.Title = "Sign Up";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@{ ViewBag.Title = "Sign Up";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="register-container">
     <div class="register-box">
         <h2>Create Account</h2>
 
         <form method="post" action="/Account/Register">
+
+            @if (ViewBag.ReturnUrl != null)
+            {
+<input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />            }
 
             <div class="register-group">
                 <label>First Name</label>
@@ -35,10 +37,9 @@
 
             @if (ViewBag.Error != null)
             {
-                <div class="register-error">
-                    @ViewBag.Error
-                </div>
-            }
+<div class="register-error">
+    @ViewBag.Error
+</div>            }
         </form>
     </div>
 </div>

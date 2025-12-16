@@ -410,6 +410,9 @@
     <Content Include="Views\Payment\Payment.cshtml" />
     <Content Include="Views\Movies\MoviesGrid.cshtml" />
     <Content Include="Views\Payment\PaymentSuccess.cshtml" />
+    <Content Include="Views\Admin\Cinemas.cshtml" />
+    <Content Include="Views\Admin\EditCinema.cshtml" />
+    <Content Include="Views\Admin\CreateCinema.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
