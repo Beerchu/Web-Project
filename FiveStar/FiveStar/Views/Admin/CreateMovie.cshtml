@@ -39,7 +39,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Poster URL</label>
-                        <input type="text" name="PosterUrl" class="form-control" placeholder="images/movies/avatar.jpg" />
+                        @Html.TextBoxFor(m => m.PosterUrl, new { @class = "form-control", placeholder = "images/movies/avatar.jpg" })
                     </div>
                 </div>
             </div>
@@ -61,6 +61,34 @@
                 <label class="form-label">Release Date</label>
                 @Html.TextBoxFor(m => m.ReleaseDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                 @Html.ValidationMessageFor(m => m.ReleaseDate, "", new { style = "color: #dc3545; font-size: 12px;" })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Genres</label>
+
+                @{ 
+                    var genres = ViewBag.Genres as IEnumerable<FiveStars.Models.Genres>;
+                    var selectedIds = ViewBag.SelectedGenreIds as int[] ?? new int[0];
+                }
+
+                @if (genres != null)
+                {
+                    <div class="genre-checkboxes">
+                        @foreach (var g in genres)
+                        {
+                            var isChecked = System.Array.IndexOf(selectedIds, g.GenreID) >= 0;
+                            <label class="genre-item">
+                                <input type="checkbox" name="selectedGenreIds" value="@g.GenreID" @(isChecked ? "checked=\"checked\"" : "") />
+                                <span>@g.Name</span>
+                            </label>
+                        }
+                    </div>
+                    <small class="help-text">You can select multiple genres.</small>
+                }
+                else
+                {
+                    <div style="color:#b9c3cf; font-size: 14px;">No genres found in database.</div>
+                }
             </div>
 
             <div class="form-actions">

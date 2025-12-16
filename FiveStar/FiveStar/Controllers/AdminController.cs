@@ -12,6 +12,19 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
+        // -------------------------
+        // Helpers
+        // -------------------------
+        private void PopulateGenres(int[] selectedGenreIds = null)
+        {
+            var genres = _db.Genres
+                .OrderBy(g => g.Name)
+                .ToList();
+
+            ViewBag.Genres = genres;
+            ViewBag.SelectedGenreIds = selectedGenreIds ?? new int[0];
+        }
+
         // =========================
         // DASHBOARD
         // =========================
@@ -37,41 +50,122 @@ namespace FiveStars.Controllers
 
         public ActionResult CreateMovie()
         {
+            PopulateGenres();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateMovie(Movies movie)
+        public ActionResult CreateMovie(Movies movie, int[] selectedGenreIds)
         {
             if (ModelState.IsValid)
             {
+                // Defensive default (DB typically expects a value)
+                if (string.IsNullOrWhiteSpace(movie.Status))
+                    movie.Status = "Coming Soon";
+
                 _db.Movies.Add(movie);
                 _db.SaveChanges();
+
+                // Save Movie -> Genre links (many-to-many)
+                if (selectedGenreIds != null && selectedGenreIds.Length > 0)
+                {
+                    foreach (var genreId in selectedGenreIds.Distinct())
+                    {
+                        _db.Genres_Movies.Add(new Genres_Movies
+                        {
+                            MovieID = movie.MovieID,
+                            GenreID = genreId
+                        });
+                    }
+                    _db.SaveChanges();
+                }
+
                 TempData["SuccessMessage"] = "Movie created successfully!";
                 return RedirectToAction("Movies");
             }
+
+            // ModelState invalid -> re-fill genres so the view can render
+            PopulateGenres(selectedGenreIds);
             return View(movie);
         }
 
         public ActionResult EditMovie(int id)
         {
-            var movie = _db.Movies.Find(id);
+            var movie = _db.Movies
+                .Include(m => m.Genres_Movies)
+                .FirstOrDefault(m => m.MovieID == id);
+
             if (movie == null) return HttpNotFound();
+
+            var selectedGenreIds = movie.Genres_Movies
+                .Where(gm => gm.GenreID.HasValue)
+                .Select(gm => gm.GenreID.Value)
+                .ToArray();
+
+            PopulateGenres(selectedGenreIds);
             return View(movie);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditMovie(Movies movie)
+        public ActionResult EditMovie(Movies movie, int[] selectedGenreIds)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(movie).State = EntityState.Modified;
+                // Always update using tracked entity (avoids detached update + keeps relations under control)
+                var dbMovie = _db.Movies
+                    .Include(m => m.Genres_Movies)
+                    .FirstOrDefault(m => m.MovieID == movie.MovieID);
+
+                if (dbMovie == null) return HttpNotFound();
+
+                // Update scalar fields
+                dbMovie.Title = movie.Title;
+                dbMovie.Description = movie.Description;
+                dbMovie.Duration_min = movie.Duration_min;
+                dbMovie.PosterUrl = movie.PosterUrl;
+                dbMovie.Ratings = movie.Ratings;
+                dbMovie.Status = string.IsNullOrWhiteSpace(movie.Status) ? "Coming Soon" : movie.Status;
+                dbMovie.ReleaseDate = movie.ReleaseDate;
+
+                // Update Movie -> Genre links
+                var newIds = (selectedGenreIds ?? new int[0]).Distinct().ToList();
+                var existingLinks = dbMovie.Genres_Movies.ToList();
+
+                // Remove links not selected anymore
+                foreach (var link in existingLinks)
+                {
+                    if (link.GenreID.HasValue && !newIds.Contains(link.GenreID.Value))
+                    {
+                        _db.Genres_Movies.Remove(link);
+                    }
+                }
+
+                // Add missing links
+                var existingIds = existingLinks
+                    .Where(l => l.GenreID.HasValue)
+                    .Select(l => l.GenreID.Value)
+                    .ToHashSet();
+
+                foreach (var gid in newIds)
+                {
+                    if (!existingIds.Contains(gid))
+                    {
+                        _db.Genres_Movies.Add(new Genres_Movies
+                        {
+                            MovieID = dbMovie.MovieID,
+                            GenreID = gid
+                        });
+                    }
+                }
+
                 _db.SaveChanges();
                 TempData["SuccessMessage"] = "Movie updated successfully!";
                 return RedirectToAction("Movies");
             }
+
+            PopulateGenres(selectedGenreIds);
             return View(movie);
         }
 
@@ -82,9 +176,24 @@ namespace FiveStars.Controllers
             var movie = _db.Movies.Find(id);
             if (movie != null)
             {
-                _db.Movies.Remove(movie);
-                _db.SaveChanges();
-                TempData["SuccessMessage"] = "Movie deleted successfully!";
+                try
+                {
+                    // If the movie has genres, remove the junction rows first (avoids FK errors)
+                    var links = _db.Genres_Movies.Where(gm => gm.MovieID == id).ToList();
+                    if (links.Any())
+                    {
+                        _db.Genres_Movies.RemoveRange(links);
+                    }
+
+                    _db.Movies.Remove(movie);
+                    _db.SaveChanges();
+                    TempData["SuccessMessage"] = "Movie deleted successfully!";
+                }
+                catch
+                {
+                    // Most likely: this movie has related showtimes/reservations/tickets etc.
+                    TempData["ErrorMessage"] = "Cannot delete this movie because it has related records (showtimes / tickets / reservations). Delete those first.";
+                }
             }
             return RedirectToAction("Movies");
         }

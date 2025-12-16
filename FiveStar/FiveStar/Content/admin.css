@@ -802,55 +802,87 @@
 .role-badge.admin:hover {
     background: linear-gradient(45deg, #c0392b, #e50914);
     animation: adminPulse 1s infinite;
-    /* ===== ROLE SELECTOR ===== */
-    .role-selector
+}
 
-{
+/* ===== ROLE SELECTOR ===== */
+.role-selector {
     position: relative;
 }
 
-.role-selector::after {
-    content: '▼';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #b9c3cf;
-    pointer-events: none;
-}
-
-.role-selector select {
-    appearance: none;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid #333;
-    border-radius: 6px;
-    padding: 12px 40px 12px 16px;
-    width: 100%;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-    .role-selector select:focus {
-        outline: none;
-        border-color: #e50914;
-        box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1);
+    .role-selector::after {
+        content: '▼';
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #b9c3cf;
+        pointer-events: none;
     }
 
-    .role-selector select option {
-        background: #1a1a1a;
+    .role-selector select {
+        appearance: none;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid #333;
+        border-radius: 6px;
+        padding: 12px 40px 12px 16px;
+        width: 100%;
         color: white;
-        padding: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
 
-        .role-selector select option[value="admin"] {
-            background: linear-gradient(45deg, rgba(229, 9, 20, 0.2), rgba(192, 57, 43, 0.2));
-            font-weight: 700;
+        .role-selector select:focus {
+            outline: none;
+            border-color: #e50914;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1);
         }
 
-        .role-selector select option[value="customer"] {
-            background: rgba(52, 152, 219, 0.1);
+        .role-selector select option {
+            background: #1a1a1a;
+            color: white;
+            padding: 10px;
         }
 
+            .role-selector select option[value="admin"] {
+                background: linear-gradient(45deg, rgba(229, 9, 20, 0.2), rgba(192, 57, 43, 0.2));
+                font-weight: 700;
+            }
+
+            .role-selector select option[value="customer"] {
+                background: rgba(52, 152, 219, 0.1);
+            }
+
+/* ===== MOVIE GENRE (MULTI-SELECT) ===== */
+.genre-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    padding: 12px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.genre-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    user-select: none;
+}
+
+    .genre-item input {
+        accent-color: #e50914;
+    }
+
+.help-text {
+    display: block;
+    margin-top: 8px;
+    color: #b9c3cf;
+    font-size: 12px;
 }
