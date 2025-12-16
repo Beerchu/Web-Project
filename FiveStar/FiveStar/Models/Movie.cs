@@ -17,8 +17,9 @@ namespace FiveStars.Models
         [Display(Name = "Poster URL")]
         public string PosterUrl { get; set; }
 
-        [Range(0, 10, ErrorMessage = "Rating must be between 0 and 10")]
+        [Range(0, 10, ErrorMessage = "Rating must be between 0 and 10.")]
         public decimal? Ratings { get; set; }
+
 
         [Required(ErrorMessage = "Status is required")]
         public string Status { get; set; } = "Coming Soon";
