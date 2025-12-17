@@ -1,4 +1,4 @@
-﻿/* admin.css - FiveStars Cinema Admin (Dark Theme) */
+﻿/* admin.css - FiveStars Cinema Admin */
 
 /* ===== BASE STYLES ===== */
 .admin-container {
@@ -820,7 +820,6 @@
     }
 
     .role-selector select {
-        appearance: none;
         background: rgba(255, 255, 255, 0.05);
         border: 2px solid #333;
         border-radius: 6px;
@@ -875,10 +874,6 @@
     cursor: pointer;
     user-select: none;
 }
-
-    .genre-item input {
-        accent-color: #e50914;
-    }
 
 .help-text {
     display: block;

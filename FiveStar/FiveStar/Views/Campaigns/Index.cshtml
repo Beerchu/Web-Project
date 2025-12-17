@@ -13,9 +13,6 @@
 
 
 <style>
-    /*-----ENHANCED STYLES-----*/
-
-    /* Hero Section Enhancement */
     .campaigns-hero {
         background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0a0a0a 100%);
         padding: 80px 5%;
@@ -210,7 +207,6 @@
         font-size: 1rem;
     }
 
-    /* Enhanced Campaign Cards */
     .campaigns-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -344,7 +340,6 @@
             cursor: not-allowed;
         }
 
-    /* Campaign Type Ribbons - Color-coded based on content */
     .campaign-ribbon {
         position: absolute;
         top: 20px;
@@ -539,13 +534,11 @@
     }
     else
     {
-        <!-- Campaign Category Tabs - Updated for your campaign types -->
         <div class="category-tabs" id="categoryTabs">
             <button class="category-tab active" data-category="all">
                 <i class="fas fa-layer-group category-icon"></i> All Offers
             </button>
 
-            <!-- Categories based on your actual campaigns -->
             <button class="category-tab" data-category="family">
                 <i class="fas fa-users category-icon"></i> Family
             </button>
@@ -633,11 +626,11 @@
                             else
                             {
                                 using (Html.BeginForm(
-                                    "Apply",                 // IMPORTANT: matches controller action below
+                                    "Apply",              
                                     "Campaigns",
                                     new { id = c.CampaignID },
                                     FormMethod.Post,
-                                    new { @class = "js-campaign-apply" }  // <-- ADD THIS
+                                    new { @class = "js-campaign-apply" } 
                                 ))
                                 {
                                     @Html.AntiForgeryToken()
@@ -648,7 +641,6 @@
                                 }
                             }
 
-                            <!-- Optional: message area (doesn't affect layout if empty) -->
                             <div class="apply-status" aria-live="polite"></div>
                         </div>
                     </div>
@@ -687,7 +679,6 @@
         var title = campaign.Title ?? "";
         var text = (description + " " + title).ToLower();
 
-        // Check for specific campaign types based on your actual campaigns
         if (text.Contains("family") || text.Contains("4 pay for 3"))
             return "family";
         else if (text.Contains("couple") || text.Contains("valentine"))
@@ -746,13 +737,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Category filtering - SIMPLIFIED VERSION
         const tabs = document.querySelectorAll('.category-tab');
         const campaignCards = document.querySelectorAll('.campaign-card');
 
         console.log('Total campaign cards:', campaignCards.length);
 
-        // Debug: Log all card categories
         campaignCards.forEach((card, index) => {
             const category = card.getAttribute('data-category');
             const title = card.querySelector('.card-title')?.textContent || 'No title';

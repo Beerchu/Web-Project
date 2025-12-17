@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace FiveStars.Models
 {
-    // Simple model for campaign dropdown/list in the Payment view
     public class CampaignModel
     {
         public int CampaignID { get; set; }
@@ -43,7 +42,7 @@ namespace FiveStars.Models
 
         [Required(ErrorMessage = "Card Number is required.")]
         [Display(Name = "Card Number")]
-        public string CardNumber { get; set; } // user types "xxxx xxxx xxxx xxxx", we validate digits
+        public string CardNumber { get; set; } // user types "xxxx xxxx xxxx xxxx"
 
         [Required(ErrorMessage = "Expiration Date is required.")]
         [Display(Name = "Expiration Date (MM/YYYY)")]
@@ -60,7 +59,6 @@ namespace FiveStars.Models
             if (digits.Length != 16)
                 yield return new ValidationResult("Card number must be 16 digits.", new[] { nameof(CardNumber) });
 
-            // --- Expiration Date: MM/YYYY only (NO expired check) ---
             // --- Expiration Date: MM/YYYY and must NOT be expired ---
             var exp = (ExpirationDate ?? "").Trim();
             if (!TryParseExpMmYyyy(exp, out int year, out int month))
@@ -93,7 +91,6 @@ namespace FiveStars.Models
             year = 0;
             month = 0;
 
-            // Accept "MM/YYYY" only (your requirement)
             var parts = input.Split('/');
             if (parts.Length != 2) return false;
 

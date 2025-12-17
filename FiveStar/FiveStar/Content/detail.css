@@ -38,7 +38,7 @@
     color: #fff;
 }
 
-/* Status satırı (NOW SHOWING /s COMING SOON vs.) */
+/* Status satırı (NOW SHOWING / COMING SOON vs.) */
 .movie-detail-status-row {
     margin-bottom: 10px;
 }
@@ -240,7 +240,7 @@
  }
 
 
-/* Link gibi görünen geri butonu */ /* "Back to Movies" butonu – sadece yazı */
+/* "Back to Movies" butonu – sadece yazı */
 .movie-detail-btn-ghost {
     border: none;
     background: none;
