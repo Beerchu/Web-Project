@@ -353,6 +353,8 @@
     <Content Include="Scripts\campaigns.js" />
     <Content Include="Scripts\contact-script.js" />
     <Content Include="Scripts\home-script.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\movies.js" />
     <Content Include="videos\main-trailer.mp4" />
     <Content Include="Web.config" />
