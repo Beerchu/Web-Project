@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using FiveStars.Models;
+using FiveStars.Models.ViewModels;
+using System.Data.Entity.Infrastructure;
+
 
 namespace FiveStars.Controllers
 {
@@ -12,9 +17,9 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // -------------------------
+        
         // Helpers
-        // -------------------------
+
         private void PopulateGenres(int[] selectedGenreIds = null)
         {
             var genres = _db.Genres
@@ -25,9 +30,78 @@ namespace FiveStars.Controllers
             ViewBag.SelectedGenreIds = selectedGenreIds ?? new int[0];
         }
 
-        // =========================
+        // Ratings: accept comma decimals (e.g., 8,5), reject dot decimals (8.5),
+        // and enforce range 0..10 with English messages.
+        private void NormalizeAndValidateRating(Movies movie)
+        {
+            // NOTE: Browser "number" inputs don't accept comma, so the view must use type="text".
+            // This method guarantees server-side correctness even if client-side is bypassed.
+
+            var rawObj = Request?.Form?["Ratings"] ?? Request?.Form?["movie.Ratings"];
+            if (rawObj == null) return; // field not posted
+
+            string raw = (rawObj ?? string.Empty).Trim();
+
+            // Clear any binder-produced error first; we'll add our own English errors.
+            ModelState.Remove("Ratings");
+            ModelState.Remove("movie.Ratings");
+
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                movie.Ratings = null;
+                return; // rating is optional
+            }
+
+            // Enforce comma as decimal separator (user requested "virgüllü")
+            if (raw.Contains("."))
+            {
+                ModelState.AddModelError("Ratings",
+                    "Use a comma (,) as the decimal separator. Example: 8,5");
+                return;
+            }
+
+            // Basic format guard: 0..10, optionally with 1-2 decimal digits using comma
+            // Examples: 8,5  |  8  |  10  |  10,0
+            if (!Regex.IsMatch(raw, @"^\d{1,2}(,\d)?$"))
+            {
+                ModelState.AddModelError("Ratings",
+                    "Invalid rating format. Use e.g. 8 or 8,5 (max 1 decimal).");
+                return;
+            }
+
+            var tr = CultureInfo.GetCultureInfo("tr-TR");
+            if (!decimal.TryParse(raw, NumberStyles.Number, tr, out decimal rating))
+            {
+                ModelState.AddModelError("Ratings",
+                    "Invalid rating value. Use e.g. 8 or 8,5.");
+                return;
+            }
+
+            if (rating < 0m || rating > 10m)
+            {
+                ModelState.AddModelError("Ratings",
+                    "Rating must be between 0 and 10.");
+                return;
+            }
+
+            movie.Ratings = rating;
+        }
+
+
+
+
+        private void ValidateMovieTitle(Movies movie)
+        {
+            if (movie == null) return;
+
+            if (string.IsNullOrWhiteSpace(movie.Title))
+            {
+                ModelState.AddModelError("Title", "Movie title is required.");
+            }
+        }
+
         // DASHBOARD
-        // =========================
+        
         public ActionResult Index()
         {
             ViewBag.TotalMovies = _db.Movies.Count();
@@ -59,6 +133,9 @@ namespace FiveStars.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMovie(Movies movie, int[] selectedGenreIds)
         {
+            NormalizeAndValidateRating(movie);
+            ValidateMovieTitle(movie);
+
             if (ModelState.IsValid)
             {
                 // Defensive default (DB typically expects a value)
@@ -112,6 +189,9 @@ namespace FiveStars.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditMovie(Movies movie, int[] selectedGenreIds)
         {
+            NormalizeAndValidateRating(movie);
+            ValidateMovieTitle(movie);
+
             if (ModelState.IsValid)
             {
                 // Always update using tracked entity (avoids detached update + keeps relations under control)
@@ -200,59 +280,179 @@ namespace FiveStars.Controllers
         }
 
         #endregion
+
+
         #region Cinema Management
 
         public ActionResult Cinemas()
         {
             var cinemas = _db.Cinemas
+                .Include(c => c.Halls)
                 .OrderBy(c => c.CinemaName)
                 .ToList();
+                
+
 
             return View(cinemas);
         }
 
         public ActionResult CreateCinema()
         {
-            return View();
+            var vm = new CinemaWithHallsVM();
+
+            // boş gelmesin diye 1 satır default
+            vm.Halls.Add(new HallRowVM { HallType = "Standard", Capacity = 120 });
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateCinema(Cinemas cinema)
+        public ActionResult CreateCinema(CinemaWithHallsVM vm)
         {
+            // Halls null gelirse patlamasın
+            vm.Halls = vm.Halls ?? new List<HallRowVM>();
+
             if (ModelState.IsValid)
             {
+                // 1) Cinema ekle
+                var cinema = new Cinemas
+                {
+                    CinemaName = vm.CinemaName,
+                    Address = vm.Address,
+                    City = vm.City,
+                    District = vm.District,
+                    PhoneNumber = vm.PhoneNumber
+                };
+
                 _db.Cinemas.Add(cinema);
+                _db.SaveChanges(); // CinemaID oluşsun
+
+                // 2) Halls ekle
+                foreach (var h in vm.Halls.Where(x => !x.IsDeleted))
+                {
+                    _db.Halls.Add(new Halls
+                    {
+                        CinemaID = cinema.CinemaID,
+                        HallType = h.HallType,
+                        Capacity = h.Capacity
+                    });
+                }
+
                 _db.SaveChanges();
-                TempData["SuccessMessage"] = "Cinema created successfully!";
+
+                TempData["SuccessMessage"] = "Cinema + halls created successfully!";
                 return RedirectToAction("Cinemas");
             }
 
-            return View(cinema);
+            // invalid -> yine satır göster
+            if (vm.Halls.Count == 0) vm.Halls.Add(new HallRowVM { HallType = "Standard", Capacity = 120 });
+            return View(vm);
         }
 
         public ActionResult EditCinema(int id)
         {
-            var cinema = _db.Cinemas.Find(id);
+            var cinema = _db.Cinemas
+                .Include(c => c.Halls)
+                .FirstOrDefault(c => c.CinemaID == id);
+
             if (cinema == null) return HttpNotFound();
 
-            return View(cinema);
+            var vm = new CinemaWithHallsVM
+            {
+                CinemaID = cinema.CinemaID,
+                CinemaName = cinema.CinemaName,
+                Address = cinema.Address,
+                City = cinema.City,
+                District = cinema.District,
+                PhoneNumber = cinema.PhoneNumber,
+                Halls = cinema.Halls
+                    .Select(h => new HallRowVM
+                    {
+                        HallID = h.HallID,
+                        HallType = h.HallType,
+                        Capacity = h.Capacity ?? 0,
+                        IsDeleted = false
+                    })
+                    .ToList()
+            };
+
+            if (vm.Halls.Count == 0)
+                vm.Halls.Add(new HallRowVM { HallType = "Standard", Capacity = 120 });
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditCinema(Cinemas cinema)
+        public ActionResult EditCinema(CinemaWithHallsVM vm)
         {
-            if (ModelState.IsValid)
+            vm.Halls = vm.Halls ?? new List<HallRowVM>();
+
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var cinema = _db.Cinemas
+                .Include(c => c.Halls)
+                .FirstOrDefault(c => c.CinemaID == vm.CinemaID);
+
+            if (cinema == null) return HttpNotFound();
+
+            // 1) Cinema alanları güncelle
+            cinema.CinemaName = vm.CinemaName;
+            cinema.Address = vm.Address;
+            cinema.City = vm.City;
+            cinema.District = vm.District;
+            cinema.PhoneNumber = vm.PhoneNumber;
+
+            // 2) Halls güncelle/ekle/sil
+            var existing = cinema.Halls.ToDictionary(h => h.HallID);
+
+            foreach (var row in vm.Halls)
             {
-                _db.Entry(cinema).State = EntityState.Modified;
-                _db.SaveChanges();
-                TempData["SuccessMessage"] = "Cinema updated successfully!";
-                return RedirectToAction("Cinemas");
+                // yeni hall
+                if (row.HallID == 0)
+                {
+                    if (row.IsDeleted) continue;
+
+                    _db.Halls.Add(new Halls
+                    {
+                        CinemaID = cinema.CinemaID,
+                        HallType = row.HallType,
+                        Capacity = row.Capacity
+                    });
+                    continue;
+                }
+
+                // eski hall
+                if (!existing.TryGetValue(row.HallID, out var hall))
+                    continue;
+
+                if (row.IsDeleted)
+                {
+                    // Bu hall showtime'a bağlıysa silme (FK patlatır)
+                    bool hasShowtime = _db.Showings.Any(s => s.HallID == hall.HallID);
+                    if (hasShowtime)
+                    {
+                        ModelState.AddModelError("", "Cannot remove a hall that has showtimes. Edit it instead.");
+                        return View(vm);
+                    }
+
+                    _db.Halls.Remove(hall);
+                    continue;
+                }
+
+                // update
+                hall.HallType = row.HallType;
+                hall.Capacity = row.Capacity;
             }
 
-            return View(cinema);
+            _db.SaveChanges();
+
+            TempData["SuccessMessage"] = "Cinema + halls updated successfully!";
+            return RedirectToAction("Cinemas");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteCinema(int id)
@@ -263,7 +463,6 @@ namespace FiveStars.Controllers
             {
                 try
                 {
-                    // If cinema has halls, showings, etc., this may throw FK exception
                     _db.Cinemas.Remove(cinema);
                     _db.SaveChanges();
 
@@ -280,6 +479,9 @@ namespace FiveStars.Controllers
         }
 
         #endregion
+
+
+
 
         #region Showtimes Management
 

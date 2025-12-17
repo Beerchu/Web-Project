@@ -166,6 +166,7 @@
     <Compile Include="Models\Cinemas.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CinemaWithHallsVM.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Models\Genres.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
@@ -233,10 +234,12 @@
     <Content Include="Content\home.css" />
     <Content Include="Content\HtmlPage1.html" />
     <Content Include="Content\login.css" />
+    <Content Include="Content\login_register.css" />
     <Content Include="Content\movies.css" />
     <Content Include="Content\profile.css" />
     <Content Include="Content\showtime.css" />
     <Content Include="Content\tickets.css" />
+    <Content Include="Content\userProfile.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -353,6 +356,8 @@
     <Content Include="Scripts\campaigns.js" />
     <Content Include="Scripts\contact-script.js" />
     <Content Include="Scripts\home-script.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\movies.js" />
     <Content Include="videos\main-trailer.mp4" />
     <Content Include="Web.config" />
@@ -413,6 +418,8 @@
     <Content Include="Views\Admin\Cinemas.cshtml" />
     <Content Include="Views\Admin\EditCinema.cshtml" />
     <Content Include="Views\Admin\CreateCinema.cshtml" />
+    <Content Include="Views\Account\EditProfile.cshtml" />
+    <Content Include="Views\Campaigns\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

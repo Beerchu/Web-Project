@@ -35,13 +35,13 @@ namespace FiveStars.Controllers
 
             if (selectedGenreId.HasValue)
             {
-                // FIX: Value kullan
+               
                 query = query.Where(m => m.Genres_Movies.Any(gm => gm.GenreID == selectedGenreId.Value));
             }
 
             if (selectedCinemaId.HasValue)
             {
-                // FIX: Value kullan
+               
                 query = query.Where(m => m.Showings.Any(s => s.Halls.CinemaID == selectedCinemaId.Value));
             }
 

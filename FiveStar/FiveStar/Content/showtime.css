@@ -87,6 +87,9 @@
     font-weight: 600;
     margin: 0 0 12px;
     opacity: .95;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Saat “chip” alanı: grid ile hizalı */
@@ -214,3 +217,11 @@
         outline: 2px solid rgba(229,9,20,.9);
         outline-offset: 2px;
     }
+.hall-badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    opacity: .9;
+}

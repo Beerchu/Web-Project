@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<FiveStars.Models.Cinemas>
+@using System
+@using System.Linq
 
 @{ ViewBag.Title = "Cinema Management";
                 Layout = "~/Views/Shared/_Layout.cshtml"; }
@@ -46,6 +48,37 @@
     <tr>
         <td>
             <strong>@cinema.CinemaName</strong>
+
+            <!-- Hall badges shown under cinema name -->
+            <div class="hall-badges">
+                @if (cinema.Halls != null && cinema.Halls.Any())
+                {
+                    foreach (var h in cinema.Halls.OrderBy(x => x.HallID))
+                    {
+                        var type = (h.HallType ?? "").Trim();
+                        var css = "hall-badge";
+
+                        if (type.Equals("VIP", StringComparison.OrdinalIgnoreCase))
+                        {
+                            css += " hall-vip";
+                        }
+                        else if (type.Equals("IMAX", StringComparison.OrdinalIgnoreCase))
+                        {
+                            css += " hall-imax";
+                        }
+                        else
+                        {
+                            css += " hall-standard";
+                        }
+
+                        <span class="@css">#@h.HallID: @type-@(h.Capacity ?? 0)</span>
+                    }
+                }
+                else
+                {
+                    <span class="hall-badge hall-empty">No halls</span>
+                }
+            </div>
         </td>
         <td>@cinema.City</td>
         <td>@cinema.District</td>
@@ -77,3 +110,31 @@
         </table>
     </div>
 </div>
+
+<!-- Badge styles (white text + colored boxes) -->
+<style>
+    .hall-badges{
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .hall-badge{
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 10px; /* more "box" than pill */
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .3px;
+        color: rgb(0 0 0);
+        border: 1px solid rgba(255,255,255,.16);
+        box-shadow: 0 6px 18px rgba(0,0,0,.25);
+    }
+
+    .hall-standard{ background: #f0b400; } /* gold */
+    .hall-vip{ background: #e53935; }      /* red */
+    .hall-imax{ background: #7c3aed; }     /* purple */
+    .hall-empty{ background: rgba(255,255,255,.18); }
+</style>

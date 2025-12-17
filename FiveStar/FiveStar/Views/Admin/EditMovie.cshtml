@@ -15,7 +15,7 @@
     </div>
 
     <div class="form-container">
-        @using (Html.BeginForm("EditMovie", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("EditMovie", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", novalidate = "novalidate" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.MovieID)
@@ -35,8 +35,22 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Rating</label>
-                    @Html.TextBoxFor(m => m.Ratings, new { @class = "form-control", type = "number", step = "0.1", placeholder = "8.5" })
-                </div>
+                    @{
+                        var tr = System.Globalization.CultureInfo.GetCultureInfo("tr-TR");
+                        var ratingText = (Model != null && Model.Ratings.HasValue)
+                            ? Model.Ratings.Value.ToString("0.#", tr)
+                            : "";
+                    }
+                    @Html.TextBox("Ratings", ratingText, new
+                    {
+                        @class = "form-control",
+                        type = "text",
+                        inputmode = "decimal",
+                        placeholder = "8,5",
+                        autocomplete = "off"
+                    })
+                    @Html.ValidationMessageFor(m => m.Ratings, "", new { style = "color: #dc3545; font-size: 12px;" })
+                    </div>
             </div>
 
             <div class="form-row">
@@ -49,7 +63,7 @@
      ),
      new { @class = "form-control" })
 
-                    @Html.ValidationMessageFor(m => m.Status, "", new { style = "color: #dc3545; font-size: 12px;" })
+                    @Html.ValidationMessageFor(m => m.Status, "", new { style = "color: #000000; font-size: 12px;" })
                 </div>
                 <div class="form-group">
                     <label class="form-label">Release Date</label>
