@@ -112,13 +112,18 @@ class LiveChat {
     }
 
     listenMessages() {
+        // .orderBy("timestamp", "asc") kýsmýndan sonra .limitToLast(0) gibi 
+        // bir kýsýtlama yerine, Snapshot'ý sadece yeni gelenler için kullanacaðýz.
+
         db.collection("messages")
+            .where("timestamp", ">", new Date()) // Sadece þu andan sonraki mesajlarý dinle
             .orderBy("timestamp", "asc")
             .onSnapshot(snapshot => {
-                this.chatMessages.innerHTML = "";
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    this.renderMessage(data.text, data.sender, data.timestamp);
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === "added") {
+                        const data = change.doc.data();
+                        this.renderMessage(data.text, data.sender, data.timestamp);
+                    }
                 });
                 this.scrollToBottom();
             });

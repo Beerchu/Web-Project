@@ -1,85 +1,9 @@
-﻿@model FiveStars.Models.ViewModels.AdminShowtimesVM
+﻿@model IEnumerable<FiveStars.Models.Showings>
 
 @{
     ViewBag.Title = "Showtimes Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<style>
-    /* One-row filter bar (matches the vibe of Movies page filters) */
-    .showtime-filter-bar {
-        margin-top: 20px;
-        padding: 14px 16px;
-        border-radius: 999px;
-        background: rgba(0, 0, 0, 0.55);
-        border: 1px solid rgba(255, 255, 255, 0.10);
-        backdrop-filter: blur(6px);
-    }
-
-    .showtime-filter-form {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .sf-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex: 1 1 auto;
-        min-width: 0;
-    }
-
-    .sf-control {
-        height: 44px;
-        min-width: 170px;
-        border-radius: 12px;
-        padding: 0 12px;
-        background: rgba(31, 36, 42, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: #fff;
-        outline: none;
-    }
-
-    .sf-control:focus {
-        border-color: rgba(255, 0, 0, 0.65);
-        box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.12);
-    }
-
-    .sf-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-left: auto;
-        white-space: nowrap;
-    }
-
-    .sf-actions .btn {
-        height: 44px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .sf-count {
-        color: #9aa4ad;
-    }
-
-    /* Desktop: keep it one row */
-    @media (min-width: 992px) {
-        .showtime-filter-form { flex-wrap: nowrap; }
-        .sf-left { flex-wrap: nowrap; }
-    }
-
-    /* Smaller screens: allow wrapping so it doesn't break */
-    @media (max-width: 991px) {
-        .showtime-filter-bar { border-radius: 18px; }
-        .showtime-filter-form { flex-wrap: wrap; }
-        .sf-left { flex-wrap: wrap; }
-        .sf-actions { width: 100%; margin-left: 0; }
-        .sf-control { flex: 1 1 220px; min-width: 220px; }
-    }
-</style>
 
 <div class="admin-container">
     <div class="admin-header">
@@ -95,29 +19,6 @@
             <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
         </div>
     }
-
-    <!-- Filters (GET) -->
-    <div class="showtime-filter-bar">
-        @using (Html.BeginForm("Showtimes", "Admin", FormMethod.Get, new { @class = "showtime-filter-form" }))
-        {
-            <div class="sf-left">
-                @Html.DropDownList("movieId", Model.Movies, "All Movies", new { @class = "sf-control", aria_label = "Movie" })
-                @Html.DropDownList("hallType", Model.HallTypes, "All Halls", new { @class = "sf-control", aria_label = "Hall" })
-                <input type="date" name="date" class="sf-control" aria-label="Date"
-                       value="@(Model.SelectedDate.HasValue ? Model.SelectedDate.Value.ToString("yyyy-MM-dd") : "")" />
-                <input type="time" name="time" class="sf-control" aria-label="Time"
-                       value="@(string.IsNullOrWhiteSpace(Model.SelectedTime) ? "" : Model.SelectedTime)" />
-            </div>
-
-            <div class="sf-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
-                <a href="@Url.Action("Showtimes", "Admin")" class="btn btn-secondary">Reset</a>
-                <span class="sf-count">Showing: <strong>@(Model.Showings?.Count() ?? 0)</strong></span>
-            </div>
-        }
-    </div>
 
     <div class="action-buttons">
         <a href="@Url.Action("CreateShowtime", "Admin")" class="btn btn-success">
@@ -138,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var showing in Model.Showings)
+                @foreach (var showing in Model)
                 {
                     <tr>
                         <td>@showing.ShowingID</td>
