@@ -4,23 +4,17 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using FiveStars.Models;
-using FiveStars; // Orders, Tickets, CinemasDBEntities gibi EF sınıflarına erişim sağlar.
-
+using FiveStars; // Orders, Tickets, CinemaDBEntities gibi EF sınıflarına erişim sağlar.
 
 namespace FiveStars.Controllers
 {
-    // *** Koltuk Seçim Sayfasından POST edilen veriyi karşılayacak tek model ***
-    // (JavaScript'ten gelen SelectedSeatNumbers ve BaseTotal'ı yakalar.)
-    // Eğer bu model Models/ klasörünüzde tanımlıysa, burayı silin ve sadece using FiveStars.Models; kullanın.
-    // Şimdilik TicketsController.cs içinde tanımlı kabul edelim:
+    // *** Koltuk Seçim Sayfasından POST edilen veriyi karşılayacak model ***
     public class SeatSelectionPostModel
     {
         public int ShowingID { get; set; }
         public decimal BaseTotal { get; set; }
-        // JavaScript'ten name="SelectedSeatIDs" olarak gelen veriyi yakalar.
         public List<int> SelectedSeatIDs { get; set; }
-        // JavaScript'ten name="SelectedSeatNumbers" olarak gelen veriyi yakalar.
-        public List<string> SelectedSeatNumbers { get; set; }
+        // Artık SelectedSeatNumbers'a gerek yok.
     }
 
     public class TicketsController : Controller
@@ -37,8 +31,9 @@ namespace FiveStars.Controllers
             if (showing == null)
                 return Enumerable.Empty<SeatRow>();
 
-            int hallId = showing.HallID.GetValueOrDefault();
-            hallId = 3; // !!! KRİTİK DB UYUMSUZLUĞU DÜZELTMESİ (Sabit değer korundu) !!!
+            int hallId = showing.HallID ?? 0;
+            if (hallId == 0)
+                return Enumerable.Empty<SeatRow>();
 
             var hallSeats = _db.Seats
                 .Where(s => s.HallID == hallId && s.IsActive != false)
@@ -59,13 +54,11 @@ namespace FiveStars.Controllers
                  select t.SeatID)
                 .ToList();
 
-
             var groupedSeats = hallSeats.GroupBy(s => s.RowLabel);
             var seatingPlan = new List<SeatRow>();
 
-            foreach (var group in groupedSeats.OrderByDescending(g => g.Key))
+            foreach (var group in groupedSeats.OrderBy(g => g.Key))//OrderByDescending = Z’den A’ya (H, G, F… A) demek
             {
-                // SeatRow ve Seat, sizin Models/ klasörünüzde tanımlı olmalıdır.
                 var row = new SeatRow { RowName = group.Key, Seats = new List<Seat>() };
 
                 foreach (var dbSeat in group.OrderBy(s => s.SeatNumber))
@@ -82,17 +75,20 @@ namespace FiveStars.Controllers
                     });
                 }
 
-                // Orta Koridoru Ekleme Mantığı
-                if (row.Seats.Count == 20)
+                // Dinamik koridor ekleme
+                int seatCount = row.Seats.Count;
+                if (seatCount >= 8)
                 {
-                    row.Seats.Insert(10, null);
-                    row.Seats.Insert(11, null);
+                    int mid = seatCount / 2;
+                    row.Seats.Insert(mid, null);
+                    if (seatCount >= 16)
+                        row.Seats.Insert(mid + 1, null);
                 }
 
                 seatingPlan.Add(row);
             }
 
-            return seatingPlan.OrderByDescending(r => r.RowName);
+            return seatingPlan.OrderBy(r => r.RowName);
         }
 
         private void ReleaseExpiredHolds()
@@ -113,10 +109,8 @@ namespace FiveStars.Controllers
                          && t.Status == "booked")
                 .ToList();
 
-
             _db.Tickets.RemoveRange(expiredTickets);
             _db.Orders.RemoveRange(expiredOrders);
-
             _db.SaveChanges();
         }
 
@@ -138,7 +132,6 @@ namespace FiveStars.Controllers
         // PUBLIC ACTION METOTLAR
         // =========================================================
 
-        // PUBLIC: SHOWTIMES (GÖSTERİMLERİ LİSTELEME)
         [AllowAnonymous]
         public ActionResult Showtimes(int movieId)
         {
@@ -151,7 +144,6 @@ namespace FiveStars.Controllers
                 .OrderBy(s => s.ShowTime)
                 .ToList();
 
-            // ShowtimeSelectionViewModel ve ShowtimeItem, Models klasörünüzde tanımlı olmalıdır.
             var vm = new ShowtimeSelectionViewModel
             {
                 MovieId = movie.MovieID,
@@ -171,7 +163,6 @@ namespace FiveStars.Controllers
             return View(vm);
         }
 
-        // PUBLIC: SEAT SELECTION (KOLTUK SEÇİM SAYFASINI GÖSTERME)
         [AllowAnonymous]
         public ActionResult SelectSeats(int showingId)
         {
@@ -186,7 +177,6 @@ namespace FiveStars.Controllers
             if (showing == null)
                 return HttpNotFound();
 
-            // SeatSelectionViewModel, Models klasörünüzde tanımlı olmalıdır.
             var viewModel = new SeatSelectionViewModel
             {
                 SessionTimeID = showing.ShowingID,
@@ -195,32 +185,30 @@ namespace FiveStars.Controllers
                 StartTime = showing.ShowTime,
                 ScreenType = showing.Halls.HallType,
                 TicketPrice = (decimal)showing.TicketPrice,
-
                 SeatingPlan = GetSeatingPlanFromDB(showingId)
             };
 
             return View(viewModel);
         }
 
-        // POST: ÖDEME İŞLEMİNE YÖNLENDİRME (KRİTİK GÖREV)
+        // =========================================================
+        // POST: ÖDEME İŞLEMİNE YÖNLENDİRME
+        // =========================================================
         [HttpPost]
-        [Authorize] // Kullanıcının giriş yapmasını zorlar
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrderAndRedirectToPayment(SeatSelectionPostModel model)
         {
-            // 1. Giriş/Seçim Kontrolü
             if (model == null || model.SelectedSeatIDs == null || !model.SelectedSeatIDs.Any())
             {
                 TempData["ErrorMessage"] = "Lütfen en az bir koltuk seçin.";
                 return RedirectToAction("SelectSeats", new { showingId = model.ShowingID });
             }
 
-            // 2. Güvenlik Kontrolleri (Koltukların Hala Boş Olup Olmadığı)
             int currentUserId = GetCurrentUserId();
             var showing = _db.Showings.FirstOrDefault(s => s.ShowingID == model.ShowingID);
             if (showing == null) return HttpNotFound();
 
-            // Client-side'dan gelen BaseTotal değeri yerine sunucu tarafında hesaplama yapılır.
             decimal ticketPrice = (decimal)showing.TicketPrice;
             decimal serverTotal = model.SelectedSeatIDs.Count * ticketPrice;
 
@@ -241,7 +229,14 @@ namespace FiveStars.Controllers
                 return RedirectToAction("SelectSeats", new { showingId = model.ShowingID });
             }
 
-            // 3. Yeni Order kaydı oluştur
+            // Koltukları DB'den çek → label oluştur (ör. "C5")
+            var seats = _db.Seats
+                .Where(s => model.SelectedSeatIDs.Contains(s.SeatID))
+                .Select(s => new { s.SeatID, s.HallID, s.RowLabel, s.SeatNumber })
+                .ToList();
+
+            var seatLabels = seats.ToDictionary(x => x.SeatID, x => $"{x.RowLabel}{x.SeatNumber}");
+
             var newOrder = new Orders
             {
                 UserID = currentUserId,
@@ -251,35 +246,32 @@ namespace FiveStars.Controllers
             };
 
             _db.Orders.Add(newOrder);
-            _db.SaveChanges(); // OrderID'yi almak için kaydedilir.
+            _db.SaveChanges();
 
-            // 4. Her bir koltuk için Ticket kaydı oluştur ve rezerve et
-            for (int i = 0; i < model.SelectedSeatIDs.Count; i++)
+            foreach (var seatId in model.SelectedSeatIDs)
             {
+                string seatLabel = seatLabels.ContainsKey(seatId) ? seatLabels[seatId] : seatId.ToString();
+
                 var newTicket = new Tickets
                 {
-                    SeatID = model.SelectedSeatIDs[i],
+                    SeatID = seatId,
                     ShowingID = model.ShowingID,
                     UserID = currentUserId,
                     OrderID = newOrder.OrderID,
-                    SeatNumber = model.SelectedSeatNumbers[i],
-                    Status = "booked" // Koltuklar rezerve edildi
+                    SeatNumber = seatLabel,
+                    Status = "booked"
                 };
                 _db.Tickets.Add(newTicket);
             }
             _db.SaveChanges();
 
-            // 5. Kullanıcıyı Payment sayfasına yönlendir (Yeni Form Ekranı)
             return RedirectToAction("Payment", "Payment", new { orderId = newOrder.OrderID });
         }
 
-
-        // Dispoz metodu
         protected override void Dispose(bool disposing)
         {
             if (disposing)
                 _db.Dispose();
-
             base.Dispose(disposing);
         }
     }
