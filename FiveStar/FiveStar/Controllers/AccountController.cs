@@ -10,9 +10,8 @@ namespace FiveStars.Controllers
 {
     public class AccountController : Controller
     {
-        // =========================
+       
         // LOGIN (GET)
-        // =========================
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -20,9 +19,8 @@ namespace FiveStars.Controllers
             return View();
         }
 
-        // =========================
+        
         // LOGIN (POST)
-        // =========================
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Login(string email, string password, string returnUrl)
@@ -51,9 +49,8 @@ namespace FiveStars.Controllers
             return View();
         }
 
-        // =========================
+        
         // LOGOUT
-        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Logout()
@@ -65,9 +62,8 @@ namespace FiveStars.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        // =========================
+        
         // REGISTER (GET)
-        // =========================
         [AllowAnonymous]
         public ActionResult Register(string returnUrl)
         {
@@ -75,9 +71,8 @@ namespace FiveStars.Controllers
             return View();
         }
 
-        // =========================
+        
         // REGISTER (POST)
-        // =========================
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Register(string firstName, string lastName, string email, string password, string returnUrl)
@@ -115,11 +110,11 @@ namespace FiveStars.Controllers
             }
         }
 
-        // =========================
+       
         // USER PROFILE
         // - Active bookings count
         // - Redeemed campaigns not used yet (from User_Campaigns)
-        // =========================
+        
         [Authorize]
         public ActionResult UserProfile()
         {
@@ -174,17 +169,6 @@ namespace FiveStars.Controllers
             }
         }
 
-        // =========================
-        // Redeemed campaigns (claimed) NOT used yet
-        // Source of truth:
-        //   User_Campaigns(UserID, CampaignID, RedeemedDate)
-        // Join:
-        //   Campaigns(CampaignID, Title, Description, ImageUrl, DurationText, IsActive)
-        //
-        // Important: This method is resilient:
-        // - First tries "exclude used via Orders" rule
-        // - If Orders schema doesn't match, it falls back to showing all redeemed campaigns
-        // =========================
         private List<RedeemedCampaignViewModel> FetchRedeemedNotUsedCampaigns(CinemaDBEntities db, int userId)
         {
             // Attempt 1: redeemed minus used in PAID/COMPLETED orders
@@ -269,9 +253,9 @@ namespace FiveStars.Controllers
             }
         }
 
-        // =========================
+        
         // EDIT PROFILE (GET)
-        // =========================
+        
         [Authorize]
         public ActionResult EditProfile()
         {
@@ -298,9 +282,7 @@ namespace FiveStars.Controllers
             }
         }
 
-        // =========================
         // EDIT PROFILE (POST)
-        // =========================
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]

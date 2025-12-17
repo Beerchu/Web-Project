@@ -12,11 +12,10 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // =========================================================
-        // A. HELPER METOTLAR (Kampanya/Fiyat/Cleanup)
-        // =========================================================
-
-        // A.1. Kampanya Uygunluk Kontrolü
+        
+        // HELPER METOTLAR (Kampanya/Fiyat/Cleanup)
+        
+        //Kampanya Uygunluk Kontrolü
         private string CheckCampaignEligibility(int orderId, int campaignId)
         {
             var orderTickets = _db.Tickets
@@ -53,7 +52,7 @@ namespace FiveStars.Controllers
             return "";
         }
 
-        // A.2. Fiyat Hesaplama Mantığı
+        // Fiyat Hesaplama Mantığı
         private (decimal Discount, decimal FinalTotal) CalculateOrderPrice(int orderId, int? campaignId)
         {
             var orderTickets = _db.Tickets
@@ -69,7 +68,7 @@ namespace FiveStars.Controllers
             decimal discountAmount = 0m;
             int numTickets = orderTickets.Count;
 
-            // Uygunluk kontrolü (AJAX'tan sonra güvenlik için tekrar kontrol)
+            // Uygunluk kontrolü 
             if (campaignId.HasValue && campaignId.Value > 0)
             {
                 string eligibilityCheck = CheckCampaignEligibility(orderId, campaignId.Value);
@@ -102,7 +101,7 @@ namespace FiveStars.Controllers
             return (Math.Round(discountAmount, 2), Math.Round(Math.Max(0m, finalTotal), 2));
         }
 
-        // A.3. Süresi Dolan Siparişleri Serbest Bırakma
+        // Süresi Dolan Siparişleri Serbest Bırakma
         private void ReleaseExpiredHolds()
         {
             var cutoff = DateTime.Now.AddMinutes(-10);
@@ -128,7 +127,7 @@ namespace FiveStars.Controllers
             _db.SaveChanges();
         }
 
-        // A.4. Mevcut Kullanıcı ID'sini Alma
+        // Mevcut Kullanıcı ID'sini Alma
         private int GetCurrentUserId()
         {
             var name = (User.Identity?.Name ?? "").Trim();
@@ -143,9 +142,9 @@ namespace FiveStars.Controllers
             return user.UserID;
         }
 
-        // =========================================================
-        // B. GET ACTION: ÖDEME SAYFASINI YÜKLE
-        // =========================================================
+        
+        // GET ACTION: ÖDEME SAYFASINI YÜKLE
+        
 
         [Authorize]
         public ActionResult Payment(int orderId)
@@ -189,9 +188,9 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
-        // =========================================================
-        // C. POST ACTION: AJAX FİYAT YENİDEN HESAPLAMA
-        // =========================================================
+        
+        //POST ACTION: AJAX FİYAT YENİDEN HESAPLAMA
+      
 
         [Authorize]
         [HttpPost]
@@ -199,7 +198,7 @@ namespace FiveStars.Controllers
         {
             int? selectedCampaignId = campaignId > 0 ? campaignId : (int?)null;
 
-            // 1. Sahip olma kontrolü
+            //Sahip olma kontrolü
             if (selectedCampaignId.HasValue)
             {
                 int userId = GetCurrentUserId();
@@ -219,7 +218,7 @@ namespace FiveStars.Controllers
                 }
             }
 
-            // 2. Uygunluk kontrolü
+            //Uygunluk kontrolü
             string validationMessage = "";
             if (campaignId > 0)
                 validationMessage = CheckCampaignEligibility(orderId, campaignId);
@@ -238,7 +237,7 @@ namespace FiveStars.Controllers
                 });
             }
 
-            // 3. Fiyatı hesapla
+            //Fiyatı hesapla
             var (discount, finalTotal) = CalculateOrderPrice(orderId, selectedCampaignId);
 
             return Json(new
@@ -251,10 +250,9 @@ namespace FiveStars.Controllers
         }
 
 
-        // =========================================================
-        // D. POST ACTION: ÖDEME ONAYI VE DB GÜNCELLEMESİ
-        // =========================================================
-
+        
+        //POST ACTION: ÖDEME ONAYI VE DB GÜNCELLEMESİ
+        
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -327,9 +325,9 @@ namespace FiveStars.Controllers
             return RedirectToAction("Payment", new { orderId = model.OrderID });
         }
 
-        // =========================================================
-        // E. GET ACTION: ÖDEME BAŞARI SAYFASI
-        // =========================================================
+     
+        //GET ACTION: ÖDEME BAŞARI SAYFASI
+        
 
         [Authorize]
         public ActionResult PaymentSuccess(int orderId)
@@ -345,21 +343,20 @@ namespace FiveStars.Controllers
             var successModel = new PaymentViewModel
             {
                 OrderID = orderId,
-                // Hata çözümü: TotalAmount'ın decimal olduğunu varsayıyoruz.
+                
                 FinalTotal = order.TotalAmount,
             };
 
-            // Onay mesajı (Home Controller'da gösterilmek üzere)
+            
             TempData["PaymentConfirmed"] = "Ödeme işleminiz başarıyla onaylanmıştır! Biletleriniz e-posta adresinize gönderilmiştir.";
 
-            // Bu, sizin oluşturduğunuz PaymentSuccess.cshtml görünümünü yükler.
+            
             return View(successModel);
         }
 
-        // =========================================================
-        // F. Dispose Method
-        // =========================================================
-
+        
+        //Dispose Method
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

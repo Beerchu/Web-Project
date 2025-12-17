@@ -146,14 +146,14 @@
         var row = e.target.closest('.hall-row');
         if (!row) return;
 
-        // yeni eklenen satırsa direkt sil
+        // yeni eklenen satırsa direkt siler
         var isNew = row.querySelector('input[name$=".HallID"]')?.value === "0";
         if (isNew) {
             row.remove();
             return;
         }
 
-        // eski satırsa IsDeleted=true yap
+        // eski satırsa IsDeleted=true yapar
         var del = row.querySelector('.is-deleted');
         if (del) del.value = "true";
         row.style.display = "none";

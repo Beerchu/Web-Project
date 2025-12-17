@@ -38,7 +38,6 @@
         border: none;
         outline: none;
         font-size: 14px;
-        /* Varsayılan koyu temaya uyum */
         background-color: #333;
         color: white;
     }
@@ -79,9 +78,9 @@
 
 .register-container {
     max-width: 440px;
-    margin: 0 auto; /* DÜZELTME: Yatayda ortalama için eklendi */
+    margin: 0 auto; 
     position: relative;
-    top: 220px; /* Dikeyde aşağı kaydırma */
+    top: 220px; 
 }
 
 .register-box {
@@ -119,7 +118,6 @@
         border: none;
         outline: none;
         font-size: 14px;
-        /* Varsayılan koyu temaya uyum */
         background-color: #333;
         color: white;
     }

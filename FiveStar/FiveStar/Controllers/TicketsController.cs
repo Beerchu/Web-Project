@@ -4,11 +4,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using FiveStars.Models;
-using FiveStars; // Orders, Tickets, CinemaDBEntities gibi EF sınıflarına erişim sağlar.
+using FiveStars; //Orders, Tickets, CinemaDBEntities gibi EF sınıflarına erişim sağlar.
 
 namespace FiveStars.Controllers
 {
-    // *** Koltuk Seçim Sayfasından POST edilen veriyi karşılayacak model ***
+    // Koltuk Seçim Sayfasından POST edilen veriyi karşılayacak model
     public class SeatSelectionPostModel
     {
         public int ShowingID { get; set; }
@@ -21,10 +21,9 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // =========================================================
+        
         // HELPER METOTLAR
-        // =========================================================
-
+     
         private IEnumerable<SeatRow> GetSeatingPlanFromDB(int showingId)
         {
             var showing = _db.Showings.FirstOrDefault(s => s.ShowingID == showingId);
@@ -128,10 +127,9 @@ namespace FiveStars.Controllers
             return user.UserID;
         }
 
-        // =========================================================
+        
         // PUBLIC ACTION METOTLAR
-        // =========================================================
-
+        
         [AllowAnonymous]
         public ActionResult Showtimes(int movieId)
         {
@@ -191,9 +189,9 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
-        // =========================================================
+        
         // POST: ÖDEME İŞLEMİNE YÖNLENDİRME
-        // =========================================================
+        
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
