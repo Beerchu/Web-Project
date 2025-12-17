@@ -1,177 +1,169 @@
-/* Toggles the visibility of the user dropdown menu (Sign In, Sign Up, Cart).*/
-function toggleDropdown() {
-    // Chooses the dropdown content
-    const dropdown = document.getElementById("userDropdown");
-    
-    // shows/hides the menu by adding/removing the show-dropdown class
-    dropdown.classList.toggle("show-dropdown");
+// ===============================
+// FIREBASE CONFIG
+// ===============================
+const firebaseConfig = {
+    apiKey: "AIzaSyA8sZZD3rDM_4IfcfT2aTOEmNGLPSrzwzg",
+    authDomain: "live-support-c2260.firebaseapp.com",
+    projectId: "live-support-c2260",
+    storageBucket: "live-support-c2260.firebasestorage.app",
+    messagingSenderId: "1076806111910",
+    appId: "1:1076806111910:web:d88db157573ddf25255a67",
+    measurementId: "G-Y3804JJ84N"
+};
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
 }
 
-/* Closes the dropdown menu when a click occurs outside of the menu button.*/
-window.onclick = function(event) {
-     // Check if the clicked element is the menu icon
-    if (!event.target.matches('.menu-button') && !event.target.matches('.menu-button i')) {
-        const dropdown = document.getElementById("userDropdown");
-        
-        // If the menu is visible, close it
-        if (dropdown && dropdown.classList.contains('show-dropdown')) {
-            dropdown.classList.remove('show-dropdown');
+const db = firebase.firestore();
+
+// ===============================
+// RULE BASED RESPONSES
+// ===============================
+const rules = [
+    {
+        keywords: ["refund", "return", "cancel"],
+        answer: "Refunds are available up to 2 hours before the movie session. After this time, refunds cannot be processed."
+    },
+    {
+        keywords: ["ticket", "booking", "reserve"],
+        answer: "You can book tickets directly from our website by selecting your movie, cinema location, date, and session time."
+    },
+    {
+        keywords: ["payment", "credit card", "debit card"],
+        answer: "We accept all major credit and debit cards. All payments are processed securely through our payment system."
+    },
+    {
+        keywords: ["working hours", "support hours", "open", "available"],
+        answer: "Live support is available every day between 09:00 AM and 10:00 PM, including weekends."
+    },
+    {
+        keywords: ["contact", "phone", "email", "reach"],
+        answer: "You can reach us using the contact form on this page or by calling +90 (553) 777 06 03."
+    },
+    {
+        keywords: ["seat", "seating", "choose seat"],
+        answer: "You can select your preferred seats during the booking process before completing your payment."
+    },
+    {
+        keywords: ["movie", "movies", "now playing"],
+        answer: "You can view currently playing movies and upcoming releases on our Movies page."
+    },
+    {
+        keywords: ["location", "cinema", "theater"],
+        answer: "Our cinema locations and addresses are listed on the Contact Us page."
+    },
+    {
+        keywords: ["problem", "issue", "error"],
+        answer: "If you are experiencing a technical issue, please describe the problem in detail and our support team will assist you."
+    },
+    {
+        keywords: ["lost", "forgot", "email confirmation"],
+        answer: "If you did not receive your confirmation email, please check your spam folder or contact support."
+    }
+];
+
+
+function getRuleBasedResponse(message) {
+    const lowerMessage = message.toLowerCase();
+
+    for (let rule of rules) {
+        if (rule.keywords.some(keyword => lowerMessage.includes(keyword))) {
+            return rule.answer;
         }
     }
+
+    return "Thank you for your message. A support agent will contact you shortly.";
 }
 
-// Live chat system
+// ===============================
+// LIVE CHAT CLASS
+// ===============================
 class LiveChat {
     constructor() {
         this.chatButton = document.getElementById('chatButton');
         this.chatBox = document.getElementById('chatBox');
         this.closeChat = document.getElementById('closeChat');
         this.messageInput = document.getElementById('messageInput');
-        this.sendMessage = document.getElementById('sendMessage');
+        this.sendMessageBtn = document.getElementById('sendMessage');
         this.chatMessages = document.getElementById('chatMessages');
-        
-        // The bot's predefined responses
-        this.botResponses = [
-            "I see, how can I assist you?",
-            "Could you provide more information about this?",
-            "Our team will contact you as soon as possible.",
-            "Thank you! We are evaluating your query.",
-            "How else may I help you?"
-        ];
-        
+
         this.init();
+        this.listenMessages();
     }
-    
+
     init() {
-        if (this.chatButton) this.chatButton.addEventListener('click', () => this.toggleChat());
-        if (this.closeChat) this.closeChat.addEventListener('click', () => this.closeChatBox());
-        if (this.sendMessage) this.sendMessage.addEventListener('click', () => this.sendUserMessage());
-        
-        if (this.messageInput) {
-            this.messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    this.sendUserMessage();
-                }
-            });
-        }
-    }
-    
-    toggleChat() {
-        if (!this.chatBox) return;
-        this.chatBox.classList.toggle('active');
-        if (this.chatBox.classList.contains('active')) {
-            if (this.messageInput) this.messageInput.focus();
-        }
-    }
-    
-    closeChatBox() {
-        if (this.chatBox) this.chatBox.classList.remove('active');
-    }
-    
-    sendUserMessage() {
-        if (!this.messageInput) return;
+        this.chatButton.onclick = () => {
+            this.chatBox.classList.toggle('open');
+            this.scrollToBottom();
+        };
 
-        const message = this.messageInput.value.trim();
-        
-        if (message === '') return;
-        
-        //Add user message to chat
-        this.addMessage(message, 'user');
-        this.messageInput.value = '';
-        
-        //simulate bot response after a delay
-        setTimeout(() => {
-            this.addBotResponse();
-        }, 1000 + Math.random() * 1000);
-    }
-    
-    addMessage(text, sender) {
-        if (!this.chatMessages) return;
+        this.closeChat.onclick = () => {
+            this.chatBox.classList.remove('open');
+        };
 
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}-message`;
-        
-        const time = new Date().toLocaleTimeString('tr-TR', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
+        this.sendMessageBtn.onclick = () => {
+            this.sendMessage();
+        };
+
+        this.messageInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") this.sendMessage();
         });
-        
-        messageDiv.innerHTML = `
-            <p>${this.escapeHtml(text)}</p>
-            <span class="time">${time}</span>
-        `;
-        
-        this.chatMessages.appendChild(messageDiv);
-        this.scrollToBottom();
     }
-    
-    addBotResponse() {
-        const randomResponse = this.botResponses[
-            Math.floor(Math.random() * this.botResponses.length)
-        ];
-        this.addMessage(randomResponse, 'bot');
+
+    listenMessages() {
+        db.collection("messages")
+            .orderBy("timestamp", "asc")
+            .onSnapshot(snapshot => {
+                this.chatMessages.innerHTML = "";
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    this.renderMessage(data.text, data.sender, data.timestamp);
+                });
+                this.scrollToBottom();
+            });
     }
-    
+
+    async sendMessage() {
+        const text = this.messageInput.value.trim();
+        if (!text) return;
+
+        this.messageInput.value = "";
+
+        await db.collection("messages").add({
+            text: text,
+            sender: "user",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        const reply = getRuleBasedResponse(text);
+
+        setTimeout(async () => {
+            await db.collection("messages").add({
+                text: reply,
+                sender: "bot",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }, 800);
+    }
+
+    renderMessage(text, sender, timestamp) {
+        const div = document.createElement("div");
+        div.className = `message ${sender}-message`;
+
+        const time = timestamp
+            ? new Date(timestamp.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : "Now";
+
+        div.innerHTML = `<p>${text}</p><span class="time">${time}</span>`;
+        this.chatMessages.appendChild(div);
+    }
+
     scrollToBottom() {
-        if (this.chatMessages) this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
-    }
-    
-    // FOR SECURITY: Escape HTML to prevent XSS
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
     }
 }
 
-
-//DOMContentLoaded event to ensure the DOM is fully loaded before running scripts
-
-document.addEventListener('DOMContentLoaded', function() {
-    // 1. Contact Form Submission Handling
-    const contactForm = document.getElementById('contactForm');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            //Check if necessary fields are filled
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-
-            if (!name || !email || subject === "" || !message) {
-                 alert('Fill neccesary fields.');
-                 return;
-            }
-
-            const formData = {
-                name: name,
-                email: email,
-                subject: subject,
-                message: message
-            };
-            
-            console.log('Form data:', formData);
-            alert('Your message has been sent, we will contact you later.');
-            contactForm.reset();
-        });
-    }
-
-    // 2. Initialize Live Chat
+document.addEventListener("DOMContentLoaded", () => {
     new LiveChat();
-
-    // 3. Close chat box when clicking outside
-    const chatBox = document.getElementById('chatBox');
-    const chatButton = document.getElementById('chatButton');
-    
-    document.addEventListener('click', (e) => {
-        // Close chat box if click is outside chat box and chat button
-        if (chatBox && chatBox.classList.contains('active') && 
-            chatButton && !chatBox.contains(e.target) && 
-            !chatButton.contains(e.target)) {
-            chatBox.classList.remove('active');
-        }
-    });
 });
