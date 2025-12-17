@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using FiveStars.Models;
 
@@ -23,6 +25,76 @@ namespace FiveStars.Controllers
 
             ViewBag.Genres = genres;
             ViewBag.SelectedGenreIds = selectedGenreIds ?? new int[0];
+        }
+
+        // Ratings: accept comma decimals (e.g., 8,5), reject dot decimals (8.5),
+        // and enforce range 0..10 with English messages.
+        private void NormalizeAndValidateRating(Movies movie)
+        {
+            // NOTE: Browser "number" inputs don't accept comma, so the view must use type="text".
+            // This method guarantees server-side correctness even if client-side is bypassed.
+
+            var rawObj = Request?.Form?["Ratings"] ?? Request?.Form?["movie.Ratings"];
+            if (rawObj == null) return; // field not posted
+
+            string raw = (rawObj ?? string.Empty).Trim();
+
+            // Clear any binder-produced error first; we'll add our own English errors.
+            ModelState.Remove("Ratings");
+            ModelState.Remove("movie.Ratings");
+
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                movie.Ratings = null;
+                return; // rating is optional
+            }
+
+            // Enforce comma as decimal separator (user requested "virgüllü")
+            if (raw.Contains("."))
+            {
+                ModelState.AddModelError("Ratings",
+                    "Use a comma (,) as the decimal separator. Example: 8,5");
+                return;
+            }
+
+            // Basic format guard: 0..10, optionally with 1-2 decimal digits using comma
+            // Examples: 8,5  |  8  |  10  |  10,0
+            if (!Regex.IsMatch(raw, @"^\d{1,2}(,\d)?$"))
+            {
+                ModelState.AddModelError("Ratings",
+                    "Invalid rating format. Use e.g. 8 or 8,5 (max 1 decimal).");
+                return;
+            }
+
+            var tr = CultureInfo.GetCultureInfo("tr-TR");
+            if (!decimal.TryParse(raw, NumberStyles.Number, tr, out decimal rating))
+            {
+                ModelState.AddModelError("Ratings",
+                    "Invalid rating value. Use e.g. 8 or 8,5.");
+                return;
+            }
+
+            if (rating < 0m || rating > 10m)
+            {
+                ModelState.AddModelError("Ratings",
+                    "Rating must be between 0 and 10.");
+                return;
+            }
+
+            movie.Ratings = rating;
+        }
+
+
+
+
+        private void ValidateMovieTitle(Movies movie)
+        {
+            if (movie == null) return;
+
+            if (string.IsNullOrWhiteSpace(movie.Title))
+            {
+                ModelState.AddModelError("Title", "Movie title is required.");
+            }
         }
 
         // =========================
@@ -59,6 +131,9 @@ namespace FiveStars.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMovie(Movies movie, int[] selectedGenreIds)
         {
+            NormalizeAndValidateRating(movie);
+            ValidateMovieTitle(movie);
+
             if (ModelState.IsValid)
             {
                 // Defensive default (DB typically expects a value)
@@ -112,6 +187,9 @@ namespace FiveStars.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditMovie(Movies movie, int[] selectedGenreIds)
         {
+            NormalizeAndValidateRating(movie);
+            ValidateMovieTitle(movie);
+
             if (ModelState.IsValid)
             {
                 // Always update using tracked entity (avoids detached update + keeps relations under control)
