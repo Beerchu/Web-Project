@@ -70,32 +70,35 @@
                                                  .OrderBy(s => s.ShowTime)
                                                  .GroupBy(s => s.ShowTime.Date))
                     {
-                        <div class="showtime-day-block">
-                            <h2 class="showtime-section-title">
-                                @dayGroup.Key.ToString("dddd, dd MMMM yyyy")
-                            </h2>
+            <div class="showtime-day-block">
+                <h2 class="showtime-section-title">
+                    @dayGroup.Key.ToString("dddd, dd MMMM yyyy")
+                </h2>
+                @foreach (var hallGroup in dayGroup
+                   .GroupBy(s => new { s.CinemaName, s.HallName })
+                   .OrderBy(g => g.Key.CinemaName)
+                   .ThenBy(g => g.Key.HallName))
+                {
+                    <div class="cinema-block">
+                        <h3 class="cinema-name">
+                            @hallGroup.Key.CinemaName
+                            <span class="hall-sep">-</span>
+                            <span class="hall-badge">@hallGroup.Key.HallName</span>
+                        </h3>
 
-                            @foreach (var cinemaGroup in dayGroup
-                                                       .GroupBy(s => s.CinemaName)
-                                                       .OrderBy(g => g.Key))
+                        <div class="showtime-chips">
+                            @foreach (var s in hallGroup.OrderBy(x => x.ShowTime))
                             {
-                                <div class="cinema-block">
-                                    <h3 class="cinema-name">@cinemaGroup.Key</h3>
-
-                                    <div class="showtime-chips">
-                                        @foreach (var s in cinemaGroup.OrderBy(x => x.ShowTime))
-                                        {
-                                            <a class="showtime-chip"
-                                               href="@Url.Action("SelectSeats", "Tickets", new { showingId = s.ShowingId })">
-                                                <span class="showtime-chip-time">
-                                                    @s.ShowTime.ToString("HH:mm")
-                                                </span>
-                                            </a>
-                                        }
-                                    </div>
-                                </div>
+                                <a class="showtime-chip"
+                                   href="@Url.Action("SelectSeats","Tickets", new { showingId = s.ShowingId })">
+                                    <span class="showtime-chip-time">@s.ShowTime.ToString("HH:mm")</span>
+                                </a>
                             }
                         </div>
+                    </div>
+                }
+
+            </div>
                     }
                 }
             </div>

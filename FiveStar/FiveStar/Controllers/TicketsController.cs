@@ -10,8 +10,6 @@ using FiveStars; // Orders, Tickets, CinemasDBEntities gibi EF sınıflarına er
 namespace FiveStars.Controllers
 {
     // *** Koltuk Seçim Sayfasından POST edilen veriyi karşılayacak tek model ***
-    // (JavaScript'ten gelen SelectedSeatNumbers ve BaseTotal'ı yakalar.)
-    // Eğer bu model Models/ klasörünüzde tanımlıysa, burayı silin ve sadece using FiveStars.Models; kullanın.
     // Şimdilik TicketsController.cs içinde tanımlı kabul edelim:
     public class SeatSelectionPostModel
     {
@@ -37,9 +35,12 @@ namespace FiveStars.Controllers
             if (showing == null)
                 return Enumerable.Empty<SeatRow>();
 
-            int hallId = showing.HallID.GetValueOrDefault();
-            hallId = 3; // !!! KRİTİK DB UYUMSUZLUĞU DÜZELTMESİ (Sabit değer korundu) !!!
 
+            int hallId = showing.HallID ?? 0;
+            if (hallId == 0) return Enumerable.Empty<SeatRow>();
+
+            //HallID null geliyorsa da “boş plan” dön:
+            //VIP 40 mı 60 mı?” muhabbeti kozmetik kalır. Çünkü kapasiteyi doğru seçsen bile koltuklar başka salondan gelecektir.
             var hallSeats = _db.Seats
                 .Where(s => s.HallID == hallId && s.IsActive != false)
                 .ToList();
