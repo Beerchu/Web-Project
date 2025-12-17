@@ -6,20 +6,22 @@
 
 <div class="success-container">
     <i class="fas fa-check-circle success-icon"></i>
-    <h2>Ödeme İşleminiz Başarıyla Tamamlandı!</h2>
-    <p class="success-message-text">Biletleriniz kayıtlı e-posta adresinize gönderilmiştir.</p>
+    <h2>Your payment process has been successfully completed!</h2>
+    <p class="success-message-text">
+        Your tickets have been sent to your registered email address.
+    </p>
 
     @* Model kontrolü ve sipariş detaylarının gösterilmesi *@
     @if (Model != null)
     {
         <div class="success-details-box">
-            <h4>Sipariş Özetiniz</h4>
+            <h4>Order Details</h4>
             <div class="detail-line">
-                <span>Sipariş Numarası:</span>
+                <span>Order Number:</span>
                 <strong>@Model.OrderID</strong>
             </div>
             <div class="detail-line">
-                <span>Ödenen Tutar:</span>
+                <span>Amount Paid:</span>
                 <strong class="final-total-success">@Model.FinalTotal.ToString("C")</strong>
             </div>
         </div>
@@ -30,11 +32,9 @@
     </div>
 </div>
 
-@* ========================================================================= *@
-@* Sayfaya özgü CSS (Genel site.css dosyanıza eklenebilir) *@
-@* ========================================================================= *@
+
 <style>
-    /* Başarı Sayfası Stilleri (Koyu Temaya uygun) */
+    /* Başarı Sayfası Stillerimiz*/
     .success-container {
         max-width: 450px;
         margin: 100px auto;

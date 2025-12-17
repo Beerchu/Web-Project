@@ -12,6 +12,6 @@ namespace FiveStars.Models
         public int? CinemaID { get; set; }
 
         // Navigation property
-        public virtual Cinema Cinemas { get; set; }  // Singular or plural? Check your EF model
+        public virtual Cinema Cinemas { get; set; }  
     }
 }

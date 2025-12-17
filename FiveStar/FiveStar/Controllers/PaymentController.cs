@@ -12,10 +12,10 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // =========================================================
-        // A) HELPERS (Campaign / Price / Cleanup)
-        // =========================================================
-
+        
+        // HELPER METOTLAR (Kampanya/Fiyat/Cleanup)
+        
+        //Kampanya Uygunluk Kontrolü
         private string CheckCampaignEligibility(int orderId, int campaignId)
         {
             var orderTickets = _db.Tickets
@@ -107,6 +107,7 @@ namespace FiveStars.Controllers
             return (Math.Round(baseTotal, 2), Math.Round(discountAmount, 2), Math.Round(finalTotal, 2));
         }
 
+        // Süresi Dolan Siparişleri Serbest Bırakma
         private void ReleaseExpiredHolds()
         {
             var cutoff = DateTime.Now.AddMinutes(-10);
@@ -131,6 +132,7 @@ namespace FiveStars.Controllers
             _db.SaveChanges();
         }
 
+        // Mevcut Kullanıcı ID'sini Alma
         private int GetCurrentUserId()
         {
             var name = (User.Identity?.Name ?? "").Trim();
@@ -147,9 +149,10 @@ namespace FiveStars.Controllers
             return user.UserID;
         }
 
-        // =========================================================
-        // B) GET: PAYMENT PAGE
-        // =========================================================
+        
+        // GET ACTION: ÖDEME SAYFASINI YÜKLE
+        
+
         [Authorize]
         public ActionResult Payment(int orderId)
         {
@@ -192,16 +195,17 @@ namespace FiveStars.Controllers
             return View(viewModel);
         }
 
-        // =========================================================
-        // C) POST: AJAX RECALCULATE
-        // =========================================================
+        
+        //POST ACTION: AJAX FİYAT YENİDEN HESAPLAMA
+      
+
         [Authorize]
         [HttpPost]
         public JsonResult RecalculatePrice(int orderId, int campaignId)
         {
             int? selectedCampaignId = campaignId > 0 ? campaignId : (int?)null;
 
-            // 1) ownership check
+            //Sahip olma kontrolü
             if (selectedCampaignId.HasValue)
             {
                 int userId = GetCurrentUserId();
@@ -250,9 +254,10 @@ namespace FiveStars.Controllers
             });
         }
 
-        // =========================================================
-        // D) POST: CONFIRM PAYMENT
-        // =========================================================
+
+        
+        //POST ACTION: ÖDEME ONAYI VE DB GÜNCELLEMESİ
+        
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -329,9 +334,10 @@ namespace FiveStars.Controllers
             return RedirectToAction("PaymentSuccess", new { orderId = model.OrderID });
         }
 
-        // =========================================================
-        // E) SUCCESS
-        // =========================================================
+     
+        //GET ACTION: ÖDEME BAŞARI SAYFASI
+        
+
         [Authorize]
         public ActionResult PaymentSuccess(int orderId)
         {
