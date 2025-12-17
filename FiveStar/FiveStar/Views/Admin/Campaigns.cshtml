@@ -69,13 +69,7 @@
                                 <a href="@Url.Action("EditCampaign", new { id = campaign.CampaignID })" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
-                                @using (Html.BeginForm("DeleteCampaign", "Admin", new { id = campaign.CampaignID }, FormMethod.Post, new { @class = "inline-form" }))
-                                {
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this campaign?')">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                }
+                               
                             </div>
                         </td>
                     </tr>
