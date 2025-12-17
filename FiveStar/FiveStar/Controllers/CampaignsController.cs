@@ -36,7 +36,6 @@ namespace FiveStars.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Apply(int id)
         {
-            // AJAX requests must get JSON. No redirects. No HTML.
             bool isAjax = Request.IsAjaxRequest();
 
             // 1) Not logged in
@@ -110,11 +109,9 @@ namespace FiveStars.Controllers
         {
             var name = (User.Identity?.Name ?? "").Trim();
 
-            // If User.Identity.Name stores numeric ID:
             if (int.TryParse(name, out int parsedId))
                 return parsedId;
 
-            // If it stores email:
             var user = _db.Users.FirstOrDefault(u => u.Email == name);
             if (user == null)
                 throw new InvalidOperationException("Logged-in user not found. Check login setup (User.Identity.Name).");

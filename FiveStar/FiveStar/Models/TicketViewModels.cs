@@ -9,7 +9,6 @@ namespace FiveStars.Models
 
         public string CinemaName { get; set; }
 
-        // Bizde Halls tablosunda "HallType" var, onu salon adı gibi kullanacağız
         public string HallType { get; set; }
 
         public DateTime ShowTime { get; set; }

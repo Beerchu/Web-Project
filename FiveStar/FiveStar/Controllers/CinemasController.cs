@@ -15,10 +15,9 @@ namespace FiveStars.Controllers
         {
             const string targetCity = "İstanbul";
 
-            // FIXED: Proper lambda expression in Where clause
             var allCinemas = _db.Cinemas
                 .Include(c => c.Halls)
-                .Where(c => c.City == targetCity)  // This is correct
+                .Where(c => c.City == targetCity)
                 .ToList();
 
           

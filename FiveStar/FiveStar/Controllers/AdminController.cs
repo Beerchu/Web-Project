@@ -42,7 +42,6 @@ namespace FiveStars.Controllers
 
             string raw = (rawObj ?? string.Empty).Trim();
 
-            // Clear any binder-produced error first; we'll add our own English errors.
             ModelState.Remove("Ratings");
             ModelState.Remove("movie.Ratings");
 
@@ -52,7 +51,7 @@ namespace FiveStars.Controllers
                 return; // rating is optional
             }
 
-            // Enforce comma as decimal separator (user requested "virgüllü")
+            // Enforce comma as decimal separator
             if (raw.Contains("."))
             {
                 ModelState.AddModelError("Ratings",
@@ -138,14 +137,12 @@ namespace FiveStars.Controllers
 
             if (ModelState.IsValid)
             {
-                // Defensive default (DB typically expects a value)
                 if (string.IsNullOrWhiteSpace(movie.Status))
                     movie.Status = "Coming Soon";
 
                 _db.Movies.Add(movie);
                 _db.SaveChanges();
 
-                // Save Movie -> Genre links (many-to-many)
                 if (selectedGenreIds != null && selectedGenreIds.Length > 0)
                 {
                     foreach (var genreId in selectedGenreIds.Distinct())
@@ -163,7 +160,6 @@ namespace FiveStars.Controllers
                 return RedirectToAction("Movies");
             }
 
-            // ModelState invalid -> re-fill genres so the view can render
             PopulateGenres(selectedGenreIds);
             return View(movie);
         }
@@ -214,7 +210,6 @@ namespace FiveStars.Controllers
                 var newIds = (selectedGenreIds ?? new int[0]).Distinct().ToList();
                 var existingLinks = dbMovie.Genres_Movies.ToList();
 
-                // Remove links not selected anymore
                 foreach (var link in existingLinks)
                 {
                     if (link.GenreID.HasValue && !newIds.Contains(link.GenreID.Value))
@@ -223,7 +218,6 @@ namespace FiveStars.Controllers
                     }
                 }
 
-                // Add missing links
                 var existingIds = existingLinks
                     .Where(l => l.GenreID.HasValue)
                     .Select(l => l.GenreID.Value)
@@ -259,7 +253,6 @@ namespace FiveStars.Controllers
             {
                 try
                 {
-                    // If the movie has genres, remove the junction rows first (avoids FK errors)
                     var links = _db.Genres_Movies.Where(gm => gm.MovieID == id).ToList();
                     if (links.Any())
                     {
