@@ -192,13 +192,10 @@
                             <a href="@Url.Action("UserProfile", "Account")"
                                class="dropdown-action-btn">My Profile</a>
 
-                            <a href="@Url.Action("Logout", "Account")"
-                               class="dropdown-action-btn">Sign Out</a>
+                            <a href="#"
+                               class="dropdown-action-btn"
+                               onclick="submitLogout(event)">Sign Out</a>
                         }
-
-                        
-
-                        
                     </div>
 
                 </div>
@@ -228,7 +225,6 @@
         </div>
     </footer>
     <!-- ====================== END FOOTER ====================== -->
-
     <!-- ====================== SCRIPTS ====================== -->
     @Scripts.Render("~/bundles/jquery")
 
@@ -246,6 +242,22 @@
                 menu.classList.toggle("show");
         }
     </script>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form id="logoutForm" action="@Url.Action("Logout","Account")" method="post" style="display:none;">
+            @Html.AntiForgeryToken()
+        </form>
+    }
+
+    <script>
+        function submitLogout(e) {
+            e.preventDefault();
+            const f = document.getElementById("logoutForm");
+            if (f) f.submit();
+        }
+    </script>
+
 
 </body>
 </html>
