@@ -3,79 +3,129 @@ using System.Linq;
 using System.Web.Mvc;
 using FiveStars.Models;
 
-public class CampaignsController : Controller
+namespace FiveStars.Controllers
 {
-    private readonly CinemaDBEntities _db = new CinemaDBEntities();
-
-    public ActionResult Index()
+    public class CampaignsController : Controller
     {
-        var campaigns = _db.Campaigns
-            .Where(c => c.IsActive)
-            .OrderByDescending(c => c.CampaignID)
-            .ToList();
+        private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        if (User.Identity.IsAuthenticated)
+        // GET: /Campaigns
+        [HttpGet]
+        public ActionResult Index()
         {
-            int userId = GetCurrentUserId();
-
-            ViewBag.AppliedCampaignIds = _db.User_Campaigns
-                .Where(x => x.UserID == userId)
-                .Select(x => x.CampaignID)
+            var campaigns = _db.Campaigns
+                .Where(c => c.IsActive)
+                .OrderByDescending(c => c.CampaignID)
                 .ToList();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = GetCurrentUserId();
+
+                ViewBag.AppliedCampaignIds = _db.User_Campaigns
+                    .Where(x => x.UserID == userId)
+                    .Select(x => x.CampaignID)
+                    .ToList();
+            }
+
+            return View(campaigns);
         }
 
-        return View(campaigns);
-    }
-
-
-    [HttpPost]
-    [Authorize]
-    [ValidateAntiForgeryToken]
-    public ActionResult Apply(int id)
-    {
-        int userId = GetCurrentUserId();
-
-        var campaign = _db.Campaigns.FirstOrDefault(c => c.CampaignID == id && c.IsActive);
-        if (campaign == null)
+        // POST: /Campaigns/Apply/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Apply(int id)
         {
-            TempData["ErrorMessage"] = "Campaign not found or inactive.";
+            // AJAX requests must get JSON. No redirects. No HTML.
+            bool isAjax = Request.IsAjaxRequest();
+
+            // 1) Not logged in
+            if (!User.Identity.IsAuthenticated)
+            {
+                if (isAjax)
+                {
+                    Response.StatusCode = 401;
+                    return Json(new
+                    {
+                        ok = false,
+                        requiresLogin = true,
+                        message = "You must be logged in to apply this offer."
+                    });
+                }
+
+                TempData["ErrorMessage"] = "You must be logged in to apply this offer.";
+                return RedirectToAction("Index");
+            }
+
+            // 2) Logged in -> normal apply logic
+            int userId = GetCurrentUserId();
+
+            var campaign = _db.Campaigns.FirstOrDefault(c => c.CampaignID == id && c.IsActive);
+            if (campaign == null)
+            {
+                if (isAjax)
+                {
+                    Response.StatusCode = 404;
+                    return Json(new { ok = false, message = "Campaign not found or inactive." });
+                }
+
+                TempData["ErrorMessage"] = "Campaign not found or inactive.";
+                return RedirectToAction("Index");
+            }
+
+            bool alreadyApplied = _db.User_Campaigns.Any(x => x.UserID == userId && x.CampaignID == id);
+
+            if (!alreadyApplied)
+            {
+                _db.User_Campaigns.Add(new User_Campaigns
+                {
+                    UserID = userId,
+                    CampaignID = id,
+                    RedeemedDate = DateTime.Now
+                });
+
+                _db.SaveChanges();
+            }
+
+            // 3) AJAX response (no refresh)
+            if (isAjax)
+            {
+                return Json(new
+                {
+                    ok = true,
+                    alreadyApplied = alreadyApplied,
+                    campaignId = id,
+                    message = alreadyApplied ? "You already applied this campaign." : "Campaign saved to your account!"
+                });
+            }
+
+            // 4) Non-AJAX fallback
+            TempData[alreadyApplied ? "InfoMessage" : "SuccessMessage"] =
+                alreadyApplied ? "You already applied this campaign." : "Campaign saved to your account!";
+
             return RedirectToAction("Index");
         }
 
-        bool alreadyApplied = _db.User_Campaigns.Any(x => x.UserID == userId && x.CampaignID == id);
-        if (!alreadyApplied)
+        private int GetCurrentUserId()
         {
-            _db.User_Campaigns.Add(new User_Campaigns
-            {
-                UserID = userId,
-                CampaignID = id,
-                RedeemedDate = DateTime.Now
-            });
-            _db.SaveChanges();
-            TempData["SuccessMessage"] = "Campaign saved to your account!";
+            var name = (User.Identity?.Name ?? "").Trim();
+
+            // If User.Identity.Name stores numeric ID:
+            if (int.TryParse(name, out int parsedId))
+                return parsedId;
+
+            // If it stores email:
+            var user = _db.Users.FirstOrDefault(u => u.Email == name);
+            if (user == null)
+                throw new InvalidOperationException("Logged-in user not found. Check login setup (User.Identity.Name).");
+
+            return user.UserID;
         }
-        else
+
+        protected override void Dispose(bool disposing)
         {
-            TempData["InfoMessage"] = "You already applied this campaign.";
+            if (disposing) _db.Dispose();
+            base.Dispose(disposing);
         }
-
-        return RedirectToAction("Index");
-    }
-
-
-    private int GetCurrentUserId()
-    {
-        // Çoğu projede User.Identity.Name = email olur
-        var name = (User.Identity?.Name ?? "").Trim();
-
-        // Eğer sizde numeric id tutuluyorsa:
-        if (int.TryParse(name, out int parsedId))
-            return parsedId;
-
-        var user = _db.Users.FirstOrDefault(u => u.Email == name);
-        if (user == null)
-            throw new InvalidOperationException("Logged-in user not found. Check login setup (User.Identity.Name).");
-
-        return user.UserID;
     }
 }

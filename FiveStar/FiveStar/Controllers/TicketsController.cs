@@ -247,6 +247,9 @@ namespace FiveStars.Controllers
 
             _db.Orders.Add(newOrder);
             _db.SaveChanges();
+            Session["CurrentOrderId"] = newOrder.OrderID;
+
+
 
             foreach (var seatId in model.SelectedSeatIDs)
             {
