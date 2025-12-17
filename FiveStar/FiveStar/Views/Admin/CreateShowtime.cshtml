@@ -21,12 +21,12 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Movie *</label>
-                    @Html.DropDownList("MovieID", (SelectList)ViewBag.MoviesList, "Select Movie", new { @class = "form-control", required = "required" })
+                    @Html.DropDownList("MovieID", (SelectList)ViewBag.MovieID, "Select Movie", new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(m => m.MovieID, "", new { style = "color: #dc3545; font-size: 12px;" })
                 </div>
                 <div class="form-group">
                     <label class="form-label">Hall *</label>
-                    @Html.DropDownList("HallID", (SelectList)ViewBag.HallsList, "Select Hall", new { @class = "form-control", required = "required" })
+                    @Html.DropDownList("HallID", (SelectList)ViewBag.HallID, "Select Hall", new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(m => m.HallID, "", new { style = "color: #dc3545; font-size: 12px;" })
                 </div>
             </div>
