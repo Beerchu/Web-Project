@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using FiveStars.Models;
+using FiveStars.Models.ViewModels;
 
 namespace FiveStars.Controllers
 {
