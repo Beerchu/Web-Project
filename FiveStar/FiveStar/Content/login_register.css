@@ -10,7 +10,8 @@
     color: white;
     text-align: center;
     position: relative;
-    top: 260px; /* Dikeyde aşağı kaydırma */
+    top: 120px; /* Dikeyde aşağı kaydırma */
+    margin-bottom: 20px; /*aşağıdaki boşluk*/
 }
 
     .login-container h2 {
@@ -80,7 +81,8 @@
     max-width: 440px;
     margin: 0 auto; 
     position: relative;
-    top: 220px; 
+    top: 100px; /* Dikeyde aşağı kaydırma */
+    margin-bottom: 20px; /*aşağıdaki boşluk*/
 }
 
 .register-box {
