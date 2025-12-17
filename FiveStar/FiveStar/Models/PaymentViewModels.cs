@@ -1,72 +1,129 @@
-﻿// Models/PaymentViewModel.cs
-
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq; // List<string>.Any() kullanmak için eklenmiştir
+using System.Linq;
 
-namespace FiveStars.Models // KRİTİK: Namespace'i FiveStars.Models olarak ayarlayın
+namespace FiveStars.Models
 {
-    // Kampanya Dropdown'ı için basit bir model.
+    // Simple model for campaign dropdown/list in the Payment view
     public class CampaignModel
     {
         public int CampaignID { get; set; }
         public string Title { get; set; }
     }
 
-    public class PaymentViewModel
+    public class PaymentViewModel : IValidatableObject
     {
-        // ===========================================
-        // 1. SİPARİŞ ve HESAPLAMA BİLGİLERİ (Controller'dan View'a ve Geriye)
-        // ===========================================
-
+        // =========================
+        // ORDER / PRICING
+        // =========================
         [Required]
         public int OrderID { get; set; }
 
-        [Display(Name = "Temel Toplam")]
+        [Display(Name = "Base Total")]
         public decimal BaseTotal { get; set; }
 
-        [Display(Name = "Seçilen Koltuklar")]
-        public List<string> SelectedSeats { get; set; }
-
-        // Kampanya Seçimi ve Hesaplama Sonuçları
-        [Display(Name = "Uygulanan Kampanya")]
-        public int? SelectedCampaignID { get; set; }
-
-        public List<CampaignModel> AvailableCampaigns { get; set; }
-
-        [Display(Name = "İndirim Miktarı")]
+        [Display(Name = "Discount Amount")]
         public decimal DiscountAmount { get; set; }
 
-        [Display(Name = "Ödenecek Toplam")]
+        [Display(Name = "Final Total")]
         public decimal FinalTotal { get; set; }
 
+        public List<string> SelectedSeats { get; set; } = new List<string>();
 
-        // ===========================================
-        // 2. KART BİLGİLERİ (ÖDEME FORMU GİRİŞLERİ) - YENİ EKLENEN KISIM
-        // ===========================================
+        public int? SelectedCampaignID { get; set; }
+        public List<CampaignModel> AvailableCampaigns { get; set; } = new List<CampaignModel>();
 
-        // Kart sahibinin tam adı
+        // =========================
+        // CARD INPUTS
+        // =========================
         [Required(ErrorMessage = "Card Holder Name is required.")]
         [Display(Name = "Card Holder Name")]
         public string CardHolderName { get; set; }
 
-        // 13-19 haneli Kart Numarası (Standart VISA/MasterCard/Amex vb. için)
         [Required(ErrorMessage = "Card Number is required.")]
-        [RegularExpression(@"^\d{13,19}$", ErrorMessage = "Invalid Card Number.")]
         [Display(Name = "Card Number")]
-        public string CardNumber { get; set; }
+        public string CardNumber { get; set; } // user types "xxxx xxxx xxxx xxxx", we validate digits
 
-        // Son Kullanma Ay ve Yıl bilgisi (MM/YY formatında)
-        // Regex: (01-12) / (00-99)
         [Required(ErrorMessage = "Expiration Date is required.")]
-        [RegularExpression(@"^(0[1-9]|1[0-2])\/?([0-9]{2})$", ErrorMessage = "Invalid Date Format (MM/YY).")]
-        [Display(Name = "Expiration Date (MM/YY)")]
-        public string ExpirationDate { get; set; }
+        [Display(Name = "Expiration Date (MM/YYYY)")]
+        public string ExpirationDate { get; set; } // MM/YYYY
 
-        // CVV kodu (3 veya 4 hane)
         [Required(ErrorMessage = "CVV is required.")]
-        [StringLength(4, MinimumLength = 3, ErrorMessage = "CVV must be 3 or 4 digits.")]
         [Display(Name = "CVV")]
-        public string Cvv { get; set; }
+        public string CVV { get; set; } // 3-4 digits
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // --- Card Number: 16 digits only (spaces allowed in input) ---
+            var digits = new string((CardNumber ?? "").Where(char.IsDigit).ToArray());
+            if (digits.Length != 16)
+                yield return new ValidationResult("Card number must be 16 digits.", new[] { nameof(CardNumber) });
+
+            // --- Expiration Date: MM/YYYY only (NO expired check) ---
+            // --- Expiration Date: MM/YYYY and must NOT be expired ---
+            var exp = (ExpirationDate ?? "").Trim();
+            if (!TryParseExpMmYyyy(exp, out int year, out int month))
+            {
+                yield return new ValidationResult("Invalid date format. Use MM/YYYY.", new[] { nameof(ExpirationDate) });
+            }
+            else
+            {
+                // Valid through the end of the expiry month
+                var endOfExpiryMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                if (endOfExpiryMonth < DateTime.Today)
+                    yield return new ValidationResult("Card is expired.", new[] { nameof(ExpirationDate) });
+            }
+
+
+            // --- CVV: 3-4 digits only ---
+            var cvv = (CVV ?? "").Trim();
+            if (!(cvv.Length == 3 || cvv.Length == 4) || !cvv.All(char.IsDigit))
+                yield return new ValidationResult("CVV must be 3 or 4 digits.", new[] { nameof(CVV) });
+
+            // --- Card holder name: required, basic sanity only ---
+            var name = (CardHolderName ?? "").Trim();
+            if (name.Length < 2)
+                yield return new ValidationResult("Card Holder Name is required.", new[] { nameof(CardHolderName) });
+        }
+
+
+        private static bool TryParseExpMmYyyy(string input, out int year, out int month)
+        {
+            year = 0;
+            month = 0;
+
+            // Accept "MM/YYYY" only (your requirement)
+            var parts = input.Split('/');
+            if (parts.Length != 2) return false;
+
+            if (!int.TryParse(parts[0], out month)) return false;
+            if (!int.TryParse(parts[1], out year)) return false;
+
+            if (month < 1 || month > 12) return false;
+            if (year < 1900 || year > 3000) return false;
+
+            return true;
+        }
+
+        private static bool IsLuhnValid(string digits)
+        {
+            int sum = 0;
+            bool alt = false;
+
+            for (int i = digits.Length - 1; i >= 0; i--)
+            {
+                int n = digits[i] - '0';
+                if (alt)
+                {
+                    n *= 2;
+                    if (n > 9) n -= 9;
+                }
+                sum += n;
+                alt = !alt;
+            }
+
+            return (sum % 10) == 0;
+        }
     }
 }
