@@ -21,11 +21,7 @@ namespace FiveStars.Controllers
                 .Where(c => c.City == targetCity)  // This is correct
                 .ToList();
 
-            // If you're still getting errors, try this alternative:
-            // var allCinemas = (from c in _db.Cinemas.Include(c => c.Halls)
-            //                  where c.City == targetCity
-            //                  select c).ToList();
-
+          
             // Group cinemas by District
             var regionGroups = allCinemas
                 .GroupBy(c => c.District)

@@ -68,8 +68,7 @@ namespace FiveStars.Controllers
 
           
 
-            // LAST WEEK’S MOVIES: “Now Showing” olmayan, yakın zamanda vizyondan düşenler gibi düşün.
-            // Elinizde status “Archived” varsa onu çekiyoruz. Yoksa “Coming Soon değil ve Now Showing değil” fallback.
+            
             var lastWeek = _db.Movies
                 .Where(m => m.Status != null &&
                             (m.Status.Trim().ToLower() == "archived"

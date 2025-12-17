@@ -7,7 +7,7 @@ namespace FiveStars.Models
         public int? SelectedGenreId { get; set; }
         public int? SelectedCinemaId { get; set; }
 
-        // YENİ: arama kutusu
+        
         public string SearchTerm { get; set; }
 
         public List<Genres> Genres { get; set; }

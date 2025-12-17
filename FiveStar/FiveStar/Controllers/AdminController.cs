@@ -17,9 +17,9 @@ namespace FiveStars.Controllers
     {
         private readonly CinemaDBEntities _db = new CinemaDBEntities();
 
-        // -------------------------
+        
         // Helpers
-        // -------------------------
+
         private void PopulateGenres(int[] selectedGenreIds = null)
         {
             var genres = _db.Genres
@@ -100,9 +100,8 @@ namespace FiveStars.Controllers
             }
         }
 
-        // =========================
         // DASHBOARD
-        // =========================
+        
         public ActionResult Index()
         {
             ViewBag.TotalMovies = _db.Movies.Count();

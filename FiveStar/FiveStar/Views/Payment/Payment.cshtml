@@ -82,7 +82,7 @@
         gap: 15px;
     }
 
-    /* ========== FANCY CAMPAIGN SECTION ========== */
+    /*---CAMPAIGN SECTION style---*/
     .campaign-section {
         background: linear-gradient(145deg, #1e1e1e, #252525);
         border-radius: 16px;
@@ -345,9 +345,10 @@
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(m => m.OrderID)
+       
         @Html.HiddenFor(m => m.SelectedCampaignID, new { id = "SelectedCampaignID" })
 
-        <!-- 1) BOOKING DETAILS -->
+        @* ---BOOKING DETAILS --- *@
         <div class="booking-details-box">
             <h4>Booking Details</h4>
 
@@ -452,7 +453,7 @@
 
         <hr style="border-color: #3A3A3A;" />
 
-        <!-- 3) PAYMENT SUMMARY -->
+        @* ---PAYMENT SUMMARY --- *@
         <div class="summary-box">
             <h4>Payment Summary</h4>
             <p>
@@ -500,7 +501,7 @@
             </p>
         </div>
 
-        <!-- 5) SUBMIT BUTTON -->
+        @* ---SUBMIT BUTTON --- *@
         <div class="mt-4">
             <button type="submit" class="btn btn-lg btn-confirm w-100">
                 <i class="fas fa-lock me-2"></i> CONFIRM PAYMENT AND ISSUE TICKET
@@ -511,6 +512,9 @@
     }
 </div>
 
+@* ========================================================================= *@
+@* RAZOR @functions  *@
+@* ========================================================================= *@
 @functions {
     public string GetDiscountInfoFromTitle(string title)
     {
@@ -575,6 +579,9 @@
     }
 }
 
+@* ========================================================================= *@
+@* JAVASCRIPT / AJAX FUNCTIONALITY  *@
+@* ========================================================================= *@
 <script>
 $(document).ready(function () {
 
