@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="@Url.Content("~/Content/campaigns.css")" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+
 <style>
     /*-----ENHANCED STYLES-----*/
 
@@ -631,7 +632,13 @@
                             }
                             else
                             {
-                                using (Html.BeginForm("Apply", "Campaigns", new { id = c.CampaignID }, FormMethod.Post))
+                                using (Html.BeginForm(
+                                    "Apply",                 // IMPORTANT: matches controller action below
+                                    "Campaigns",
+                                    new { id = c.CampaignID },
+                                    FormMethod.Post,
+                                    new { @class = "js-campaign-apply" }  // <-- ADD THIS
+                                ))
                                 {
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn-apply">
@@ -640,6 +647,9 @@
                                     </button>
                                 }
                             }
+
+                            <!-- Optional: message area (doesn't affect layout if empty) -->
+                            <div class="apply-status" aria-live="polite"></div>
                         </div>
                     </div>
                 </div>
@@ -815,3 +825,5 @@
         });
     });
 </script>
+
+<script src="~/Scripts/campaigns-ajax.js"></script>
