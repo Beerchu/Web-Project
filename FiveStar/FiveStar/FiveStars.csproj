@@ -233,7 +233,6 @@
     <Content Include="Content\detail.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\HtmlPage1.html" />
-    <Content Include="Content\login.css" />
     <Content Include="Content\login_register.css" />
     <Content Include="Content\movies.css" />
     <Content Include="Content\profile.css" />
@@ -353,6 +352,7 @@
       <DependentUpon>CinemaModel.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\about.js" />
+    <Content Include="Scripts\campaigns-ajax.js" />
     <Content Include="Scripts\campaigns.js" />
     <Content Include="Scripts\contact-script.js" />
     <Content Include="Scripts\home-script.js" />
@@ -376,6 +376,7 @@
     <Content Include="Views\Movies\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\AdminShowtimesVM\" />
     <Folder Include="Views\HomeIndexViewModel\" />
     <Folder Include="Views\TicketViewModels\" />
   </ItemGroup>
